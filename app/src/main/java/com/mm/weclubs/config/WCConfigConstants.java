@@ -17,6 +17,8 @@ public interface WCConfigConstants {
 
     long REQUEST_DEFAULT_TIMEOUT = 30000;   //  默认http响应延迟时间
 
+    String CONTENT_TYPE_JSON = "Content-Type: application/json;charset=UTF-8";
+
     // 服务器地址
     String HTTP_BASE_URL = (ENABLE_SSL ? "https://" : "http://")
             + (

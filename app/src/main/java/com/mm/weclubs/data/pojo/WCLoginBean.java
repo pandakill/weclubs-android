@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 描述:
  */
 
-public class LoginBean implements Serializable {
+public class WCLoginBean implements Serializable {
     /**
      * graduate_year : 0级
      * avatar_url : http://weclubs.net/avatar/qx2jkloew8.jpeg

@@ -33,7 +33,7 @@ import android.widget.Toast;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
 import com.mm.weclubs.data.model.WCResponseParamModel;
-import com.mm.weclubs.data.pojo.LoginBean;
+import com.mm.weclubs.data.pojo.WCLoginBean;
 import com.mm.weclubs.retrofit.ServiceGenerator;
 import com.mm.weclubs.retrofit.service.TestService;
 import com.mm.weclubs.rxbus.RxBus;
@@ -340,7 +340,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         service.login("/user/login", mHttpParamsPresenter.initRequestParam(getApplicationContext(), userLoginInfo))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamModel<LoginBean>>() {
+                .subscribe(new Subscriber<WCResponseParamModel<WCLoginBean>>() {
                     @Override
                     public void onCompleted() {
                         log.d("方赞潘retrofit onCompleted");
@@ -356,7 +356,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     }
 
                     @Override
-                    public void onNext(WCResponseParamModel<LoginBean> loginBeanResponseBean) {
+                    public void onNext(WCResponseParamModel<WCLoginBean> loginBeanResponseBean) {
                         Log.d("方赞潘retrofit onNext", "loginBeanResponseBean = " + loginBeanResponseBean.toString());
 
                         if (loginBeanResponseBean.getResult_code() == 200) {
