@@ -32,13 +32,14 @@ import android.widget.Toast;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
+import com.mm.weclubs.data.model.WCResponseParamModel;
 import com.mm.weclubs.data.pojo.LoginBean;
-import com.mm.weclubs.data.pojo.ResponseBean;
 import com.mm.weclubs.retrofit.ServiceGenerator;
 import com.mm.weclubs.retrofit.service.TestService;
 import com.mm.weclubs.rxbus.RxBus;
 import com.mm.weclubs.rxbus.events.LoginSuccessEvent;
 import com.mm.weclubs.ui.PDMainActivity;
+import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mLoginFormView;
 
     private WCHttpParamsPresenter mHttpParamsPresenter;
+    private WCLog log = new WCLog(this.getClass());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,42 +334,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            }
 //        });
         HashMap<String, Object> userLoginInfo = new HashMap<>();
-        userLoginInfo.put("user_id", mEmailView.getText().toString());
+        userLoginInfo.put("mobile", mEmailView.getText().toString());
         userLoginInfo.put("password", mPasswordView.getText().toString());
 
-        service.login("/test/test_post", mHttpParamsPresenter.initRequestParam(getApplicationContext(), userLoginInfo))
+        service.login("/user/login", mHttpParamsPresenter.initRequestParam(getApplicationContext(), userLoginInfo))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ResponseBean<LoginBean>>() {
+                .subscribe(new Subscriber<WCResponseParamModel<LoginBean>>() {
                     @Override
                     public void onCompleted() {
-                        Log.d("方赞潘retrofit onCompleted", "请求完成");
+                        log.d("方赞潘retrofit onCompleted");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        Log.d("方赞潘retrofit onError", "请求失败");
+                        log.d("方赞潘retrofit onError");
 
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                         showProgress(false);
                     }
 
                     @Override
-                    public void onNext(ResponseBean<LoginBean> loginBeanResponseBean) {
+                    public void onNext(WCResponseParamModel<LoginBean> loginBeanResponseBean) {
                         Log.d("方赞潘retrofit onNext", "loginBeanResponseBean = " + loginBeanResponseBean.toString());
 
                         if (loginBeanResponseBean.getResult_code() == 200) {
 //                            Toast.makeText(LoginActivity.this, "登陆成功", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, PDMainActivity.class));
+
+                            showProgress(false);
+                            RxBus.getDefault().post(new LoginSuccessEvent());
+                            finish();
                         } else {
                             String msg = loginBeanResponseBean.getResult_msg() + "(" + loginBeanResponseBean.getResult_code() + ")";
                             Toast.makeText(LoginActivity.this, msg, Toast.LENGTH_SHORT).show();
                         }
-
-                        showProgress(false);
-                        RxBus.getDefault().post(new LoginSuccessEvent());
-                        finish();
                     }
                 });
     }

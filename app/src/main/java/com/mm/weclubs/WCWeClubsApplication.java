@@ -3,13 +3,12 @@ package com.mm.weclubs;
 import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
-import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.util.LibCommonUtils;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
+import com.mm.weclubs.util.WCLog;
 
 import java.util.UUID;
 
@@ -21,7 +20,7 @@ import java.util.UUID;
 
 public class WCWeClubsApplication extends Application {
 
-    private String TAG = WCWeClubsApplication.class.getSimpleName();
+    private WCLog log = new WCLog(WCWeClubsApplication.class);
 
     @Override
     public void onCreate() {
@@ -45,15 +44,11 @@ public class WCWeClubsApplication extends Application {
             wm.getDefaultDisplay().getMetrics(dm);
             screenWidth = dm.widthPixels;
 
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initScreenWidth: 生成的 screenWidth = " + screenWidth);
-            }
+            log.d("initScreenWidth: 生成的 screenWidth = " + screenWidth);
 
             PreferencesHelper.getInstance(getApplicationContext()).put("screen_width", screenWidth);
         } else {
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initScreenWidth: 从缓存中读取的 screenWidth = " + screenWidth);
-            }
+            log.d("initScreenWidth: 从缓存中读取的 screenWidth = " + screenWidth);
         }
     }
 
@@ -69,15 +64,11 @@ public class WCWeClubsApplication extends Application {
             wm.getDefaultDisplay().getMetrics(dm);
             screenHeight = dm.heightPixels;
 
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initScreenHeight: 生成的 screenHeight = " + screenHeight);
-            }
+            log.d("initScreenHeight: 生成的 screenHeight = " + screenHeight);
 
             PreferencesHelper.getInstance(getApplicationContext()).put("screen_height", screenHeight);
         } else {
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initScreenHeight: 从缓存中读取的 screenHeight = " + screenHeight);
-            }
+            log.d("initScreenHeight: 从缓存中读取的 screenHeight = " + screenHeight);
         }
     }
 
@@ -94,21 +85,15 @@ public class WCWeClubsApplication extends Application {
 
             uuid = sw + "-" + UUID.randomUUID().toString() + "-" + sh;
 
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initUUID: 原始uuid = " + uuid);
-            }
+            log.d("initUUID: 原始uuid = " + uuid);
 
             uuid = MD5Util.md5(uuid).toLowerCase();
 
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initUUID: 加密后的uuid = " + uuid);
-            }
+            log.d("initUUID: 加密后的uuid = " + uuid);
 
             PreferencesHelper.getInstance(getApplicationContext()).put("uuid", uuid);
         } else {
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "initUUID: 从缓存中读取的uuid = " + uuid);
-            }
+            log.d("initUUID: 从缓存中读取的uuid = " + uuid);
         }
     }
 }

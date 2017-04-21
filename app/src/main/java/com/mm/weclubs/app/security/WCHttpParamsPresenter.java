@@ -7,11 +7,12 @@ import android.util.Log;
 import com.mm.weclubs.BuildConfig;
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.model.WCRequestParamModel;
-import com.mm.weclubs.data.pojo.RequestBean;
-import com.mm.weclubs.data.pojo.RequestBean.ClientBean.ExBean;
+import com.mm.weclubs.data.model.WCRequestParamModel.ClientBean;
+import com.mm.weclubs.data.model.WCRequestParamModel.ClientBean.ExBean;
 import com.mm.weclubs.util.JsonHelper;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
+import com.mm.weclubs.util.WCLog;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -20,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * 创建人: fangzanpan
@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 public class WCHttpParamsPresenter {
 
-    private String TAG = WCHttpParamsPresenter.class.getSimpleName();
+    private WCLog log = new WCLog(WCHttpParamsPresenter.class);
 
     public WCRequestParamModel initRequestParam(Context context, HashMap<String, Object> params) {
 
@@ -37,13 +37,15 @@ public class WCHttpParamsPresenter {
 
         requestParamModel.setData(params);
 
-        String id = UUID.randomUUID().toString();
-        id += System.currentTimeMillis();
+//        String id = UUID.randomUUID().toString();
+//        id += System.currentTimeMillis();
+        String id = System.currentTimeMillis() + "";
 
-        requestParamModel.setId(MD5Util.md5(id).toString().toLowerCase());
+//        requestParamModel.setId(MD5Util.md5(id).toString().toLowerCase());
+        requestParamModel.setId(id);
         requestParamModel.setSign(signParams(params));
 
-        RequestBean.ClientBean clientBean = new RequestBean.ClientBean();
+        ClientBean clientBean = new ClientBean();
         clientBean.setCaller(WCConfigConstants.CALLER);
         clientBean.setVersion(BuildConfig.VERSION_NAME);
         clientBean.setDate(System.currentTimeMillis() + "");
@@ -60,9 +62,7 @@ public class WCHttpParamsPresenter {
 
         requestParamModel.setClient(clientBean);
 
-        if (WCConfigConstants.DEV) {
-            Log.i(TAG, "initRequestParam: " + JsonHelper.getJsonStrFromObj(requestParamModel));
-        }
+        log.d("initRequestParam: " + JsonHelper.getJsonStrFromObj(requestParamModel));
 
         return requestParamModel;
     }
@@ -86,20 +86,18 @@ public class WCHttpParamsPresenter {
             }
             sb.append(WCConfigConstants.SIGN_SECRET);
 
-            Log.i(TAG, "signParams: 签名前 sign = " + sb.toString());
+            log.d("signParams: 签名前 sign = " + sb.toString());
 
             byte[] sha1Digest = getSHA1Digest(sb.toString());
             String md5Sign = MD5Util.md5(MD5Util.toHexString(sha1Digest));
             String result = md5Sign.toLowerCase();
 
-            if (WCConfigConstants.DEV) {
-                Log.i(TAG, "signParams: 签名后 sign = " + result);
-            }
+            log.d("signParams: 签名后 sign = " + result);
 
             return result;
 
         } catch (IOException e) {
-            Log.e(TAG, "sign：Sign 值签名错误");
+            log.e("sign：Sign 值签名错误");
             e.printStackTrace();
             return null;
         }
@@ -114,7 +112,7 @@ public class WCHttpParamsPresenter {
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             bytes = md.digest(data.getBytes("UTF-8"));
         } catch (GeneralSecurityException gse) {
-            Log.e(TAG, "getSHA1Digest：SHA1加密失败");
+            log.e("getSHA1Digest：SHA1加密失败");
             gse.printStackTrace();
         }
 

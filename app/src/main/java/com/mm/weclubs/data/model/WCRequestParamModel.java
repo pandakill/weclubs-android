@@ -1,8 +1,5 @@
 package com.mm.weclubs.data.model;
 
-import com.mm.weclubs.data.pojo.RequestBean;
-import com.mm.weclubs.data.pojo.RequestBean.ClientBean.ExBean;
-
 /**
  * 创建人: fangzanpan
  * 创建时间: 2017/4/21 下午7:43
@@ -13,35 +10,9 @@ public class WCRequestParamModel {
 
     private String id;
 
-    private RequestBean.ClientBean client;
+    private ClientBean client;
     private String sign;
     private Object data;
-
-    public static RequestBean getRequestData(Object object) {
-        RequestBean requestBean = new RequestBean();
-        requestBean.setData(object);
-
-        requestBean.setId("12234455555");
-        requestBean.setEncrypt("md5");
-        requestBean.setSign("fafadfdsafdsaf");
-
-        RequestBean.ClientBean clientBean = new RequestBean.ClientBean();
-        clientBean.setCaller("chrome_test");
-        clientBean.setVersion("v2.1");
-        clientBean.setDate(System.currentTimeMillis() + "");
-
-        ExBean exBean = new ExBean();
-        exBean.setDv("chrome_test");
-        exBean.setSc("720,1280");
-        exBean.setUid("12dfaf990");
-        exBean.setSf("pp");
-        exBean.setOs("android");
-        clientBean.setEx(exBean);
-
-        requestBean.setClient(clientBean);
-
-        return requestBean;
-    }
 
     public String getId() {
         return id;
@@ -51,11 +22,11 @@ public class WCRequestParamModel {
         this.id = id;
     }
 
-    public RequestBean.ClientBean getClient() {
+    public ClientBean getClient() {
         return client;
     }
 
-    public void setClient(RequestBean.ClientBean client) {
+    public void setClient(ClientBean client) {
         this.client = client;
     }
 
@@ -80,7 +51,7 @@ public class WCRequestParamModel {
         private String version;
         private String date;
 
-        private RequestBean.ClientBean.ExBean ex;
+        private ExBean ex;
 
         public String getCaller() {
             return caller;
@@ -106,11 +77,11 @@ public class WCRequestParamModel {
             this.date = date;
         }
 
-        public RequestBean.ClientBean.ExBean getEx() {
+        public ExBean getEx() {
             return ex;
         }
 
-        public void setEx(RequestBean.ClientBean.ExBean ex) {
+        public void setEx(ExBean ex) {
             this.ex = ex;
         }
 

@@ -1,19 +1,14 @@
-package com.mm.weclubs.data.pojo;
+package com.mm.weclubs.data.model;
+
+import com.mm.weclubs.util.JsonHelper;
 
 /**
  * 创建人: fangzanpan
- * 创建时间: 2017/2/7 下午2:34
+ * 创建时间: 2017/4/21 下午10:06
  * 描述:
  */
 
-public class ResponseBean<T> {
-
-    /**
-     * result_code : 200
-     * result_msg : 请求成功.
-     * sys_time : 1486431081896
-     * data : {}
-     */
+public class WCResponseParamModel<T> {
 
     private int result_code;
     private String result_msg;
@@ -54,11 +49,6 @@ public class ResponseBean<T> {
 
     @Override
     public String toString() {
-        return "ResponseBean{" +
-                "result_code=" + result_code +
-                ", result_msg='" + result_msg + '\'' +
-                ", sys_time=" + sys_time +
-                ", data=" + data +
-                '}';
+        return JsonHelper.getJsonStrFromObj(this);
     }
 }

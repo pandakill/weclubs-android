@@ -1,8 +1,8 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.data.model.WCRequestParamModel;
+import com.mm.weclubs.data.model.WCResponseParamModel;
 import com.mm.weclubs.data.pojo.LoginBean;
-import com.mm.weclubs.data.pojo.ResponseBean;
 import com.mm.weclubs.data.pojo.UserBean;
 
 import retrofit2.Call;
@@ -19,14 +19,11 @@ import rx.Observable;
  */
 public interface TestService {
 
-//    @Headers("Content-Type: application/json")
-//    @POST
-//    Call<ResponseBean<LoginBean>> login(@Url String url, @Body RequestBean requestBean);
-
+    @Headers("Content-Type: application/json;charset=UTF-8")
     @POST
-    Observable<ResponseBean<LoginBean>> login(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamModel<LoginBean>> login(@Url String url, @Body WCRequestParamModel requestBean);
 
     @Headers("Content-Type: application/json")
     @POST
-    Call<ResponseBean<UserBean>> getUserInfo(@Url String url, @Body WCRequestParamModel requestBean);
+    Call<WCResponseParamModel<UserBean>> getUserInfo(@Url String url, @Body WCRequestParamModel requestBean);
 }
