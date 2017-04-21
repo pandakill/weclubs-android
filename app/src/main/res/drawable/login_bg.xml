@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners
+                android:bottomLeftRadius="0px"
+                android:bottomRightRadius="0px"
+                android:topLeftRadius="0px"
+                android:topRightRadius="0px" />
+            <!-- 圆角，你也可以对不同的角设置不同的数值 -->
+            <gradient
+                android:angle="0"
+                android:startColor="#402263"
+                android:endColor="#7B1FA2" />
+            <!-- 形状的填充色 -->
+        </shape>
+    </item>
+</selector> 

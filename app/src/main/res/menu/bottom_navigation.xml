@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item1"
+        android:checked="true"
+        android:icon="@drawable/ic_mail_outline_black_24dp"
+        android:title="日记"/>
+
+    <item
+        android:id="@+id/item2"
+        android:icon="@drawable/ic_call_black_24dp"
+        android:title="广场"/>
+
+    <item
+        android:id="@+id/item3"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="我的"/>
+
+</menu>
