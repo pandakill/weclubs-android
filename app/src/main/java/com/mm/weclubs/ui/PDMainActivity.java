@@ -83,16 +83,16 @@ public class PDMainActivity extends AppCompatActivity {
             mTabHost.getTabWidget().getChildAt(i).setOnClickListener(v -> {
                 switch ((Integer) v.getTag()) {
                     case 0:
-                        clickTagHost((Integer) v.getTag(), "index");
+                        clickTagHost((Integer) v.getTag(), mFragmentTags[0]);
                         break;
                     case 1:
-                        clickTagHost((Integer) v.getTag(), "dynamic");
+                        clickTagHost((Integer) v.getTag(), mFragmentTags[1]);
                         break;
                     case 2:
-                        clickTagHost((Integer) v.getTag(), "tools");
+                        clickTagHost((Integer) v.getTag(), mFragmentTags[2]);
                         break;
                     case 3:
-                        clickTagHost((Integer) v.getTag(), "mine");
+                        clickTagHost((Integer) v.getTag(), mFragmentTags[3]);
                         break;
                 }
 
