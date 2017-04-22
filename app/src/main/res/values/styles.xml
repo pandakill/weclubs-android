@@ -20,12 +20,6 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <style name="CommonButton">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/colorAccent</item>
-        <item name="android:background">@drawable/corner_bg_white_color</item>
-    </style>
     <!-- 水波纹的按钮样式 start -->
     <style name="MLYWidget">
         <item name="android:layout_width">match_parent</item>

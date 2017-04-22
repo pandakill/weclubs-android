@@ -61,7 +61,10 @@
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="@style/CommonButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/colorPrimary"
+                android:textColor="#999999"
                 android:layout_marginTop="16dp"
                 android:text="@string/action_sign_in"
                 android:textStyle="bold"/>

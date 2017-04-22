@@ -21,7 +21,7 @@ import com.mm.weclubs.widget.MLYFragmentTabHost;
 import rx.Subscription;
 
 
-public class PDMainActivity extends AppCompatActivity {
+public class WCMainActivity extends AppCompatActivity {
 
     private TabWidget mTabs;
     private MLYFragmentTabHost mTabHost;
@@ -63,7 +63,7 @@ public class PDMainActivity extends AppCompatActivity {
 
         mRxSubscription = RxBus.getDefault().toObservable(LoginSuccessEvent.class)
                 .subscribe(loginSuccessEvent -> {
-                    Toast.makeText(PDMainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(WCMainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 });
     }
 

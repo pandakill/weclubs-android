@@ -12,7 +12,7 @@ import com.mm.weclubs.R;
 import com.mm.weclubs.app.login.WCLoginPresenter;
 import com.mm.weclubs.app.login.WCLoginView;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
-import com.mm.weclubs.ui.PDMainActivity;
+import com.mm.weclubs.ui.WCMainActivity;
 
 /**
  * 创建人: fangzanpan
@@ -42,7 +42,7 @@ public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
     public void loginSuccess(WCUserInfoInfo userInfo) {
         Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
 
-        Intent intent = new Intent(this, PDMainActivity.class);
+        Intent intent = new Intent(this, WCMainActivity.class);
         startActivity(intent);
         finish();
     }
