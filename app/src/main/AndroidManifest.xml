@@ -23,7 +23,7 @@
 
         <activity
             android:name="com.mm.weclubs.ui.activity.WCLoginActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

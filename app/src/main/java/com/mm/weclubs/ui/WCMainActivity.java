@@ -16,7 +16,7 @@ import com.mm.weclubs.rxbus.RxBus;
 import com.mm.weclubs.rxbus.events.LoginSuccessEvent;
 import com.mm.weclubs.ui.fragment.PDMineFragment;
 import com.mm.weclubs.ui.fragment.PDSquareFragment;
-import com.mm.weclubs.widget.MLYFragmentTabHost;
+import com.mm.weclubs.widget.FragmentTabHost;
 
 import rx.Subscription;
 
@@ -24,7 +24,7 @@ import rx.Subscription;
 public class WCMainActivity extends AppCompatActivity {
 
     private TabWidget mTabs;
-    private MLYFragmentTabHost mTabHost;
+    private FragmentTabHost mTabHost;
 
     private FragmentManager mFragmentManager;
 
@@ -55,7 +55,7 @@ public class WCMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTabHost = (MLYFragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabs = (TabWidget) findViewById(android.R.id.tabs);
 
         mFragmentManager = getSupportFragmentManager();

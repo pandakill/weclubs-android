@@ -2,6 +2,8 @@ package com.mm.weclubs.app.login;
 
 import android.content.Context;
 
+import com.blankj.utilcode.utils.EmptyUtils;
+import com.blankj.utilcode.utils.RegexUtils;
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
@@ -41,6 +43,22 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
     }
 
     public void login(String mobile, String password) {
+
+        if (EmptyUtils.isEmpty(mobile)) {
+            getMvpView().loginFail("手机号码不能为空");
+            return;
+        }
+
+        if (EmptyUtils.isEmpty(password)) {
+            getMvpView().loginFail("密码不能为空");
+            return;
+        }
+
+        if (!RegexUtils.isMobileSimple(mobile)) {
+            getMvpView().loginFail("请输入正确的手机号码");
+            return;
+        }
+
         log.d("mobile = " + mobile + "; password = " + password);
         password = MD5Util.md5(password);
 

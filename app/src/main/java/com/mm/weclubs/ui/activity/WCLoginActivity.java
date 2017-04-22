@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +21,9 @@ import com.mm.weclubs.ui.WCMainActivity;
 
 public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
 
+    private EditText mInputMobile;
+    private EditText mInputPassword;
+
     private WCLoginPresenter mLoginPresenter;
 
     @Override
@@ -29,13 +31,19 @@ public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
+        initView();
 
         mLoginPresenter = new WCLoginPresenter(getApplicationContext());
         mLoginPresenter.attachView(this);
 
-        findViewById(R.id.email_sign_in_button).setOnClickListener(view ->
-                mLoginPresenter.login(((AutoCompleteTextView) findViewById(R.id.email)).getText().toString(),
-                ((EditText) findViewById(R.id.password)).getText().toString()));
+        findViewById(R.id.btn_login).setOnClickListener(view ->
+                mLoginPresenter.login(((EditText) findViewById(R.id.input_mobile)).getText().toString(),
+                ((EditText) findViewById(R.id.input_password)).getText().toString()));
+    }
+
+    private void initView() {
+        mInputMobile = (EditText) findViewById(R.id.input_mobile);
+        mInputPassword = (EditText) findViewById(R.id.input_password);
     }
 
     @Override

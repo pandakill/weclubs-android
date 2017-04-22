@@ -1,19 +1,15 @@
 package com.mm.weclubs;
 
 import android.app.Application;
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
 
-import com.mm.weclubs.config.WCConfigConstants;
+import com.blankj.utilcode.utils.ScreenUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.mm.weclubs.util.LibCommonUtils;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.UUID;
-
-import butterknife.ButterKnife;
 
 /**
  * 创建人: fangzanpan
@@ -29,7 +25,7 @@ public class WCWeClubsApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        ButterKnife.setDebug(WCConfigConstants.DEV);
+        Utils.init(this);
 
         initScreenWidth();
         initScreenHeight();
@@ -43,11 +39,8 @@ public class WCWeClubsApplication extends Application {
         int screenWidth =
                 PreferencesHelper.getInstance(getApplicationContext()).getAsInteger("screen_width", 0);
 
-        if (screenWidth <= 0 && getApplicationContext() != null) {
-            DisplayMetrics dm = new DisplayMetrics();
-            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            wm.getDefaultDisplay().getMetrics(dm);
-            screenWidth = dm.widthPixels;
+        if (screenWidth <= 0) {
+            screenWidth = ScreenUtils.getScreenWidth();
 
             log.d("initScreenWidth: 生成的 screenWidth = " + screenWidth);
 
@@ -63,11 +56,8 @@ public class WCWeClubsApplication extends Application {
     public void initScreenHeight() {
         int screenHeight =
                 PreferencesHelper.getInstance(getApplicationContext()).getAsInteger("screen_height", 0);
-        if (screenHeight <= 0 && getApplicationContext() != null) {
-            DisplayMetrics dm = new DisplayMetrics();
-            WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
-            wm.getDefaultDisplay().getMetrics(dm);
-            screenHeight = dm.heightPixels;
+        if (screenHeight <= 0) {
+            screenHeight = ScreenUtils.getScreenHeight();
 
             log.d("initScreenHeight: 生成的 screenHeight = " + screenHeight);
 

@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * 创建时间: 16/8/19 下午2:25
  * 描述:
  */
-public class MLYFragmentTabHost extends TabHost implements TabHost.OnTabChangeListener {
+public class FragmentTabHost extends TabHost implements TabHost.OnTabChangeListener {
     private final ArrayList<TabInfo> mTabs = new ArrayList<>();
     private FrameLayout mRealTabContent;
     private Context mContext;
@@ -99,14 +99,14 @@ public class MLYFragmentTabHost extends TabHost implements TabHost.OnTabChangeLi
         };
     }
 
-    public MLYFragmentTabHost(Context context) {
+    public FragmentTabHost(Context context) {
         // Note that we call through to the version that takes an AttributeSet,
         // because the simple Context construct can result in a broken object!
         super(context, null);
         initFragmentTabHost(context, null);
     }
 
-    public MLYFragmentTabHost(Context context, AttributeSet attrs) {
+    public FragmentTabHost(Context context, AttributeSet attrs) {
         super(context, attrs);
         initFragmentTabHost(context, attrs);
     }
