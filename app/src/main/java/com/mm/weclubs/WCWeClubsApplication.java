@@ -5,12 +5,15 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.util.LibCommonUtils;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.UUID;
+
+import butterknife.ButterKnife;
 
 /**
  * 创建人: fangzanpan
@@ -25,6 +28,8 @@ public class WCWeClubsApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ButterKnife.setDebug(WCConfigConstants.DEV);
 
         initScreenWidth();
         initScreenHeight();

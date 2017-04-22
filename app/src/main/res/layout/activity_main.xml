@@ -15,26 +15,36 @@
         android:layout_marginBottom="66dp"
         app:srcCompat="@android:drawable/ic_dialog_dialer"/>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottomNavigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#f8f8f8"
-        app:menu="@menu/bottom_navigation"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/content_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"/>
-
-    <FrameLayout
-        android:id="@+id/content"
+    <com.mm.weclubs.widget.MLYFragmentTabHost
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--<include layout="@layout/content_pdmain"/>-->
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#DEDEDE"/>
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:background="@android:color/white"/>
+        </LinearLayout>
+
+    </com.mm.weclubs.widget.MLYFragmentTabHost>
 
 </android.support.design.widget.CoordinatorLayout>

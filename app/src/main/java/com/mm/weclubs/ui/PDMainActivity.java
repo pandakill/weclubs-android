@@ -1,118 +1,119 @@
 package com.mm.weclubs.ui;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.BottomNavigationView.OnNavigationItemSelectedListener;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.rxbus.RxBus;
 import com.mm.weclubs.rxbus.events.LoginSuccessEvent;
-import com.mm.weclubs.ui.adapter.FragmentAdapter;
 import com.mm.weclubs.ui.fragment.PDMineFragment;
-import com.mm.weclubs.ui.fragment.PDMyDailyFragment;
 import com.mm.weclubs.ui.fragment.PDSquareFragment;
+import com.mm.weclubs.widget.MLYFragmentTabHost;
 
-import java.util.ArrayList;
-
-import butterknife.ButterKnife;
 import rx.Subscription;
 
 
 public class PDMainActivity extends AppCompatActivity {
 
-    FrameLayout mContent;
-    BottomNavigationView mBottomNavigationView;
-    FloatingActionButton mFab;
-    ViewPager mViewPager;
+    private TabWidget mTabs;
+    private MLYFragmentTabHost mTabHost;
 
-    PDMineFragment mMineFragment;
-    PDMyDailyFragment mMyDailyFragment;
-    PDSquareFragment mSquareFragment;
+    private FragmentManager mFragmentManager;
 
     Subscription mRxSubscription = null;
+
+    // tabHost 图标
+    private int mFragmentDrawables[] = {
+            R.drawable.tab_host_index,
+            R.drawable.tab_host_dynamic,
+            R.drawable.tab_host_tools,
+            R.drawable.tab_host_mine
+    };
+    // tabHost 标题
+    private String mFragmentTags[] = {
+            "首页", "动态", "工具", "我的"
+    };
+
+    // fragment
+    private Class<?> mFragments[] = {
+            PDMineFragment.class,
+            PDSquareFragment.class,
+            PDSquareFragment.class,
+            PDMineFragment.class
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        mTabHost = (MLYFragmentTabHost) findViewById(android.R.id.tabhost);
+        mTabs = (TabWidget) findViewById(android.R.id.tabs);
 
-        mMineFragment = new PDMineFragment();
-        mMyDailyFragment = new PDMyDailyFragment();
-        mSquareFragment = new PDSquareFragment();
-
-        mFab = (FloatingActionButton) findViewById(R.id.fab);
-        mBottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNavigation);
-        mViewPager = (ViewPager) findViewById(R.id.content_viewpager);
-
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
-        ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(mMyDailyFragment);
-        fragments.add(mSquareFragment);
-        fragments.add(mMineFragment);
-        adapter.setFragments(fragments);
-
-        mViewPager.setAdapter(adapter);
-
-        mFab.setOnClickListener(view -> Toast.makeText(this, "Replace with your own action", Toast.LENGTH_LONG).show());
-
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.isChecked()) {
-                    return false;
-                }
-
-                switch (item.getItemId()) {
-                    case R.id.item1:
-                        mFab.show();
-                        mViewPager.setCurrentItem(0);
-                        break;
-                    case R.id.item2:
-                        mFab.hide();
-                        mViewPager.setCurrentItem(1);
-                        break;
-                    case R.id.item3:
-                        mFab.hide();
-                        mViewPager.setCurrentItem(2);
-                        break;
-                }
-
-                Toast.makeText(PDMainActivity.this, item.getTitle(), Toast.LENGTH_SHORT).show();
-                return true;
-            }
-        });
-
-        mViewPager.addOnPageChangeListener(new OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                mBottomNavigationView.getMenu().getItem(mViewPager.getCurrentItem()).setChecked(false);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mBottomNavigationView.getMenu().getItem(mViewPager.getCurrentItem()).setChecked(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-            }
-        });
+        mFragmentManager = getSupportFragmentManager();
+        initTabHost();
 
         mRxSubscription = RxBus.getDefault().toObservable(LoginSuccessEvent.class)
                 .subscribe(loginSuccessEvent -> {
                     Toast.makeText(PDMainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 });
+    }
+
+    private void initTabHost() {
+        mTabHost.setup(this, mFragmentManager, android.R.id.tabcontent);
+        mTabHost.getTabWidget().setDividerDrawable(null);   // 去除分割线
+        mTabHost.clearAllTabs();
+
+        for (int i = 0; i < mFragmentTags.length; i++) {
+            // 添加图片和文字
+            TabSpec tabSpec = mTabHost.newTabSpec(mFragmentTags[i]).setIndicator(getImageView(i));
+            // 设置对应的fragment
+            mTabHost.addTab(tabSpec, mFragments[i], null);
+            // 设置背景
+            mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(android.R.color.white);
+            mTabHost.getTabWidget().getChildAt(i).setTag(i);
+            mTabHost.getTabWidget().getChildAt(i).setOnClickListener(v -> {
+                switch ((Integer) v.getTag()) {
+                    case 0:
+                        clickTagHost((Integer) v.getTag(), "index");
+                        break;
+                    case 1:
+                        clickTagHost((Integer) v.getTag(), "dynamic");
+                        break;
+                    case 2:
+                        clickTagHost((Integer) v.getTag(), "tools");
+                        break;
+                    case 3:
+                        clickTagHost((Integer) v.getTag(), "mine");
+                        break;
+                }
+
+            });
+        }
+    }
+
+    private void clickTagHost(int tag, String tagId) {
+        mTabs.setCurrentTab(tag);
+        mTabHost.onTabChanged(tagId);
+    }
+
+    // 获得图片资源
+    private View getImageView(int index) {
+        @SuppressLint("InflateParams")
+        View view = getLayoutInflater().inflate(R.layout.view_tab_indicator, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.tab_iv_image);
+        TextView textView = (TextView) view.findViewById(R.id.tab_tv_title);
+        textView.setText(mFragmentTags[index]);
+        imageView.setImageResource(mFragmentDrawables[index]);
+        return view;
     }
 
     @Override

@@ -51,7 +51,8 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
 
     // 依赖注入
-    compile 'com.jakewharton:butterknife:7.0.1'
+//    compile 'com.jakewharton:butterknife:8.5.1'
+//    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     // 高斯模糊类
     compile 'com.commit451:NativeStackBlur:1.0.2'
