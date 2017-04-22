@@ -6,7 +6,7 @@ import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
-import com.mm.weclubs.retrofit.ServiceGenerator;
+import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCUserService;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.WCLog;
@@ -31,7 +31,7 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
     public WCLoginPresenter(Context context) {
         super(context);
 
-        mUserService = ServiceGenerator.createService(WCUserService.class);
+        mUserService = WCServiceFactory.getUserService();
         mHttpParamsPresenter = new WCHttpParamsPresenter();
     }
 
