@@ -2,13 +2,12 @@ package com.mm.weclubs.app.security;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
 
 import com.mm.weclubs.BuildConfig;
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.model.WCRequestParamModel;
-import com.mm.weclubs.data.model.WCRequestParamModel.ClientBean;
-import com.mm.weclubs.data.model.WCRequestParamModel.ClientBean.ExBean;
+import com.mm.weclubs.data.bean.WCRequestParamBean;
+import com.mm.weclubs.data.bean.WCRequestParamBean.ClientBean;
+import com.mm.weclubs.data.bean.WCRequestParamBean.ClientBean.ExBean;
 import com.mm.weclubs.util.JsonHelper;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
@@ -31,9 +30,9 @@ public class WCHttpParamsPresenter {
 
     private WCLog log = new WCLog(WCHttpParamsPresenter.class);
 
-    public WCRequestParamModel initRequestParam(Context context, HashMap<String, Object> params) {
+    public WCRequestParamBean initRequestParam(Context context, HashMap<String, Object> params) {
 
-        WCRequestParamModel requestParamModel = new WCRequestParamModel();
+        WCRequestParamBean requestParamModel = new WCRequestParamBean();
 
         requestParamModel.setData(params);
 

@@ -1,9 +1,9 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.model.WCRequestParamModel;
-import com.mm.weclubs.data.model.WCResponseParamModel;
-import com.mm.weclubs.data.pojo.WCUserInfoBean;
+import com.mm.weclubs.data.bean.WCRequestParamBean;
+import com.mm.weclubs.data.bean.WCResponseParamBean;
+import com.mm.weclubs.data.pojo.WCUserInfoInfo;
 
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -26,21 +26,21 @@ public interface WCUserService {
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamModel<WCUserInfoBean>> login(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> login(@Url String url, @Body WCRequestParamBean requestBean);
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamModel<WCUserInfoBean>> getUserInfo(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> getUserInfo(@Url String url, @Body WCRequestParamBean requestBean);
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamModel<WCUserInfoBean>> register(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> register(@Url String url, @Body WCRequestParamBean requestBean);
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamModel<WCUserInfoBean>> changePassword(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> changePassword(@Url String url, @Body WCRequestParamBean requestBean);
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamModel> updateSchoolInfo(@Url String url, @Body WCRequestParamModel requestBean);
+    Observable<WCResponseParamBean> updateSchoolInfo(@Url String url, @Body WCRequestParamBean requestBean);
 }

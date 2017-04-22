@@ -1,4 +1,4 @@
-package com.mm.weclubs.data.model;
+package com.mm.weclubs.data.bean;
 
 /**
  * 创建人: fangzanpan
@@ -6,7 +6,7 @@ package com.mm.weclubs.data.model;
  * 描述:  请求参数的模型
  */
 
-public class WCRequestParamModel {
+public class WCRequestParamBean {
 
     private String id;
 

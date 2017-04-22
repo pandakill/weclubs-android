@@ -16,7 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.ui.activity.LoginActivity;
+import com.mm.weclubs.ui.activity.WCLoginActivity;
 
 
 /**
@@ -54,7 +54,7 @@ public class PDMyDailyFragment extends Fragment {
         mLoadingProgressBar.show();
         mLoginBtn.setOnClickListener(view1 -> {
             Toast.makeText(mAppCompatActivity, "登录", Toast.LENGTH_SHORT).show();
-            mAppCompatActivity.startActivity(new Intent(mAppCompatActivity, LoginActivity.class));
+            mAppCompatActivity.startActivity(new Intent(mAppCompatActivity, WCLoginActivity.class));
         });
     }
 

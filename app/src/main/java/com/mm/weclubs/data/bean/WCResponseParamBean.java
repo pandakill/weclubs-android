@@ -1,4 +1,4 @@
-package com.mm.weclubs.data.model;
+package com.mm.weclubs.data.bean;
 
 import com.mm.weclubs.util.JsonHelper;
 
@@ -8,7 +8,7 @@ import com.mm.weclubs.util.JsonHelper;
  * 描述:
  */
 
-public class WCResponseParamModel<T> {
+public class WCResponseParamBean<T> {
 
     private int result_code;
     private String result_msg;

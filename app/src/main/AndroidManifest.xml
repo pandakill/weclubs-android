@@ -22,7 +22,7 @@
         android:name=".WCWeClubsApplication">
 
         <activity
-            android:name="com.mm.weclubs.ui.activity.LoginActivity"
+            android:name="com.mm.weclubs.ui.activity.WCLoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:launchMode="singleTask">

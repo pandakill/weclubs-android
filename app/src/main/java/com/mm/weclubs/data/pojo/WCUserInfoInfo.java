@@ -8,7 +8,7 @@ import com.mm.weclubs.util.JsonHelper;
  * 描述:
  */
 
-public class WCUserInfoBean {
+public class WCUserInfoInfo {
 
     /**
      * graduate_year : 0级
