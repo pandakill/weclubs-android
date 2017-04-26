@@ -36,8 +36,8 @@ public interface WCConfigConstants {
             : SERVER_URLS.RELEASE.signSecret);
 
     enum SERVER_URLS {
-        DEV("weclubs.net:1203", "chrome_test", MD5Util.md5("pukongjie")),
-        DEBUG("debug.com", "chrome_test", MD5Util.md5("pukongjie")),
+        DEV("192.168.31.168:1203", "chrome_test", MD5Util.md5("pukongjie")),
+        DEBUG("weclubs.net:1203", "chrome_test", MD5Util.md5("pukongjie")),
         RELEASE("release.com", "chrome_test", MD5Util.md5("pukongjie"));
 
         String url = null;

@@ -36,14 +36,18 @@ public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
         mLoginPresenter = new WCLoginPresenter(getApplicationContext());
         mLoginPresenter.attachView(this);
 
-        findViewById(R.id.btn_login).setOnClickListener(view ->
-                mLoginPresenter.login(((EditText) findViewById(R.id.input_mobile)).getText().toString(),
-                ((EditText) findViewById(R.id.input_password)).getText().toString()));
+        afterView();
     }
 
     private void initView() {
         mInputMobile = (EditText) findViewById(R.id.input_mobile);
         mInputPassword = (EditText) findViewById(R.id.input_password);
+    }
+
+    private void afterView() {
+        findViewById(R.id.btn_login).setOnClickListener(view ->
+                mLoginPresenter.login(mInputMobile.getText().toString(),
+                        mInputPassword.getText().toString()));
     }
 
     @Override
