@@ -1,4 +1,4 @@
-package com.mm.weclubs.ui;
+package com.mm.weclubs.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -14,8 +14,10 @@ import android.widget.Toast;
 import com.mm.weclubs.R;
 import com.mm.weclubs.rxbus.RxBus;
 import com.mm.weclubs.rxbus.events.LoginSuccessEvent;
-import com.mm.weclubs.ui.fragment.PDMineFragment;
-import com.mm.weclubs.ui.fragment.PDSquareFragment;
+import com.mm.weclubs.ui.fragment.WCDynamicFragment;
+import com.mm.weclubs.ui.fragment.WCIndexFragment;
+import com.mm.weclubs.ui.fragment.WCMineFragment;
+import com.mm.weclubs.ui.fragment.WCToolsFragment;
 import com.mm.weclubs.widget.FragmentTabHost;
 
 import rx.Subscription;
@@ -44,10 +46,10 @@ public class WCMainActivity extends AppCompatActivity {
 
     // fragment
     private Class<?> mFragments[] = {
-            PDMineFragment.class,
-            PDSquareFragment.class,
-            PDSquareFragment.class,
-            PDMineFragment.class
+            WCIndexFragment.class,
+            WCDynamicFragment.class,
+            WCToolsFragment.class,
+            WCMineFragment.class
     };
 
     @Override

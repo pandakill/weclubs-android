@@ -19,48 +19,24 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
-    <!--// 标签栏-->
-    <!--#define TABBAR_FG_COLOR 0x2fcafb-->
-    <!--#define TABBAR_BG_COLOR 0xffffff-->
+    <!-- 标题栏的样式 START-->
+    <item name="title_bar" type="id" />
 
-    <!--// 导航栏-->
-    <!--#define NAVBAR_FG_COLOR 0x333333-->
-    <!--#define NAVBAR_BG_COLOR 0xffffff-->
-    <!--#define NAVBAR_TITLE_SIZE 17-->
+    <color name="title_bar_bg">@color/colorPrimary</color>
+    <dimen name="title_bar_title_text_size">17sp</dimen>
+    <color name="title_bar_title_text_color">#333333</color>
+    <bool name="title_bar_text_bold">false</bool>
+    <dimen name="title_bar_left_padding">12dp</dimen>
+    <dimen name="title_bar_right_text_size">16sp</dimen>
+    <color name="title_bar_right_text_color">#2FCAFB</color>
+    <dimen name="title_bar_right_padding">12dp</dimen>
 
-    <!--// 动画相关-->
-    <!--#define GENERAL_ALERT_DURATION 2.0-->
-
-    <!--// 注册登陆模块-->
-    <!--#define LOGIN_VIEW_BG_COLOR 0xffffff-->
-
-    <!--// 首页模块-->
-    <!--#define HOME_NAV_FG_COLOR 0xffffff-->
-    <!--#define QRCODE_SCANNER_FG_COLOR 0xffffff-->
-
-    <!--// 动态模块-->
-    <!--#define DYNAMIC_LEFT_RIGHT_SPACE 12-->
-    <!--#define DYNAMIC_TOP_SPACE 16-->
-    <!--#define DYNAMIC_CONTENT_BG_COLOR 0xffffff-->
-    <!--#define DYNAMIC_SEPARATOR_BG_COLOR 0xf3f3f3-->
-
-    <!--// 工具模块-->
-    <!--#define TOOLS_ITEMS_OF_ROW 4-->
-
-    <!--// 视图背景色-->
-    <!--#define GENERAL_VIEW_BG_COLOR 0xf3f5f7-->
-
-    <!--// 字体颜色-->
-    <!--#define FONT_MAIN_COLOR 0x333333-->
-    <!--#define FONT_SECOND_COLOR 0x666666-->
-    <!--#define FONT_THIRD_COLOR 0x999999-->
-
-    <!--// 控件不同状态颜色-->
-    <!--#define HIGHTLIGHT_COLOR 0x2fcafb-->
-    <!--#define DESTRUCTIVE_COLOR 0xeb4856-->
-
-    <!--// 圆角规定-->
-    <!--#define RECTANGLE_CORNER_RADIUS 5-->
+    <style name="TitleBar">
+        <item name="android:id">@id/title_bar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+    </style>
+    <!-- 标题栏的样式 END-->
 
     <!-- 登录页相关 START -->
     <string name="hint_mobile">请输入手机号</string>
@@ -81,5 +57,21 @@
         <item name="android:text">@string/action_login</item>
     </style>
     <!-- 登录页相关 END -->
+
+    <!-- 分tab-首页 START -->
+    <string name="title_index">首页</string>
+    <!-- 分tab-首页 END -->
+
+    <!-- 分tab-动态相关 START -->
+    <string name="title_dynamic">我的组织</string>
+    <!-- 分tab-动态相关 END -->
+
+    <!-- 分tab-工具 START -->
+    <string name="title_tools">工具</string>
+    <!-- 分tab-工具 END -->
+
+    <!-- 分tab-我的 START -->
+    <string name="title_mine">我的</string>
+    <!-- 分tab-我的 END -->
 
 </resources>

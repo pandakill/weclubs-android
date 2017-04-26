@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.WCMainActivity"
+            android:name=".ui.activity.WCMainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:launchMode="singleInstance">
         </activity>

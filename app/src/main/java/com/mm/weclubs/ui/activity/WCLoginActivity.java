@@ -11,7 +11,6 @@ import com.mm.weclubs.R;
 import com.mm.weclubs.app.login.WCLoginPresenter;
 import com.mm.weclubs.app.login.WCLoginView;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
-import com.mm.weclubs.ui.WCMainActivity;
 
 /**
  * 创建人: fangzanpan

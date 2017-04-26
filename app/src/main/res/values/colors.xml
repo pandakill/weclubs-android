@@ -1,85 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4a225d</color>
-    <color name="colorPrimaryDark">#402263</color>
+    <color name="colorPrimary">#ffffff</color>
+    <color name="colorPrimaryDark">#20ffffff</color>
     <color name="colorAccent">#F3E5F5</color>
 
-    <color name="white">#19ffffff</color>
-    <color name="white_50">#904A225D</color>
+    <color name="colorLine">#F3F5F7</color>
 
-    <!--// 标签栏-->
-    <!--#define TABBAR_FG_COLOR 0x2fcafb-->
-    <!--#define TABBAR_BG_COLOR 0xffffff-->
+    <color name="colorCommonBg">#F3F5F7</color>
 
-    <!--// 导航栏-->
-    <!--#define NAVBAR_FG_COLOR 0x333333-->
-    <!--#define NAVBAR_BG_COLOR 0xffffff-->
-    <!--#define NAVBAR_TITLE_SIZE 17-->
-
-    <!--// 动画相关-->
-    <!--#define GENERAL_ALERT_DURATION 2.0-->
-
-    <!--// 注册登陆模块-->
-    <!--#define LOGIN_VIEW_BG_COLOR 0xffffff-->
-
-    <!--// 首页模块-->
-    <!--#define HOME_NAV_FG_COLOR 0xffffff-->
-    <!--#define QRCODE_SCANNER_FG_COLOR 0xffffff-->
-
-    <!--// 动态模块-->
-    <!--#define DYNAMIC_LEFT_RIGHT_SPACE 12-->
-    <!--#define DYNAMIC_TOP_SPACE 16-->
-    <!--#define DYNAMIC_CONTENT_BG_COLOR 0xffffff-->
-    <!--#define DYNAMIC_SEPARATOR_BG_COLOR 0xf3f3f3-->
-
-    <!--// 工具模块-->
-    <!--#define TOOLS_ITEMS_OF_ROW 4-->
-
-    <!--// 视图背景色-->
-    <!--#define GENERAL_VIEW_BG_COLOR 0xf3f5f7-->
-
-    <!--// 字体颜色-->
-    <!--#define FONT_MAIN_COLOR 0x333333-->
-    <!--#define FONT_SECOND_COLOR 0x666666-->
-    <!--#define FONT_THIRD_COLOR 0x999999-->
-
-    <!--// 控件不同状态颜色-->
-    <!--#define HIGHTLIGHT_COLOR 0x2fcafb-->
-    <!--#define DESTRUCTIVE_COLOR 0xeb4856-->
-
-    <!--// 圆角规定-->
-    <!--#define RECTANGLE_CORNER_RADIUS 5-->
-
-    <color name="theme_color">@color/theme_color_c1</color> <!-- C1:用于重要性按钮及高亮元素 -->
-    <color name="theme_color_title">@color/theme_color_c2</color> <!-- C2:用于标题内容,重要叙述内容 -->
-    <color name="theme_color_tips">@color/theme_color_c3</color> <!-- C3:用于高亮和特殊提示 -->
-    <color name="theme_color_special_tips">@color/theme_color_c4</color> <!-- C4:特殊提示,例:点赞 -->
-    <color name="theme_color_unavailable">@color/theme_color_c5</color> <!-- C5:用于次级内容,不可点信息 -->
-    <color name="theme_color_modify">@color/theme_color_c6</color> <!-- C6:辅助内容,修饰性icon -->
-    <color name="theme_color_under_line">@color/theme_color_c7</color> <!-- C7:内容层级分割线 -->
-    <color name="theme_window_background">@color/theme_color_c8</color> <!-- C8:整体app背景色 -->
-    <color name="theme_color_c0">#FFFFFF</color>    <!-- C0:特殊提示 -->
-
-    <color name="theme_color_c1">#9BDB4E</color>
-    <color name="theme_color_c2">#2A2A2C</color>
-    <color name="theme_color_c3">#FFEF3B</color>
-    <color name="theme_color_c4">#FF3344</color>
-    <color name="theme_color_c5">#999999</color>
-    <color name="theme_color_c6">#CCCCCC</color>
-    <color name="theme_color_c7">#E8E8E8</color>
-    <color name="theme_color_c8">#F0F0F0</color>
-    <color name="theme_color_c2_a50">#802A2A2C</color>
-
-    <color name="theme_color_divider">#E2E2E2</color>   <!-- 组件间的分割线 -->
-
-    <color name="theme_color_button">@color/theme_color</color>
-    <color name="theme_color_button_clicked">#88cc36</color>
-    <color name="theme_color_button_text_color">@android:color/white</color>
-
-    <color name="theme_white_button">@android:color/white</color>
-    <color name="theme_white_button_clicked">#f7f7f7</color>
-    <color name="theme_white_button_text_color">@color/theme_color_title</color>
-
-    <color name="theme_color_layout_alpha">#50999999</color> <!-- 通用的一个颜色覆盖层 -->
-    <color name="theme_color_title_deep">#2A2A2F</color> <!-- C2:用于标题内容,重要叙述内容 -->
+    <color name="colorCommonText">#333333</color>
+    <color name="colorHintText">#B2C1C6</color>
 </resources>

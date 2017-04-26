@@ -9,18 +9,19 @@ import android.view.ViewGroup;
 
 import com.mm.weclubs.R;
 
-
 /**
  * 创建人: fangzanpan
- * 创建时间: 2017/2/15 下午2:26
- * 描述:
+ * 创建时间: 2017/4/26 下午4:11
+ * 描述:  首页动态的fragment
  */
 
-public class PDSquareFragment extends Fragment {
+public class WCToolsFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_square, null);
+        setHasOptionsMenu(true);
+        View fragmentView = inflater.inflate(R.layout.fragment_tools, null);
+        return fragmentView;
     }
 }
