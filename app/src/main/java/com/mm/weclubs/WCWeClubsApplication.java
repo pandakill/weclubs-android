@@ -3,6 +3,7 @@ package com.mm.weclubs;
 import android.app.Application;
 
 import com.blankj.utilcode.utils.ScreenUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.mm.weclubs.util.LibCommonUtils;
 import com.mm.weclubs.util.MD5Util;
@@ -26,6 +27,7 @@ public class WCWeClubsApplication extends Application {
         super.onCreate();
 
         Utils.init(this);
+        ToastUtils.init(false);
 
         initScreenWidth();
         initScreenHeight();

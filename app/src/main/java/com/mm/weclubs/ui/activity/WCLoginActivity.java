@@ -1,11 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.login.WCLoginPresenter;
@@ -18,7 +14,7 @@ import com.mm.weclubs.data.pojo.WCUserInfoInfo;
  * 描述:
  */
 
-public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
+public class WCLoginActivity extends BaseActivity implements WCLoginView {
 
     private EditText mInputMobile;
     private EditText mInputPassword;
@@ -26,32 +22,39 @@ public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
     private WCLoginPresenter mLoginPresenter;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected int getContentLayout() {
+        return R.layout.activity_login;
+    }
 
-        setContentView(R.layout.activity_login);
-        initView();
+    @Override
+    protected void initView() {
+        mInputMobile = (EditText) findViewById(R.id.input_mobile);
+        mInputPassword = (EditText) findViewById(R.id.input_password);
 
         mLoginPresenter = new WCLoginPresenter(getApplicationContext());
         mLoginPresenter.attachView(this);
-
-        afterView();
     }
 
-    private void initView() {
-        mInputMobile = (EditText) findViewById(R.id.input_mobile);
-        mInputPassword = (EditText) findViewById(R.id.input_password);
-    }
-
-    private void afterView() {
+    @Override
+    protected void afterView() {
         findViewById(R.id.btn_login).setOnClickListener(view ->
                 mLoginPresenter.login(mInputMobile.getText().toString(),
                         mInputPassword.getText().toString()));
     }
 
     @Override
+    protected boolean toggleOverridePendingTransition() {
+        return false;
+    }
+
+    @Override
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return null;
+    }
+
+    @Override
     public void loginSuccess(WCUserInfoInfo userInfo) {
-        Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
+        showToast("登录成功");
 
         Intent intent = new Intent(this, WCMainActivity.class);
         startActivity(intent);
@@ -60,6 +63,6 @@ public class WCLoginActivity extends AppCompatActivity implements WCLoginView {
 
     @Override
     public void loginFail(String errorMsg) {
-        Toast.makeText(this, errorMsg, Toast.LENGTH_SHORT).show();
+        showToast(errorMsg);
     }
 }

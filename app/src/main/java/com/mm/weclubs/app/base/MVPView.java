@@ -6,4 +6,6 @@ package com.mm.weclubs.app.base;
  * 描述: mvpView的一些常用的方法
  */
 public interface MVPView {
+
+    void showToast(String text);
 }

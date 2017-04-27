@@ -1,15 +1,12 @@
 package com.mm.weclubs.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.rxbus.RxBus;
@@ -23,7 +20,7 @@ import com.mm.weclubs.widget.FragmentTabHost;
 import rx.Subscription;
 
 
-public class WCMainActivity extends AppCompatActivity {
+public class WCMainActivity extends BaseActivity {
 
     private TabWidget mTabs;
     private FragmentTabHost mTabHost;
@@ -53,20 +50,36 @@ public class WCMainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getContentLayout() {
+        return R.layout.activity_main;
+    }
 
+    @Override
+    protected void initView() {
         mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
         mTabs = (TabWidget) findViewById(android.R.id.tabs);
 
         mFragmentManager = getSupportFragmentManager();
+    }
+
+    @Override
+    protected void afterView() {
         initTabHost();
 
         mRxSubscription = RxBus.getDefault().toObservable(LoginSuccessEvent.class)
                 .subscribe(loginSuccessEvent -> {
-                    Toast.makeText(WCMainActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                    showToast("登录成功");
                 });
+    }
+
+    @Override
+    protected boolean toggleOverridePendingTransition() {
+        return true;
+    }
+
+    @Override
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return TransitionMode.RIGHT;
     }
 
     private void initTabHost() {
