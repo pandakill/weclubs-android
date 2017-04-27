@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.rxbus.RxBus;
 import com.mm.weclubs.util.WCLog;
 
 import cn.bingoogolapple.titlebar.BGATitleBar;
@@ -24,6 +25,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     private BGATitleBar mTitleBar;
 
     private WCLog log;
+
+    private RxBus mBus = null;
 
     public enum TransitionMode {
         LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
@@ -91,6 +94,17 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (mBus != null) {
+
+        }
+
+        unSubscribeObservable();
+    }
+
     protected abstract int getContentLayout();
 
     protected abstract void initView();
@@ -102,6 +116,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     protected abstract TransitionMode getOverridePendingTransitionMode();
 
     protected abstract boolean leftBtnIsReturn();
+
+    protected abstract void unSubscribeObservable();
 
     protected void initTitleBar() {
         mTitleBar = (BGATitleBar) findViewById(R.id.title_bar);

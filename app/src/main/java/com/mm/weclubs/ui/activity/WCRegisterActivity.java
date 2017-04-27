@@ -65,4 +65,11 @@ public class WCRegisterActivity extends BaseActivity {
     protected boolean leftBtnIsReturn() {
         return true;
     }
+
+    @Override
+    protected void unSubscribeObservable() {
+        if (verifyCodeObservable != null) {
+            verifyCodeObservable.unsubscribeOn(AndroidSchedulers.mainThread());
+        }
+    }
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.rxbus.RxBus;
-import com.mm.weclubs.rxbus.events.LoginSuccessEvent;
+import com.mm.weclubs.rxbus.RxEvents;
 import com.mm.weclubs.ui.fragment.WCDynamicFragment;
 import com.mm.weclubs.ui.fragment.WCIndexFragment;
 import com.mm.weclubs.ui.fragment.WCMineFragment;
@@ -66,9 +66,13 @@ public class WCMainActivity extends BaseActivity {
     protected void afterView() {
         initTabHost();
 
-        mRxSubscription = RxBus.getDefault().toObservable(LoginSuccessEvent.class)
-                .subscribe(loginSuccessEvent -> {
-                    showToast("登录成功");
+        mRxSubscription = RxBus.getDefault().toObservable(RxEvents.class)
+                .subscribe(rxEvents -> {
+                    switch (rxEvents.getEventName()) {
+                        case RxEvents.loginSuccess:
+                            showToast("登录成功");
+                            break;
+                    }
                 });
     }
 
@@ -85,6 +89,13 @@ public class WCMainActivity extends BaseActivity {
     @Override
     protected boolean leftBtnIsReturn() {
         return false;
+    }
+
+    @Override
+    protected void unSubscribeObservable() {
+        if (!mRxSubscription.isUnsubscribed()) {
+            mRxSubscription.unsubscribe();
+        }
     }
 
     private void initTabHost() {
@@ -134,13 +145,5 @@ public class WCMainActivity extends BaseActivity {
         textView.setText(mFragmentTags[index]);
         imageView.setImageResource(mFragmentDrawables[index]);
         return view;
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (!mRxSubscription.isUnsubscribed()) {
-            mRxSubscription.unsubscribe();
-        }
-        super.onDestroy();
     }
 }
