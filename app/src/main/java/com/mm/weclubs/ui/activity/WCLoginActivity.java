@@ -1,6 +1,5 @@
 package com.mm.weclubs.ui.activity;
 
-import android.content.Intent;
 import android.widget.EditText;
 
 import com.mm.weclubs.R;
@@ -40,6 +39,9 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
         findViewById(R.id.btn_login).setOnClickListener(view ->
                 mLoginPresenter.login(mInputMobile.getText().toString(),
                         mInputPassword.getText().toString()));
+
+        findViewById(R.id.btn_register).setOnClickListener(view -> showIntent(WCRegisterActivity.class));
+        findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("注册新用户"));
     }
 
     @Override
@@ -53,12 +55,15 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
     }
 
     @Override
+    protected boolean leftBtnIsReturn() {
+        return false;
+    }
+
+    @Override
     public void loginSuccess(WCUserInfoInfo userInfo) {
         showToast("登录成功");
 
-        Intent intent = new Intent(this, WCMainActivity.class);
-        startActivity(intent);
-        finish();
+        showIntentThenKill(WCMainActivity.class);
     }
 
     @Override

@@ -3,7 +3,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar.HasStatusBar">
@@ -20,6 +20,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:layout_marginTop">24dp</item>
+        <item name="android:gravity">center</item>
         <item name="android:background">@drawable/btn_corner_click_bg_theme</item>
         <item name="android:text">@string/action_login</item>
         <item name="android:stateListAnimator">@null</item> <!-- 去出阴影效果 -->

@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.util.WCLog;
+
+import cn.bingoogolapple.titlebar.BGATitleBar;
+import cn.bingoogolapple.titlebar.BGATitleBar.Delegate;
 
 /**
  * 创建人: fangzanpan
@@ -15,6 +20,10 @@ import com.mm.weclubs.app.base.MVPView;
  */
 
 public abstract class BaseActivity extends AppCompatActivity implements MVPView {
+
+    private BGATitleBar mTitleBar;
+
+    private WCLog log;
 
     public enum TransitionMode {
         LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
@@ -48,7 +57,10 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
 
         setContentView(getContentLayout());
 
+        log = new WCLog(this.getClass());
+
         initView();
+        initTitleBar();
         afterView();
     }
 
@@ -88,6 +100,157 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     protected abstract boolean toggleOverridePendingTransition();
 
     protected abstract TransitionMode getOverridePendingTransitionMode();
+
+    protected abstract boolean leftBtnIsReturn();
+
+    protected void initTitleBar() {
+        mTitleBar = (BGATitleBar) findViewById(R.id.title_bar);
+
+        if (mTitleBar == null) {
+            log.d("titleBar == null");
+            return;
+        }
+
+        mTitleBar.setDelegate(new Delegate() {
+            @Override
+            public void onClickLeftCtv() {
+                onClickLeftTitle();
+            }
+
+            @Override
+            public void onClickTitleCtv() {
+                onClickTitle();
+            }
+
+            @Override
+            public void onClickRightCtv() {
+                onClickRightTitle();
+            }
+
+            @Override
+            public void onClickRightSecondaryCtv() {
+                onClickRightSecondTitle();
+            }
+        });
+    }
+
+    public BGATitleBar getTitleBar() {
+        return mTitleBar;
+    }
+
+    protected void onClickTitle() {
+
+        if (getTitleBar() == null) {
+            return;
+        }
+
+        showToast("点击了标题栏");
+    }
+
+    protected void onClickLeftTitle() {
+
+        if (getTitleBar() == null) {
+            return;
+        }
+
+        if (leftBtnIsReturn()) {
+            finish();
+        }
+    }
+
+    protected void onClickRightTitle() {
+
+        if (getTitleBar() == null) {
+            return;
+        }
+
+        showToast("点击了右侧按钮");
+    }
+
+    protected void onClickRightSecondTitle() {
+
+        if (getTitleBar() == null) {
+            return;
+        }
+
+        showToast("点击了右侧第二个按钮");
+    }
+
+    /**
+     * 普通的startActivity
+     *
+     * @param targetActivity 目标activity
+     */
+    protected void showIntent(Class<?> targetActivity) {
+        Intent intent = new Intent(this, targetActivity);
+        startActivity(intent);
+    }
+
+    /**
+     * 带有bundle的startActivity
+     *
+     * @param targetActivity 目标activity
+     * @param extras         需要传送的参数
+     */
+    protected void showIntent(Class<?> targetActivity, Bundle extras) {
+        Intent intent = new Intent(this, targetActivity);
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
+        startActivity(intent);
+    }
+
+    /**
+     * 普通的startActivity,跳转之后需要finish本页面
+     *
+     * @param targetActivity 目标activity
+     */
+    protected void showIntentThenKill(Class<?> targetActivity) {
+        Intent intent = new Intent(this, targetActivity);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * 带有bundle的startActivity,跳转之后需要finish本页面
+     *
+     * @param targetActivity 目标activity
+     * @param extras         需要传送的参数
+     */
+    protected void showIntentThenKill(Class<?> targetActivity, Bundle extras) {
+        Intent intent = new Intent(this, targetActivity);
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
+        startActivity(intent);
+        finish();
+    }
+
+    /**
+     * 普通的startActivityForResult
+     *
+     * @param targetActivity 目标activity
+     * @param requestCode    请求码
+     */
+    protected void showIntentForResult(Class<?> targetActivity, int requestCode) {
+        Intent intent = new Intent(this, targetActivity);
+        startActivityForResult(intent, requestCode);
+    }
+
+    /**
+     * 带有bundle的startActivityForResult
+     *
+     * @param targetActivity 目标activity
+     * @param requestCode    请求码
+     * @param extras         需要传送的参数
+     */
+    protected void showIntentForResult(Class<?> targetActivity, int requestCode, Bundle extras) {
+        Intent intent = new Intent(this, targetActivity);
+        if (extras != null) {
+            intent.putExtras(extras);
+        }
+        startActivityForResult(intent, requestCode);
+    }
 
     @Override
     public void showToast(String text) {

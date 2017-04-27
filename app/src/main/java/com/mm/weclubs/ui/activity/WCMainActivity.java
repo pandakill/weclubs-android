@@ -82,6 +82,11 @@ public class WCMainActivity extends BaseActivity {
         return TransitionMode.RIGHT;
     }
 
+    @Override
+    protected boolean leftBtnIsReturn() {
+        return false;
+    }
+
     private void initTabHost() {
         mTabHost.setup(this, mFragmentManager, android.R.id.tabcontent);
         mTabHost.getTabWidget().setDividerDrawable(null);   // 去除分割线

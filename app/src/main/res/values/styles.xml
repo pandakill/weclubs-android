@@ -19,8 +19,25 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+    <!-- 全局的页面样式 START -->
+    <style name="CommonLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/colorCommonBg</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="CommonLayout.WhiteBg">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="CommonLayout.WhiteBg.PaddingLeftAndRight">
+        <item name="android:paddingLeft">20dp</item>
+        <item name="android:paddingRight">20dp</item>
+    </style>
+    <!-- 全局的页面样式 END -->
+
     <!-- 标题栏的样式 START-->
-    <item name="title_bar" type="id" />
 
     <color name="title_bar_bg">@color/colorPrimary</color>
     <dimen name="title_bar_title_text_size">17sp</dimen>
@@ -32,7 +49,6 @@
     <dimen name="title_bar_right_padding">12dp</dimen>
 
     <style name="TitleBar">
-        <item name="android:id">@id/title_bar</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
     </style>
@@ -41,11 +57,15 @@
     <!-- 登录页相关 START -->
     <string name="hint_mobile">请输入手机号</string>
     <string name="hint_password">请输入密码</string>
+    <string name="hint_code">请输入手机验证码</string>
     <string name="prompt_country_code">+86</string>
     <string name="action_login">登录</string>
     <string name="action_register">新用户注册</string>
     <string name="action_forget_password">忘记密码</string>
     <string name="title_quick_login">快速登录</string>
+    <string name="action_get_code">获取验证码</string>
+    <string name="action_repeat_get_code">重新获取（%d）</string>
+    <string name="action_next_step">下一步</string>
 
     <style name="LoginButton">
         <item name="android:layout_width">match_parent</item>
@@ -53,6 +73,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#ffffff</item>
         <item name="android:layout_marginTop">24dp</item>
+        <item name="android:gravity">center</item>
         <item name="android:background">@drawable/btn_corner_click_bg_theme</item>
         <item name="android:text">@string/action_login</item>
     </style>

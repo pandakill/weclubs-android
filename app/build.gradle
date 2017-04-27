@@ -44,6 +44,8 @@ dependencies {
     // 添加RxAndroid的依赖
     compile 'io.reactivex:rxjava:1.2.2'
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.trello:rxlifecycle:0.4.0'
+    compile 'com.jakewharton.rxbinding:rxbinding:0.3.0'
 
     // 添加retrofit依赖
     compile 'com.squareup.retrofit2:retrofit:2.1.0'

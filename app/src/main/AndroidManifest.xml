@@ -23,7 +23,7 @@
 
         <activity
             android:name="com.mm.weclubs.ui.activity.WCLoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -31,11 +31,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.activity.WCMainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:launchMode="singleInstance">
         </activity>
+
+        <activity
+            android:name=".ui.activity.WCRegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
+            android:launchMode="singleTask"/>
 
     </application>
 

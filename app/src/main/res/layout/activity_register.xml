@@ -2,19 +2,19 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/CommonLayout">
+    style="@style/CommonLayout.WhiteBg">
 
     <cn.bingoogolapple.titlebar.BGATitleBar
         style="@style/TitleBar"
-        app:bgatitlebar_titleText="@string/title_mine"
-        app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
+        android:id="@+id/title_bar"
+        app:bgatitlebar_leftAndRightPadding="@dimen/title_bar_left_padding"
+        app:bgatitlebar_leftDrawable="@mipmap/icon_return"
         app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"
+        app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
         app:bgatitlebar_isTitleTextBold="@bool/title_bar_text_bold"
-        android:background="@color/title_bar_bg"/>
+        app:bgatitlebar_titleText="注册新用户"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    <include
+        layout="@layout/view_input_mobile" />
 
 </LinearLayout>

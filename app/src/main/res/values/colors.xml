@@ -10,4 +10,9 @@
 
     <color name="colorCommonText">#333333</color>
     <color name="colorHintText">#B2C1C6</color>
+    <color name="colorCommonText.Tips">#999999</color>
+
+    <color name="themeColor">#2FCAFB</color>
+    <color name="themeColor.Dark">#09c2fc</color>
+    <color name="themeColor.Disable">#b5eafa</color>
 </resources>

@@ -5,7 +5,16 @@
         <shape>
             <corners
                 android:radius="4dp"/>
-            <solid android:color="#2fcafb" />
+            <solid android:color="@color/themeColor" />
+        </shape>
+    </item>
+
+    <item
+        android:state_enabled="true" >
+        <shape>
+            <corners
+                android:radius="4dp"/>
+            <solid android:color="@color/themeColor" />
         </shape>
     </item>
 
@@ -14,7 +23,7 @@
         <shape>
             <corners
                 android:radius="4dp"/>
-            <solid android:color="#2fcafb" />
+            <solid android:color="@color/themeColor" />
         </shape>
     </item>
 
@@ -23,7 +32,7 @@
         <shape>
             <corners
                 android:radius="4dp"/>
-            <solid android:color="#09c2fc" />
+            <solid android:color="@color/themeColor.Dark" />
         </shape>
     </item>
 
@@ -32,7 +41,7 @@
         <shape>
             <corners
                 android:radius="4dp"/>
-            <solid android:color="#b5eafa" />
+            <solid android:color="@color/themeColor.Disable" />
         </shape>
     </item>
 </selector>
