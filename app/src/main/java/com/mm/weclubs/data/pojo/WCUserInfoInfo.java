@@ -2,13 +2,15 @@ package com.mm.weclubs.data.pojo;
 
 import com.mm.weclubs.util.JsonHelper;
 
+import java.io.Serializable;
+
 /**
  * 创建人: fangzanpan
  * 创建时间: 2017/2/7 下午2:33
  * 描述:
  */
 
-public class WCUserInfoInfo {
+public class WCUserInfoInfo implements Serializable {
 
     /**
      * graduate_year : 0级
