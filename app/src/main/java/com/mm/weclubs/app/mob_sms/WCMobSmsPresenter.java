@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.blankj.utilcode.utils.RegexUtils;
 import com.mm.weclubs.app.base.BasePresenter;
+import com.mm.weclubs.util.ThreadUtil;
 import com.mm.weclubs.util.WCLog;
 
 import org.json.JSONException;
@@ -52,7 +53,7 @@ public class WCMobSmsPresenter extends BasePresenter<WCMobSmsView> {
                         onDestroy();
                     }
 
-                    getMvpView().hideProgressDialog();
+                    ThreadUtil.runInMainThread(mContext, () -> getMvpView().hideProgressDialog());
 
                 } else {
                     ((Throwable)data).printStackTrace();
@@ -66,7 +67,7 @@ public class WCMobSmsPresenter extends BasePresenter<WCMobSmsView> {
                         e.printStackTrace();
                     }
 
-                    getMvpView().hideProgressDialog();
+                    ThreadUtil.runInMainThread(mContext, () -> getMvpView().hideProgressDialog());
                 }
             }
         };
