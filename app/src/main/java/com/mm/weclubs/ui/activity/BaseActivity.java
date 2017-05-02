@@ -11,6 +11,7 @@ import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.base.MVPView;
 import com.mm.weclubs.rxbus.RxBus;
+import com.mm.weclubs.util.ThreadUtil;
 import com.mm.weclubs.util.WCLog;
 
 import cn.bingoogolapple.titlebar.BGATitleBar;
@@ -293,7 +294,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
         mProgressDialog.setMessage(msg);
         mProgressDialog.setCancelable(cancel);
 
-        mProgressDialog.show();
+        ThreadUtil.runInMainThread(this, () -> mProgressDialog.show());
     }
 
     @Override
@@ -302,7 +303,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             return;
         }
 
-        mProgressDialog.cancel();
-        mProgressDialog.hide();
+        ThreadUtil.runInMainThread(this, () -> {
+            mProgressDialog.cancel();
+            mProgressDialog.hide();
+        });
     }
 }
