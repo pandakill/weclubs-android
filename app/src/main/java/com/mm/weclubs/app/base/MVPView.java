@@ -8,4 +8,8 @@ package com.mm.weclubs.app.base;
 public interface MVPView {
 
     void showToast(String text);
+
+    void showProgressDialog(String msg, boolean cancel);
+
+    void hideProgressDialog();
 }

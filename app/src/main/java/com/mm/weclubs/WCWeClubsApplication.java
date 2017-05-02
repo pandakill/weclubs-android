@@ -12,6 +12,8 @@ import com.mm.weclubs.util.WCLog;
 
 import java.util.UUID;
 
+import cn.smssdk.SMSSDK;
+
 /**
  * 创建人: fangzanpan
  * 创建时间: 2017/4/21 下午9:11
@@ -28,6 +30,7 @@ public class WCWeClubsApplication extends Application {
 
         Utils.init(this);
         ToastUtils.init(false);
+        SMSSDK.initSDK(this, "1d66889b4e514", "be7b94528ec334b58c4e61f6780d104a");
 
         initScreenWidth();
         initScreenHeight();

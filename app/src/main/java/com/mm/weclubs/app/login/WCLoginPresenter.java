@@ -8,6 +8,7 @@ import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
+import com.mm.weclubs.datacenter.WCUserDataCenter;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCUserService;
 import com.mm.weclubs.util.MD5Util;
@@ -42,6 +43,12 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
         log = new WCLog(WCLoginPresenter.class);
     }
 
+    /**
+     * 通过手机号码和密码登录
+     *
+     * @param mobile    手机号码
+     * @param password  密码
+     */
     public void login(String mobile, String password) {
 
         if (EmptyUtils.isEmpty(mobile)) {
@@ -59,6 +66,8 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
             return;
         }
 
+        getMvpView().showProgressDialog("登录中...", false);
+
         log.d("mobile = " + mobile + "; password = " + password);
         password = MD5Util.md5(password);
 
@@ -66,7 +75,7 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
         params.put("mobile", mobile);
         params.put("password", password);
 
-        mUserService.login(WCUserService.URL_LOGIN, mHttpParamsPresenter.initRequestParam(mContext, params))
+        mUserService.login(WCUserService.URL_LOGIN, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
@@ -79,17 +88,107 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                     public void onError(Throwable e) {
                         e.printStackTrace();
                         log.d("login：onError");
+
+                        getMvpView().loginFail(e.getMessage());
+                        getMvpView().hideProgressDialog();
                     }
 
                     @Override
                     public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
                         log.d("login：onNext = " + userInfo.toString());
                         if (userInfo.getResult_code() == 2000) {
+                            WCUserDataCenter.getInstance(mContext.getApplicationContext()).saveUserInfo(userInfo.getData());
                             getMvpView().loginSuccess(userInfo.getData());
                         } else {
                             getMvpView().loginFail(userInfo.getResult_msg());
                         }
+
+                        getMvpView().hideProgressDialog();
                     }
                 });
+    }
+
+    /**
+     * 新用户通过手机验证码注册登录
+     *
+     * @param mobile    手机号码
+     * @param code  手机验证码
+     * @param password  用户设置的密码
+     */
+    public void register(String mobile, String code, String password) {
+
+        if (!RegexUtils.isMobileSimple(mobile)) {
+            log.d("手机验证错误：" + mobile);
+            getMvpView().showToast("请输入正确的手机号码");
+            return;
+        }
+
+        if (EmptyUtils.isEmpty(code)) {
+            log.d("验证码不能为空");
+            getMvpView().showToast("验证码不能为空");
+            return;
+        }
+
+        if (code.length() != 4) {
+            log.d("输入验证码格式错误" + code);
+            getMvpView().showToast("请输入正确的验证码");
+            return;
+        }
+
+        try {
+            int codeNumber = Integer.parseInt(code);
+            log.d("手机验证码转为数字之后为：" + codeNumber);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            getMvpView().showToast("请输入正确的验证码");
+            return;
+        }
+
+        if (EmptyUtils.isEmpty(password)) {
+            log.d("密码输入为空");
+            getMvpView().showToast("请输入密码");
+            return;
+        }
+
+        getMvpView().showProgressDialog("注册中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("mobile", mobile);
+
+        password = MD5Util.md5(password);
+        params.put("password", password);
+        params.put("code", code);
+
+        mUserService.login(WCUserService.URL_REGISTER, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
+                    @Override
+                    public void onCompleted() {
+                        log.d("register：onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        log.d("register：onError");
+
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
+                        log.d("register：onNext = " + userInfo.toString());
+                        if (userInfo.getResult_code() == 2000) {
+                            WCUserDataCenter.getInstance(mContext.getApplicationContext()).saveUserInfo(userInfo.getData());
+                            getMvpView().registerSuccess(userInfo.getData());
+                        } else {
+                            getMvpView().showToast(userInfo.getResult_msg());
+                        }
+
+                        getMvpView().hideProgressDialog();
+                    }
+                });
+
     }
 }

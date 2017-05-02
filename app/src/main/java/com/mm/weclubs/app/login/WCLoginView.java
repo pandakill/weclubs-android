@@ -11,6 +11,8 @@ import com.mm.weclubs.data.pojo.WCUserInfoInfo;
 
 public interface WCLoginView extends MVPView {
 
+    void registerSuccess(WCUserInfoInfo userInfo);
+
     void loginSuccess(WCUserInfoInfo userInfo);
 
     void loginFail(String errorMsg);

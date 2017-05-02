@@ -1,10 +1,12 @@
 package com.mm.weclubs.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import com.blankj.utilcode.utils.EmptyUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.base.MVPView;
@@ -24,7 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
 
     private BGATitleBar mTitleBar;
 
-    private WCLog log;
+    protected WCLog log;
+
+    protected ProgressDialog mProgressDialog;
 
     private RxBus mBus = null;
 
@@ -271,5 +275,34 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     @Override
     public void showToast(String text) {
         ToastUtils.showShortToastSafe(text);
+    }
+
+    @Override
+    public void showProgressDialog(String msg, boolean cancel) {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+        }
+
+        if (mProgressDialog.isShowing()) {
+            hideProgressDialog();
+        }
+
+        if (EmptyUtils.isEmpty(msg)) {
+            msg = "加载中...";
+        }
+        mProgressDialog.setMessage(msg);
+        mProgressDialog.setCancelable(cancel);
+
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        if (mProgressDialog == null) {
+            return;
+        }
+
+        mProgressDialog.cancel();
+        mProgressDialog.hide();
     }
 }

@@ -27,6 +27,12 @@ android {
     }
 }
 
+repositories {
+    flatDir{
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+
 dependencies {
     testCompile 'junit:junit:4.12'
 
@@ -68,4 +74,9 @@ dependencies {
 
     //------------------titleBar 工具--------------------
     compile 'cn.bingoogolapple:bga-titlebar:1.0.8@aar'
+
+//    compile name:'SMSSDK-2.1.4',ext:'arr'
+    compile project(":SMSSDK-2.1.4")
+
+    compile 'com.wang.avi:library:1.0.1'
 }

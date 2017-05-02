@@ -65,6 +65,10 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
     }
 
     @Override
+    public void registerSuccess(WCUserInfoInfo userInfo) {
+    }
+
+    @Override
     public void loginSuccess(WCUserInfoInfo userInfo) {
         showToast("登录成功");
 

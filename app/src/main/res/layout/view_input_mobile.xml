@@ -82,7 +82,6 @@
             android:id="@+id/input_code"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:inputType="textPassword"
             android:textSize="17sp"
             android:textColor="#333333"
             android:gravity="bottom"
@@ -158,7 +157,8 @@
         android:id="@+id/btn_login"
         style="@style/LoginButton"
         android:text="@string/action_next_step"
-        android:enabled="false"
+        android:clickable="true"
+        android:enabled="true"
         android:layout_marginTop="24dp"/>
 
 </LinearLayout>

@@ -54,5 +54,5 @@ public abstract class BasePresenter<V extends MVPView> implements Presenter<V> {
         }
     }
 
-    public abstract void initLog();
+    protected abstract void initLog();
 }
