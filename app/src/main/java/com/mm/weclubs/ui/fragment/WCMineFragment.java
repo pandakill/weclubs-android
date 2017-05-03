@@ -1,13 +1,7 @@
 package com.mm.weclubs.ui.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.mm.weclubs.R;
+import com.mm.weclubs.util.WCLog;
 
 /**
  * 创建人: fangzanpan
@@ -15,13 +9,33 @@ import com.mm.weclubs.R;
  * 描述:  首页动态的fragment
  */
 
-public class WCMineFragment extends Fragment {
+public class WCMineFragment extends BaseLazyFragment {
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
-        View fragmentView = inflater.inflate(R.layout.fragment_mine, null);
-        return fragmentView;
+    protected int getContentViewLayoutID() {
+        log = new WCLog(WCMineFragment.class);
+        return R.layout.fragment_mine;
+    }
+
+    @Override
+    protected void initViewsAndEvents() {
+
+    }
+
+    @Override
+    protected void onFirstUserVisible() {
+        log.d("我的 onFirstUserVisible");
+        showToast("我的fragment创建");
+    }
+
+    @Override
+    protected void onUserVisible() {
+        log.d("我的 onUserVisible");
+        showToast("我的fragment展示");
+    }
+
+    @Override
+    protected void onUserInvisible() {
+
     }
 }

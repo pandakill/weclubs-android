@@ -3,6 +3,7 @@ package com.mm.weclubs.ui.activity;
 import android.annotation.SuppressLint;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -111,23 +112,26 @@ public class WCMainActivity extends BaseActivity {
             // 设置背景
             mTabHost.getTabWidget().getChildAt(i).setBackgroundResource(android.R.color.white);
             mTabHost.getTabWidget().getChildAt(i).setTag(i);
-            mTabHost.getTabWidget().getChildAt(i).setOnClickListener(v -> {
-                switch ((Integer) v.getTag()) {
-                    case 0:
-                        clickTagHost((Integer) v.getTag(), mFragmentTags[0]);
-                        break;
-                    case 1:
-                        clickTagHost((Integer) v.getTag(), mFragmentTags[1]);
-                        break;
-                    case 2:
-                        clickTagHost((Integer) v.getTag(), mFragmentTags[2]);
-                        break;
-                    case 3:
-                        clickTagHost((Integer) v.getTag(), mFragmentTags[3]);
-                        break;
-                }
-
-            });
+            mTabHost.getTabWidget().getChildAt(i).setOnClickListener(
+                    new OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            switch ((Integer) view.getTag()) {
+                                case 0:
+                                    clickTagHost((Integer) view.getTag(), mFragmentTags[0]);
+                                    break;
+                                case 1:
+                                    clickTagHost((Integer) view.getTag(), mFragmentTags[1]);
+                                    break;
+                                case 2:
+                                    clickTagHost((Integer) view.getTag(), mFragmentTags[2]);
+                                    break;
+                                case 3:
+                                    clickTagHost((Integer) view.getTag(), mFragmentTags[3]);
+                                    break;
+                            }
+                        }
+                    });
         }
     }
 

@@ -294,7 +294,12 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
         mProgressDialog.setMessage(msg);
         mProgressDialog.setCancelable(cancel);
 
-        ThreadUtil.runInMainThread(this, () -> mProgressDialog.show());
+        ThreadUtil.runInMainThread(this, new Runnable() {
+            @Override
+            public void run() {
+                mProgressDialog.show();
+            }
+        });
     }
 
     @Override
@@ -303,9 +308,12 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             return;
         }
 
-        ThreadUtil.runInMainThread(this, () -> {
-            mProgressDialog.cancel();
-            mProgressDialog.hide();
+        ThreadUtil.runInMainThread(this, new Runnable() {
+            @Override
+            public void run() {
+                mProgressDialog.cancel();
+                mProgressDialog.hide();
+            }
         });
     }
 }

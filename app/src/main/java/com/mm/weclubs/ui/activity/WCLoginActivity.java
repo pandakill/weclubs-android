@@ -1,5 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 import com.mm.weclubs.R;
@@ -36,9 +38,16 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
 
     @Override
     protected void afterView() {
-        findViewById(R.id.btn_login).setOnClickListener(view ->
+//        findViewById(R.id.btn_login).setOnClickListener(view ->
+//                mLoginPresenter.login(mInputMobile.getText().toString(),
+//                        mInputPassword.getText().toString()));
+        findViewById(R.id.btn_login).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 mLoginPresenter.login(mInputMobile.getText().toString(),
-                        mInputPassword.getText().toString()));
+                        mInputPassword.getText().toString());
+            }
+        });
 
         findViewById(R.id.btn_register).setOnClickListener(view -> showIntent(WCRegisterActivity.class));
         findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("注册新用户"));

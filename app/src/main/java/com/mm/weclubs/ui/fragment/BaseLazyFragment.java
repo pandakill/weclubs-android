@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.blankj.utilcode.utils.ToastUtils;
+import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.util.WCLog;
+
 import java.lang.reflect.Field;
 
 /**
@@ -17,9 +22,11 @@ import java.lang.reflect.Field;
  * 创建时间: 16/8/8 上午11:20
  * 描述: fragment基类
  */
-public abstract class BaseLazyFragment extends Fragment {
+public abstract class BaseLazyFragment extends Fragment implements MVPView {
 
     protected static String TAG = null;
+
+    protected WCLog log;
 
     protected Context mContext = null;
 
@@ -240,5 +247,20 @@ public abstract class BaseLazyFragment extends Fragment {
             intent.putExtras(extras);
         }
         startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void showToast(String text) {
+        ToastUtils.showShortToastSafe(text);
+    }
+
+    @Override
+    public void showProgressDialog(String msg, boolean cancel) {
+        ((BaseActivity) getActivity()).showProgressDialog(msg, cancel);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        ((BaseActivity) getActivity()).hideProgressDialog();
     }
 }
