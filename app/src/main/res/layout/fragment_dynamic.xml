@@ -14,9 +14,19 @@
         app:bgatitlebar_leftAndRightPadding="@dimen/title_bar_right_padding"
         android:background="@color/title_bar_bg"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:background="@color/colorPrimaryDark"
+        android:layout_height="match_parent">
+
+        <me.fangx.haorefresh.HaoRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

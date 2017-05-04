@@ -35,6 +35,8 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     private boolean isFirstInvisible = true;
     private boolean isPrepared = true;
 
+    private View mRootView;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -51,7 +53,8 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getContentViewLayoutID() != 0) {
-            return inflater.inflate(getContentViewLayoutID(), null);
+            mRootView = inflater.inflate(getContentViewLayoutID(), null);
+            return mRootView;
         } else {
             return super.onCreateView(inflater, container, savedInstanceState);
         }
@@ -62,6 +65,10 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         super.onViewCreated(view, savedInstanceState);
 
         initViewsAndEvents();
+    }
+
+    protected <T> T findViewById(int viewId, Class<T> targetClass) {
+        return (T) mRootView.findViewById(viewId);
     }
 
     @Override

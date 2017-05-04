@@ -19,6 +19,7 @@ public class WCToolsFragment extends BaseLazyFragment {
 
     @Override
     protected void initViewsAndEvents() {
+        log.d("工具 initViewsAndEvents");
 
     }
 

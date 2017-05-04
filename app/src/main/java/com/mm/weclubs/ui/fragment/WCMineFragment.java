@@ -19,6 +19,7 @@ public class WCMineFragment extends BaseLazyFragment {
 
     @Override
     protected void initViewsAndEvents() {
+        log.d("我的 initViewsAndEvents");
 
     }
 

@@ -20,6 +20,7 @@ public class WCIndexFragment extends BaseLazyFragment {
     @Override
     protected void initViewsAndEvents() {
 
+        log.d("首页 initViewsAndEvents");
     }
 
     @Override
