@@ -1,16 +1,22 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.blankj.utilcode.utils.EmptyUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.ui.adapter.WCMyDynamicAdapter;
+import com.mm.weclubs.app.club.WCMyClubListPresenter;
+import com.mm.weclubs.app.club.WCMyClubListView;
+import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.ui.adapter.WCMyClubListAdapter;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
 
 import me.fangx.haorefresh.HaoRecyclerView;
+import me.fangx.haorefresh.LoadMoreListener;
 
 /**
  * 创建人: fangzanpan
@@ -18,10 +24,15 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  首页动态的fragment
  */
 
-public class WCDynamicFragment extends BaseLazyFragment {
+public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListView {
 
-    private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private WCMyClubListPresenter mMyClubListPresenter;
+
+    private SwipeRefreshLayout mRefreshLayout = null;
+    private HaoRecyclerView mRecyclerView = null;
+    private WCMyClubListAdapter mClubListAdapter = null;
+
+    private int pageNo = 1;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -31,6 +42,10 @@ public class WCDynamicFragment extends BaseLazyFragment {
 
     @Override
     protected void initViewsAndEvents() {
+
+        mMyClubListPresenter = new WCMyClubListPresenter(mContext);
+        mMyClubListPresenter.attachView(this);
+
         log.d("动态 initViewsAndEvents");
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
         mRecyclerView = findViewById(R.id.recycler_view, HaoRecyclerView.class);
@@ -39,15 +54,25 @@ public class WCDynamicFragment extends BaseLazyFragment {
         manager.canScrollVertically();
         mRecyclerView.setLayoutManager(manager);
 
-        WCMyDynamicAdapter adapter = new WCMyDynamicAdapter(mContext);
-        mRecyclerView.setAdapter(adapter);
+        mClubListAdapter = new WCMyClubListAdapter(mContext);
+        mRecyclerView.setAdapter(mClubListAdapter);
 
-        ArrayList<Object> list = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            list.add(new Object());
-        }
+        mMyClubListPresenter.getMyClubsList(pageNo);
 
-        adapter.setItems(list);
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNo = 1;
+                mMyClubListPresenter.getMyClubsList(pageNo);
+            }
+        });
+
+        mRecyclerView.setLoadMoreListener(new LoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                mMyClubListPresenter.getMyClubsList(pageNo);
+            }
+        });
     }
 
     @Override
@@ -65,5 +90,31 @@ public class WCDynamicFragment extends BaseLazyFragment {
     @Override
     protected void onUserInvisible() {
 
+    }
+
+    @Override
+    public void refreshClubList(ArrayList<WCMyClubListInfo> list) {
+        if (EmptyUtils.isEmpty(list)) {
+            mRefreshLayout.setEnabled(false);
+            showToast("没有更多");
+            return;
+        }
+
+        mRefreshLayout.setEnabled(true);
+
+        mClubListAdapter.setItems(list);
+    }
+
+    @Override
+    public void addClubList(ArrayList<WCMyClubListInfo> list, boolean hasMore) {
+        if (EmptyUtils.isEmpty(list)) {
+            showToast("列表为空");
+            return;
+        }
+
+        pageNo ++;
+
+        mClubListAdapter.addItems(list);
+        mRefreshLayout.setEnabled(hasMore);
     }
 }

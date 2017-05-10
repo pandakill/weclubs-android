@@ -67,7 +67,7 @@ public class WCUserDataCenter {
         if (mCurrentUserInfo == null) {
             mCurrentUserInfo = (WCUserInfoInfo) PreferencesHelper.getInstance(mContext)
                     .getAsObject(USER_CENTER_LOGIN_USER, EncodeType.BASE_64);
-            log.d("getCurrentUserInfo：" + mCurrentUserInfo.toString());
+            log.d("getCurrentUserInfo：" + (mCurrentUserInfo != null ? mCurrentUserInfo.toString() : null));
         }
 
         return mCurrentUserInfo;

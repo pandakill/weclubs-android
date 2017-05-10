@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.util.WCLog;
 
 import java.lang.reflect.Field;
+
+import me.fangx.haorefresh.HaoRecyclerView;
 
 /**
  * 创建人: fangzanpan
@@ -36,6 +39,8 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     private boolean isPrepared = true;
 
     private View mRootView;
+    private SwipeRefreshLayout mSwipeRefreshLayout = null;
+    private HaoRecyclerView mRecyclerView = null;
 
     @Override
     public void onAttach(Context context) {
@@ -149,6 +154,11 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         } else {
             isPrepared = false;
         }
+    }
+
+    protected void attactRefreshLayout(SwipeRefreshLayout refreshLayout, HaoRecyclerView recyclerView) {
+        this.mSwipeRefreshLayout = refreshLayout;
+        this.mRecyclerView = recyclerView;
     }
 
     /**
@@ -269,5 +279,9 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     @Override
     public void hideProgressDialog() {
         ((BaseActivity) getActivity()).hideProgressDialog();
+
+        if (mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 }

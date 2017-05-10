@@ -8,6 +8,8 @@ import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.bean.WCRequestParamBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean.ClientBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean.ClientBean.ExBean;
+import com.mm.weclubs.data.pojo.WCUserInfoInfo;
+import com.mm.weclubs.datacenter.WCUserDataCenter;
 import com.mm.weclubs.util.JsonHelper;
 import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.PreferencesHelper;
@@ -29,10 +31,24 @@ import java.util.List;
 public class WCHttpParamsPresenter {
 
     private WCLog log = new WCLog(WCHttpParamsPresenter.class);
+    private WCUserDataCenter mUserDataCenter = null;
 
     public WCRequestParamBean initRequestParam(Context context, HashMap<String, Object> params) {
 
+        mUserDataCenter = WCUserDataCenter.getInstance(context.getApplicationContext());
+
         WCRequestParamBean requestParamModel = new WCRequestParamBean();
+
+        WCUserInfoInfo userInfo = WCUserDataCenter.getInstance(context).getCurrentUserInfo();
+
+        if (params == null) {
+            params = new HashMap<>();
+        }
+
+        if (userInfo != null) {
+            params.put("user_id", userInfo.getUser_id());
+            params.put("token", userInfo.getToken());
+        }
 
         requestParamModel.setData(params);
 

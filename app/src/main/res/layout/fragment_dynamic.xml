@@ -14,6 +14,11 @@
         app:bgatitlebar_leftAndRightPadding="@dimen/title_bar_right_padding"
         android:background="@color/title_bar_bg"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLine"/>
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -24,8 +29,8 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"/>
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

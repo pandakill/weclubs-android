@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.EmptyUtils;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 
@@ -277,7 +278,7 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
                 throw new RuntimeException("找不到ID为viewId的视图,请检查后重新执行.");
             }
             if (getView(viewId) instanceof ImageView) {
-//                ImageCacheLocalUtil.getInstance().displayImage((ImageView) getView(viewId), url);
+                ImageLoaderHelper.getInstance(mContext).loadImage(getView(viewId), url);
 
             } else {
                 throw new RuntimeException("view无法执行setImageResource方法.");
@@ -289,8 +290,8 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
                 throw new RuntimeException("找不到ID为viewId的视图,请检查后重新执行.");
             }
             if (getView(viewId) instanceof ImageView) {
-//                ImageCacheLocalUtil.getInstance().displayImage((ImageView) getView(viewId), url,
-//                        ImageCacheLocalUtil.getInstance().getDisplayConfig(defaultDrawable, defaultDrawable, defaultDrawable));
+                // TODO: 2017/5/5 需要设置默认图片
+                ImageLoaderHelper.getInstance(mContext).loadImage(getView(viewId), url);
 
             } else {
                 throw new RuntimeException("view无法执行setImageResource方法.");

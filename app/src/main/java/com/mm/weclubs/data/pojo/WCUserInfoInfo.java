@@ -12,6 +12,8 @@ import java.io.Serializable;
 
 public class WCUserInfoInfo implements Serializable {
 
+    private static final long serialVersionUID = 1024L;
+
     /**
      * graduate_year : 0级
      * avatar_url : http://weclubs.net/avatar/qx2jkloew8.jpeg

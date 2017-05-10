@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.blankj.utilcode.utils.ConvertUtils;
 import com.mm.weclubs.R;
+import com.mm.weclubs.data.pojo.WCMissionListInfo;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
 
 /**
@@ -14,9 +15,9 @@ import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
  * 描述:
  */
 
-public class WCMyDynamicAdapter extends WCBaseRecyclerViewAdapter<Object> {
+public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionListInfo> {
 
-    public WCMyDynamicAdapter(Context context) {
+    public WCMissionListAdapter(Context context) {
         super(context);
     }
 

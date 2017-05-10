@@ -5,7 +5,6 @@ import android.content.Context;
 import com.blankj.utilcode.utils.EmptyUtils;
 import com.blankj.utilcode.utils.RegexUtils;
 import com.mm.weclubs.app.base.BasePresenter;
-import com.mm.weclubs.app.security.WCHttpParamsPresenter;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
 import com.mm.weclubs.datacenter.WCUserDataCenter;
@@ -29,13 +28,11 @@ import rx.schedulers.Schedulers;
 public class WCLoginPresenter extends BasePresenter<WCLoginView> {
 
     private WCUserService mUserService = null;
-    private WCHttpParamsPresenter mHttpParamsPresenter = null;
 
     public WCLoginPresenter(Context context) {
         super(context);
 
         mUserService = WCServiceFactory.getUserService();
-        mHttpParamsPresenter = new WCHttpParamsPresenter();
     }
 
     @Override
@@ -159,7 +156,7 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
         params.put("password", password);
         params.put("code", code);
 
-        mUserService.login(WCUserService.URL_REGISTER, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
+        mUserService.register(WCUserService.URL_REGISTER, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
