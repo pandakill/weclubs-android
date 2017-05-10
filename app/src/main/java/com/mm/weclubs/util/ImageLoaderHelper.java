@@ -61,8 +61,8 @@ public class ImageLoaderHelper {
     public void loadImage(ImageView imageView, String url) {
         sPicasso
         .load(url)
-        .placeholder(R.mipmap.activity_ic_number)
-        .error(R.mipmap.activity_ic_number)
+        .placeholder(R.mipmap.login_logo_weclubs)
+        .error(R.mipmap.login_logo_weclubs)
         .fit()
         .into(imageView);
     }
