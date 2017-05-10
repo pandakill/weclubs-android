@@ -156,7 +156,7 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         }
     }
 
-    protected void attactRefreshLayout(SwipeRefreshLayout refreshLayout, HaoRecyclerView recyclerView) {
+    protected void attachRefreshLayout(SwipeRefreshLayout refreshLayout, HaoRecyclerView recyclerView) {
         this.mSwipeRefreshLayout = refreshLayout;
         this.mRecyclerView = recyclerView;
     }

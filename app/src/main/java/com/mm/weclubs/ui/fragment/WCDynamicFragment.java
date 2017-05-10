@@ -59,6 +59,8 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
 
         mMyClubListPresenter.getMyClubsList(pageNo);
 
+        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -115,6 +117,9 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
         pageNo ++;
 
         mClubListAdapter.addItems(list);
-        mRefreshLayout.setEnabled(hasMore);
+        mRecyclerView.loadMoreComplete();
+        if (!hasMore) {
+            mRecyclerView.loadMoreEnd();
+        }
     }
 }
