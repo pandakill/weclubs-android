@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -167,11 +168,11 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
      *
      * @param position itemView的位置
      */
-    protected void onClickItem(int position) {
-        if (mItemOnClickListener != null) {
-            mItemOnClickListener.onClickItem(position);
-        }
-    }
+//    protected void onClickItem(int position) {
+//        if (mItemOnClickListener != null) {
+//            mItemOnClickListener.onClickItem(position);
+//        }
+//    }
 
     /**
      * 单个itemView里面的某些view的点击事件,可以重写该方法实现操作
@@ -412,24 +413,20 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
          *
          * @param viewId view的id
          */
-//        public void setViewOnClick(int viewId) {
+        public void setViewOnClick(int viewId) {
 //            if (null == getView(viewId) && viewId != R.id.item_view) {
 //                throw new RuntimeException("找不到ID为viewId的视图,请检查后重新执行.");
 //            }
 //            if (null == getView(viewId) && viewId == R.id.item_view) {
 //                return;
 //            }
-//            getView(viewId).setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (v.getId() == R.id.item_view) {
-//                        onClickItem(getAdapterPosition());
-//                    } else {
-//                        onClickItemView(getAdapterPosition(), v);
-//                    }
-//                }
-//            });
-//        }
+            getView(viewId).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onClickItemView(getAdapterPosition(), v);
+                }
+            });
+        }
 
         /**
          * 通过id查找view

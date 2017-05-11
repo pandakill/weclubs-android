@@ -105,7 +105,8 @@
                 android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:text="待办：0"/>
+                android:text="待办：0"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
             <View
                 android:layout_width="1px"
@@ -121,7 +122,8 @@
                 android:gravity="center"
                 android:paddingTop="12dp"
                 android:paddingBottom="12dp"
-                android:text="活动：0"/>
+                android:text="活动：0"
+                android:foreground="?android:attr/selectableItemBackground"/>
 
         </LinearLayout>
     </RelativeLayout>

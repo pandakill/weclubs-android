@@ -3,8 +3,10 @@ package com.mm.weclubs.ui.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.blankj.utilcode.utils.ConvertUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
@@ -63,6 +65,23 @@ public class WCMyClubListAdapter extends WCBaseRecyclerViewAdapter<WCMyClubListI
                 break;
             case 4:
                 holder.getView(R.id.tv_club_tag).setBackground(mContext.getResources().getDrawable(R.drawable.club_level_tag_freedom));
+                break;
+        }
+
+        holder.setViewOnClick(R.id.btn_todo);
+        holder.setViewOnClick(R.id.btn_activity);
+    }
+
+    @Override
+    protected void onClickItemView(int position, View view) {
+        super.onClickItemView(position, view);
+
+        switch (view.getId()) {
+            case R.id.btn_todo:
+                ToastUtils.showShortToastSafe(((TextView) view).getText());
+                break;
+            case R.id.btn_activity:
+                ToastUtils.showShortToastSafe(((TextView) view).getText());
                 break;
         }
     }

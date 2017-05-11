@@ -1,5 +1,9 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
 import com.mm.weclubs.R;
 import com.mm.weclubs.util.WCLog;
 
@@ -11,6 +15,8 @@ import com.mm.weclubs.util.WCLog;
 
 public class WCMineFragment extends BaseLazyFragment {
 
+    private Button mBtnLogout;
+
     @Override
     protected int getContentViewLayoutID() {
         log = new WCLog(WCMineFragment.class);
@@ -21,6 +27,13 @@ public class WCMineFragment extends BaseLazyFragment {
     protected void initViewsAndEvents() {
         log.d("我的 initViewsAndEvents");
 
+        mBtnLogout = findViewById(R.id.btn_logout, Button.class);
+        mBtnLogout.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showToast("退出登录");
+            }
+        });
     }
 
     @Override

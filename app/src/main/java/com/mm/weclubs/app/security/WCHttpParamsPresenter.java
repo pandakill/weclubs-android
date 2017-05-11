@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 创建人: fangzanpan
@@ -52,11 +53,10 @@ public class WCHttpParamsPresenter {
 
         requestParamModel.setData(params);
 
-//        String id = UUID.randomUUID().toString();
-//        id += System.currentTimeMillis();
-        String id = System.currentTimeMillis() + "";
+        String id = UUID.randomUUID().toString();
+        id += System.currentTimeMillis();
 
-//        requestParamModel.setId(MD5Util.md5(id).toString().toLowerCase());
+        requestParamModel.setId(MD5Util.md5(id).toString().toLowerCase());
         requestParamModel.setId(id);
         requestParamModel.setSign(signParams(params));
 

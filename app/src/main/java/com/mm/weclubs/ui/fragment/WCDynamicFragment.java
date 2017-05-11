@@ -56,6 +56,7 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
 
         mClubListAdapter = new WCMyClubListAdapter(mContext);
         mRecyclerView.setAdapter(mClubListAdapter);
+        mRecyclerView.setCanloadMore(true);
 
         mMyClubListPresenter.getMyClubsList(pageNo);
 
