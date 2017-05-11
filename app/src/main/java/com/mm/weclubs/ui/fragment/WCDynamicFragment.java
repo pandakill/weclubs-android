@@ -4,13 +4,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.blankj.utilcode.utils.EmptyUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.club.WCMyClubListPresenter;
 import com.mm.weclubs.app.club.WCMyClubListView;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.ui.activity.WCTODOListActivity;
 import com.mm.weclubs.ui.adapter.WCMyClubListAdapter;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
@@ -57,6 +60,25 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
         mClubListAdapter = new WCMyClubListAdapter(mContext);
         mRecyclerView.setAdapter(mClubListAdapter);
         mRecyclerView.setCanloadMore(true);
+
+        mClubListAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCMyClubListInfo clubListInfo = mClubListAdapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.btn_todo:
+                        if (clubListInfo != null) {
+                            showIntent(WCTODOListActivity.class);
+                        }
+                        break;
+                    case R.id.btn_activity:
+                        if (clubListInfo != null) {
+                            showToast(clubListInfo.getClub_name() + "：" + clubListInfo.getActivity_count());
+                        }
+                        break;
+                }
+            }
+        });
 
         mMyClubListPresenter.getMyClubsList(pageNo);
 

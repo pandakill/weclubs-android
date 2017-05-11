@@ -79,6 +79,28 @@
     </style>
     <!-- 登录页相关 END -->
 
+    <!-- tabLayout的样式 start -->
+    <style name="tabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat</item>
+        <item name="tabTextAppearance">@style/tabTextAppearance</item>
+        <item name="tabPaddingStart">24dp</item>
+        <item name="tabPaddingEnd">24dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="tabBackground">@color/colorPrimary</item>
+        <item name="tabIndicatorColor">@color/themeColor</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabIndicatorHeight">2dp</item>
+    </style>
+
+    <style name="tabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/color_theme_to_hint_tips</item>
+        <item name="textAllCaps">true</item>
+    </style>
+    <!-- tabLayout的样式 end -->
+
     <!-- 分tab-首页 START -->
     <string name="title_index">首页</string>
     <!-- 分tab-首页 END -->

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/CommonLayout.WhiteBg">
+
+    <cn.bingoogolapple.titlebar.BGATitleBar
+        style="@style/TitleBar"
+        android:id="@+id/title_bar"
+        app:bgatitlebar_leftAndRightPadding="@dimen/title_bar_left_padding"
+        app:bgatitlebar_leftDrawable="@mipmap/icon_return"
+        app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"
+        app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
+        app:bgatitlebar_isTitleTextBold="@bool/title_bar_text_bold"
+        app:bgatitlebar_titleText="待办事项"/>
+
+    <include
+        layout="@layout/view_tab_layout" />
+
+</LinearLayout>

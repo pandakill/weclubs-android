@@ -27,7 +27,7 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
 
     protected Context mContext;
     protected ArrayList<T> mItems;
-    protected OnItemClickListener mItemOnClickListener = null;
+//    protected OnItemClickListener mItemOnClickListener = null;
     protected OnClickViewListener mClickViewListener = null;
 
     public WCBaseRecyclerViewAdapter(Context context) {
@@ -42,9 +42,9 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
         void onClick(View view, int position);
     }
 
-    public void setOnClickItemListener(OnItemClickListener listener) {
-        mItemOnClickListener = listener;
-    }
+//    public void setOnClickItemListener(OnItemClickListener listener) {
+//        mItemOnClickListener = listener;
+//    }
 
     public void setOnClickViewListener(OnClickViewListener listener) {
         mClickViewListener = listener;

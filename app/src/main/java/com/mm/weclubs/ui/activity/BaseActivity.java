@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 
 import com.blankj.utilcode.utils.EmptyUtils;
@@ -16,6 +17,7 @@ import com.mm.weclubs.util.WCLog;
 
 import cn.bingoogolapple.titlebar.BGATitleBar;
 import cn.bingoogolapple.titlebar.BGATitleBar.Delegate;
+import me.fangx.haorefresh.HaoRecyclerView;
 
 /**
  * 创建人: fangzanpan
@@ -32,6 +34,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     protected ProgressDialog mProgressDialog;
 
     private RxBus mBus = null;
+    private SwipeRefreshLayout mSwipeRefreshLayout = null;
+    private HaoRecyclerView mRecyclerView = null;
 
     public enum TransitionMode {
         LEFT, RIGHT, TOP, BOTTOM, SCALE, FADE
@@ -153,6 +157,11 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
                 onClickRightSecondTitle();
             }
         });
+    }
+
+    protected void attachRefreshLayout(SwipeRefreshLayout refreshLayout, HaoRecyclerView recyclerView) {
+        this.mSwipeRefreshLayout = refreshLayout;
+        this.mRecyclerView = recyclerView;
     }
 
     public BGATitleBar getTitleBar() {
@@ -313,6 +322,10 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             public void run() {
                 mProgressDialog.cancel();
                 mProgressDialog.hide();
+
+                if (mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         });
     }
