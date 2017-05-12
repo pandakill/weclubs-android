@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,6 +22,11 @@ public class WCMineFragment extends BaseLazyFragment {
     protected int getContentViewLayoutID() {
         log = new WCLog(WCMineFragment.class);
         return R.layout.fragment_mine;
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
     }
 
     @Override

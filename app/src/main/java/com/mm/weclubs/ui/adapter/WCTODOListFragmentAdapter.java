@@ -33,7 +33,10 @@ public class WCTODOListFragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Bundle extras = new Bundle();
+        Bundle extras = mFragments.get(position).getArguments();
+        if (extras == null) {
+            extras = new Bundle();
+        }
         extras.putString("tab_name", mFragmentTabName[position]);
         mFragments.get(position).setArguments(extras);
         return mFragments.get(position);

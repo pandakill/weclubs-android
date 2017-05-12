@@ -1,6 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -97,6 +98,11 @@ public class WCMainActivity extends BaseActivity {
         if (!mRxSubscription.isUnsubscribed()) {
             mRxSubscription.unsubscribe();
         }
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
     }
 
     private void initTabHost() {

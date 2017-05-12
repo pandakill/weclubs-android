@@ -8,7 +8,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.ConvertUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.data.pojo.WCMissionListInfo;
+import com.mm.weclubs.data.pojo.WCMeetingListInfo;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
 
 /**
@@ -17,15 +17,15 @@ import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
  * 描述:
  */
 
-public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionListInfo> {
+public class WCMeetingListAdapter extends WCBaseRecyclerViewAdapter<WCMeetingListInfo> {
 
-    public WCMissionListAdapter(Context context) {
+    public WCMeetingListAdapter(Context context) {
         super(context);
     }
 
     @Override
     public int getItemLayoutID(int viewType) {
-        return R.layout.view_dynamic_mission_item;
+        return R.layout.view_dynamic_meeting_item;
     }
 
     @Override
@@ -46,36 +46,37 @@ public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionLis
         holder.setText(R.id.tv_create_date, TimeUtils.millis2String(getItem(position).getCreate_date(), "MMMdd日"));
         holder.setText(R.id.tv_mission_content, getItem(position).getContent());
         holder.setText(R.id.tv_deadline, TimeUtils.millis2String(getItem(position).getDeadline(), "MMMdd日  HH:mm"));
+        holder.setText(R.id.tv_address, getItem(position).getAddress());
 
-        if (getItem(position).getConfirm_date() > 0) {
+        if (getItem(position).getConfirm_join() == 1) {
             holder.setViewVisible(R.id.icon_confirm, View.VISIBLE);
 
-            holder.setText(R.id.tv_btn_confirm_text, "已确认任务");
+            holder.setText(R.id.tv_btn_confirm_text, "已确认参与");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
                     .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
         } else {
             holder.setViewVisible(R.id.icon_confirm, View.GONE);
 
-            holder.setText(R.id.tv_btn_confirm_text, "确认任务");
+            holder.setText(R.id.tv_btn_confirm_text, "确认参与");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
         }
 
-        if (getItem(position).getFinish() == 1) {
-            holder.setViewVisible(R.id.icon_finish, View.VISIBLE);
+        if (getItem(position).getHas_sign() == 1) {
+            holder.setViewVisible(R.id.icon_sign, View.VISIBLE);
 
-            holder.setText(R.id.tv_btn_finish_text, "已完成任务");
-            ((TextView) holder.getView(R.id.tv_btn_finish_text))
+            holder.setText(R.id.tv_btn_sign_text, "已完成签到");
+            ((TextView) holder.getView(R.id.tv_btn_sign_text))
                     .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
         } else {
-            holder.setViewVisible(R.id.icon_finish, View.GONE);
+            holder.setViewVisible(R.id.icon_sign, View.GONE);
 
-            holder.setText(R.id.tv_btn_finish_text, "完成任务");
-            ((TextView) holder.getView(R.id.tv_btn_finish_text))
+            holder.setText(R.id.tv_btn_sign_text, "扫一扫签到");
+            ((TextView) holder.getView(R.id.tv_btn_sign_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
         }
 
-        holder.setViewOnClick(R.id.btn_finish);
         holder.setViewOnClick(R.id.btn_confirm);
+        holder.setViewOnClick(R.id.btn_sign);
     }
 }

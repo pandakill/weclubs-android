@@ -181,6 +181,9 @@ public abstract class WCBaseRecyclerViewAdapter<T> extends RecyclerView.Adapter 
      * @param view     响应事件的具体view
      */
     protected void onClickItemView(int position, View view) {
+        if (mClickViewListener != null) {
+            mClickViewListener.onClick(view, position);
+        }
     }
 
     public class WCBaseViewHolder extends RecyclerView.ViewHolder {

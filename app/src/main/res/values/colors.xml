@@ -9,8 +9,10 @@
     <color name="colorCommonBg">#F3F5F7</color>
 
     <color name="colorCommonText">#333333</color>
-    <color name="colorHintText">#B2C1C6</color>
     <color name="colorCommonText.Tips">#999999</color>
+    <color name="colorCommonText.666">#666666</color>
+    <color name="colorCommonText.eb4856">#eb4856</color>
+    <color name="colorHintText">#B2C1C6</color>
 
     <color name="themeColor">#2FCAFB</color>
     <color name="themeColor.Dark">#09c2fc</color>

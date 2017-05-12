@@ -71,6 +71,11 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
 
         log = new WCLog(this.getClass());
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            getBundleExtras(extras);
+        }
+
         initView();
         initTitleBar();
         afterView();
@@ -115,6 +120,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
     }
 
     protected abstract int getContentLayout();
+
+    /**
+     * 获取bundle数据
+     *
+     * @param extras bundle数据源,如果有数据的话,{@code extras}不为空,否则会出现{@code extras}为空的情况.
+     */
+    protected abstract void getBundleExtras(Bundle extras);
 
     protected abstract void initView();
 

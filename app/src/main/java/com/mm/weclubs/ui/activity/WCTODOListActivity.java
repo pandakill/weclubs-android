@@ -1,14 +1,16 @@
 package com.mm.weclubs.ui.activity;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.mm.weclubs.R;
+import com.mm.weclubs.data.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.adapter.WCTODOListFragmentAdapter;
-import com.mm.weclubs.ui.fragment.WCDynamicFragment;
-import com.mm.weclubs.ui.fragment.WCIndexFragment;
-import com.mm.weclubs.ui.fragment.WCMineFragment;
+import com.mm.weclubs.ui.fragment.WCMeetingListFragment;
+import com.mm.weclubs.ui.fragment.WCMissionListFragment;
+import com.mm.weclubs.ui.fragment.WCNotifyListFragment;
 
 import java.util.ArrayList;
 
@@ -26,9 +28,22 @@ public class WCTODOListActivity extends BaseActivity {
     private WCTODOListFragmentAdapter mTODOListFragmentAdapter;
     private ArrayList<Fragment> mFragments;
 
+    private WCMyClubListInfo mClubListInfo;
+
     @Override
     protected int getContentLayout() {
         return R.layout.activity_todo_list;
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
+        if (extras == null) {
+            log.e("getBundleExtras.extras == null");
+            return;
+        }
+
+        mClubListInfo = (WCMyClubListInfo) extras.getSerializable("clubListInfo");
     }
 
     @Override
@@ -39,19 +54,25 @@ public class WCTODOListActivity extends BaseActivity {
 
         mTODOListFragmentAdapter = new WCTODOListFragmentAdapter(getSupportFragmentManager());
         mFragments = new ArrayList<>();
+
     }
 
     @Override
     protected void afterView() {
+        Bundle extra = new Bundle();
+        extra.putSerializable("clubListInfo", mClubListInfo);
         String[] fragmentName = new String[3];
-        WCDynamicFragment fragment = new WCDynamicFragment();
-        mFragments.add(fragment);
+        WCNotifyListFragment notifyListFragment = new WCNotifyListFragment();
+        notifyListFragment.setArguments(extra);
+        mFragments.add(notifyListFragment);
         fragmentName[0] = "通知";
-        WCIndexFragment indexFragment = new WCIndexFragment();
-        mFragments.add(indexFragment);
+        WCMissionListFragment missionListFragment = new WCMissionListFragment();
+        missionListFragment.setArguments(extra);
+        mFragments.add(missionListFragment);
         fragmentName[1] = "任务";
-        WCMineFragment mineFragment = new WCMineFragment();
-        mFragments.add(mineFragment);
+        WCMeetingListFragment meetingListFragment = new WCMeetingListFragment();
+        meetingListFragment.setArguments(extra);
+        mFragments.add(meetingListFragment);
         fragmentName[2] = "会议";
 
         mTabViewPager.setOffscreenPageLimit(3);

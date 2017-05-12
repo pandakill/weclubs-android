@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -100,6 +101,11 @@ public class WCRegisterActivity extends BaseActivity implements WCLoginView, WCM
         }
 
         mMobSmsPresenter.onDestroy();
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
     }
 
     @Override

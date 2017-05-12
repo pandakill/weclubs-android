@@ -1,10 +1,11 @@
-package com.mm.weclubs.app.mission_list;
+package com.mm.weclubs.app.meeting_list;
 
 import android.content.Context;
 
 import com.mm.weclubs.app.base.BasePresenter;
+import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.bean.WCMissionListBean;
+import com.mm.weclubs.data.bean.WCMeetingListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
@@ -22,11 +23,11 @@ import rx.schedulers.Schedulers;
  * 描述:
  */
 
-public class WCMissionListPresenter extends BasePresenter<WCMissionListView> {
+public class WCMeetingListPresenter extends BasePresenter<WCMeetingListView> {
 
     private WCDynamicService mDynamicService = null;
 
-    public WCMissionListPresenter(Context context) {
+    public WCMeetingListPresenter(Context context) {
         super(context);
 
         mDynamicService = WCServiceFactory.getDynamicService();
@@ -37,7 +38,7 @@ public class WCMissionListPresenter extends BasePresenter<WCMissionListView> {
         log = new WCLog(WCMissionListPresenter.class);
     }
 
-    public void getMissionListFromServer(long clubId, int pageNo) {
+    public void getMeetingListFromServer(long clubId, int pageNo) {
 
         getMvpView().showProgressDialog("加载中...", false);
 
@@ -46,13 +47,13 @@ public class WCMissionListPresenter extends BasePresenter<WCMissionListView> {
         params.put("size", 20);
         params.put("page_no", pageNo);
         params.put("club_id", clubId);
-        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MISSION);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MEETING);
 
-        mDynamicService.getMissionList(WCDynamicService.GET_DYNAMIC_LIST,
+        mDynamicService.getMeetingList(WCDynamicService.GET_DYNAMIC_LIST,
                 mHttpParamsPresenter.initRequestParam(mContext, params))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCMissionListBean>>() {
+                .subscribe(new Subscriber<WCResponseParamBean<WCMeetingListBean>>() {
                     @Override
                     public void onCompleted() {
                         log.d("getMyDynamicFromServer：onCompleted");
@@ -65,14 +66,14 @@ public class WCMissionListPresenter extends BasePresenter<WCMissionListView> {
                     }
 
                     @Override
-                    public void onNext(WCResponseParamBean<WCMissionListBean> object) {
+                    public void onNext(WCResponseParamBean<WCMeetingListBean> object) {
                         log.d("getMyDynamicFromServer：onNext = " + object.toString());
 
                         if (object.getResult_code() == 2000) {
                             if (pageNo == 1) {
-                                getMvpView().refreshMissionList(object.getData().getMission());
+                                getMvpView().refreshMeetingList(object.getData().getMeeting());
                             } else {
-                                getMvpView().addMissionList(object.getData().getMission(), object.getData().getHas_more() == 1);
+                                getMvpView().addMeetingList(object.getData().getMeeting(), object.getData().getHas_more() == 1);
                             }
                         } else {
                             getMvpView().showToast(object.getResult_msg());

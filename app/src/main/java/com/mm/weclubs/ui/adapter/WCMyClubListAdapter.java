@@ -69,20 +69,4 @@ public class WCMyClubListAdapter extends WCBaseRecyclerViewAdapter<WCMyClubListI
         holder.setViewOnClick(R.id.btn_todo);
         holder.setViewOnClick(R.id.btn_activity);
     }
-
-    @Override
-    protected void onClickItemView(int position, View view) {
-        super.onClickItemView(position, view);
-        if (mClickViewListener != null) {
-            mClickViewListener.onClick(view, position);
-        }
-//        switch (view.getId()) {
-//            case R.id.btn_todo:
-//                ToastUtils.showShortToastSafe(((TextView) view).getText());
-//                break;
-//            case R.id.btn_activity:
-//                ToastUtils.showShortToastSafe(((TextView) view).getText());
-//                break;
-//        }
-    }
 }

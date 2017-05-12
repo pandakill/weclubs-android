@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -70,6 +71,11 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
 
     @Override
     protected void unSubscribeObservable() {
+
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
 
     }
 

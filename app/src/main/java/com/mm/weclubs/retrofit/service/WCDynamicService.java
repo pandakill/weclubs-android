@@ -22,8 +22,8 @@ import rx.Observable;
 
 public interface WCDynamicService {
 
-    String GET_DYNAMIC_LIST = "/get_dynamic_list";
-    String GET_DYNAMIC_DETAIL = "/get_dynamic_detail";
+    String GET_DYNAMIC_LIST = "/dynamic/get_dynamic_list";
+    String GET_DYNAMIC_DETAIL = "/dynamic/get_dynamic_detail";
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)

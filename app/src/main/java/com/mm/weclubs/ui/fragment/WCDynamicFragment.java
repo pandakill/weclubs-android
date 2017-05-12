@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,6 +45,11 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
     }
 
     @Override
+    protected void getBundleExtras(Bundle extras) {
+
+    }
+
+    @Override
     protected void initViewsAndEvents() {
 
         mMyClubListPresenter = new WCMyClubListPresenter(mContext);
@@ -68,7 +74,9 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
                 switch (view.getId()) {
                     case R.id.btn_todo:
                         if (clubListInfo != null) {
-                            showIntent(WCTODOListActivity.class);
+                            Bundle extra = new Bundle();
+                            extra.putSerializable("clubListInfo", clubListInfo);
+                            showIntent(WCTODOListActivity.class, extra);
                         }
                         break;
                     case R.id.btn_activity:

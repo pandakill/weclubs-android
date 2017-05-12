@@ -1,5 +1,7 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Bundle;
+
 import com.mm.weclubs.R;
 import com.mm.weclubs.util.WCLog;
 
@@ -15,6 +17,11 @@ public class WCToolsFragment extends BaseLazyFragment {
     protected int getContentViewLayoutID() {
         log = new WCLog(WCToolsFragment.class);
         return R.layout.fragment_tools;
+    }
+
+    @Override
+    protected void getBundleExtras(Bundle extras) {
+
     }
 
     @Override
