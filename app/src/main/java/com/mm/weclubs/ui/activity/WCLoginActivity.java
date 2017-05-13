@@ -85,7 +85,7 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras != null) {
-            mNeedGetUserInfo = extras.getBoolean("getUserInfo", true);
+            mNeedGetUserInfo = extras.getBoolean("getUserInfo", false);
         }
     }
 

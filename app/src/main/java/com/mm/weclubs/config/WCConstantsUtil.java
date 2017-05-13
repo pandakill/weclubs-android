@@ -11,6 +11,7 @@ public class WCConstantsUtil {
     public static String DYNAMIC_TYPE_MISSION = "mission";
     public static String DYNAMIC_TYPE_NOTIFY = "notify";
     public static String DYNAMIC_TYPE_MEETING = "meeting";
+    public static String DYNAMIC_TYPE_ACTIVITY = "activity";
 
     /**
      * 根据社团的level等级获取相对应的文字等级

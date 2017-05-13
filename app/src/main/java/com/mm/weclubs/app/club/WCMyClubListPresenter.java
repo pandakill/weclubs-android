@@ -3,6 +3,7 @@ package com.mm.weclubs.app.club;
 import android.content.Context;
 
 import com.mm.weclubs.app.base.BasePresenter;
+import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.bean.WCMyClubsBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
@@ -42,7 +43,7 @@ public class WCMyClubListPresenter extends BasePresenter<WCMyClubListView> {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("page_no", pageNo);
-        params.put("size", 20);
+        params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
 
         mClubService.getMyClubs(WCClubService.GET_MY_CLUBS, mHttpParamsPresenter.initRequestParam(mContext, params))
                 .subscribeOn(Schedulers.io())
@@ -74,6 +75,8 @@ public class WCMyClubListPresenter extends BasePresenter<WCMyClubListView> {
                             }
                         } else {
                             getMvpView().showToast(responseParamBean.getResult_msg());
+
+                            checkResult(responseParamBean);
                         }
 
                         getMvpView().hideProgressDialog();

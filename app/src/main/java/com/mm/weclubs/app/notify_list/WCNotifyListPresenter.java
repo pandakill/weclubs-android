@@ -3,6 +3,7 @@ package com.mm.weclubs.app.notify_list;
 import android.content.Context;
 
 import com.mm.weclubs.app.base.BasePresenter;
+import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCNotifyListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
@@ -43,7 +44,7 @@ public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
 
         HashMap<String, Object> params = new HashMap<>();
 
-        params.put("size", 20);
+        params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
         params.put("page_no", pageNo);
         params.put("club_id", clubId);
         params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
@@ -76,6 +77,8 @@ public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
                             }
                         } else {
                             getMvpView().showToast(object.getResult_msg());
+
+                            checkResult(object);
                         }
 
                         getMvpView().hideProgressDialog();

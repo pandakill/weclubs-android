@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
+import com.mm.weclubs.app.comment.WCCommentView;
+import com.mm.weclubs.data.pojo.WCCommentListInfo;
 import com.mm.weclubs.data.pojo.WCMeetingListInfo;
 import com.mm.weclubs.util.ImageLoaderHelper;
+
+import java.util.ArrayList;
 
 import me.fangx.haorefresh.HaoRecyclerView;
 
@@ -21,7 +25,7 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:
  */
 
-public class WCMeetingDetailActivity extends BaseActivity {
+public class WCMeetingDetailActivity extends BaseActivity implements WCCommentView {
 
     private ImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -181,6 +185,15 @@ public class WCMeetingDetailActivity extends BaseActivity {
 
     @Override
     protected void unSubscribeObservable() {
+    }
+
+    @Override
+    public void refreshCommentList(ArrayList<WCCommentListInfo> list) {
+
+    }
+
+    @Override
+    public void addCommentList(ArrayList<WCCommentListInfo> list, boolean hasMore) {
 
     }
 }

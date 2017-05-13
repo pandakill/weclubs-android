@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:background="@color/colorPrimary">
+
+    <com.mm.weclubs.widget.RoundImageView
+        android:id="@+id/img_leader_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="12dp"
+        android:src="@mipmap/login_logo_weclubs"/>
+
+    <TextView
+        android:id="@+id/tv_leader_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img_leader_logo"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorCommonText"
+        android:text="帅小伙儿"/>
+
+    <TextView
+        android:id="@+id/tv_leader_department"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/tv_leader_name"
+        android:layout_toRightOf="@id/tv_leader_name"
+        android:layout_marginLeft="12dp"
+        android:textSize="12sp"
+        android:textColor="@color/colorCommonText.Tips"
+        android:text="技术部 干事"/>
+
+    <TextView
+        android:id="@+id/tv_leader_class"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/img_leader_logo"
+        android:layout_below="@id/tv_leader_name"
+        android:layout_marginTop="4dp"
+        android:textSize="11sp"
+        android:textColor="@color/colorCommonText.Tips"
+        android:text="12级-软件工程"/>
+
+    <ImageView
+        android:id="@+id/btn_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_member_chat"/>
+
+    <ImageView
+        android:id="@+id/btn_call"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@id/btn_message"
+        android:src="@mipmap/ic_member_call"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLine"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/img_leader_logo"/>
+
+</RelativeLayout>

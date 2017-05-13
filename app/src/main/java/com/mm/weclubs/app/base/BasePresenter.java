@@ -3,6 +3,7 @@ package com.mm.weclubs.app.base;
 import android.content.Context;
 
 import com.mm.weclubs.app.security.WCHttpParamsPresenter;
+import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.util.WCLog;
 
 /**
@@ -45,6 +46,12 @@ public abstract class BasePresenter<V extends MVPView> implements Presenter<V> {
     public void checkViewAttached() {
         if (!isViewAttachView()) {
             throw new MvpViewNotAttachedException();
+        }
+    }
+
+    protected void checkResult(WCResponseParamBean responseParamBean) {
+        if (responseParamBean.getResult_code() == 3010) {
+            getMvpView().backToLoginActivity();
         }
     }
 

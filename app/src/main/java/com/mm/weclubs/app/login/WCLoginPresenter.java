@@ -184,6 +184,8 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                             getMvpView().registerSuccess(userInfo.getData());
                         } else {
                             getMvpView().showToast(userInfo.getResult_msg());
+
+                            checkResult(userInfo);
                         }
 
                         getMvpView().hideProgressDialog();
@@ -194,11 +196,11 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
 
     public void checkLogin() {
 
-        getMvpView().showProgressDialog("登录中...", false);
-
         WCUserInfoInfo userInfoInfo = mUserDataCenter.getCurrentUserInfo();
 
         if (userInfoInfo != null) {
+
+            getMvpView().showProgressDialog("登录中...", false);
 
             HashMap<String, Object> params = new HashMap<>();
             params.put("mobile", userInfoInfo.getMobile());

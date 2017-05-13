@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
+import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCMeetingListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
@@ -44,7 +45,7 @@ public class WCMeetingListPresenter extends BasePresenter<WCMeetingListView> {
 
         HashMap<String, Object> params = new HashMap<>();
 
-        params.put("size", 20);
+        params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
         params.put("page_no", pageNo);
         params.put("club_id", clubId);
         params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MEETING);
@@ -77,6 +78,8 @@ public class WCMeetingListPresenter extends BasePresenter<WCMeetingListView> {
                             }
                         } else {
                             getMvpView().showToast(object.getResult_msg());
+
+                            checkResult(object);
                         }
 
                         getMvpView().hideProgressDialog();
