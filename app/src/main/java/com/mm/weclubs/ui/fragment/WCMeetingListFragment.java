@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
 import com.mm.weclubs.app.meeting_list.WCMeetingListView;
 import com.mm.weclubs.data.pojo.WCMeetingListInfo;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.ui.activity.WCMeetingDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMeetingListAdapter;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 
 import java.util.ArrayList;
 
@@ -75,6 +78,19 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
     private void afterView() {
         mMeetingListAdapter = new WCMeetingListAdapter(mContext);
         mRecyclerView.setAdapter(mMeetingListAdapter);
+        mMeetingListAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCMeetingListInfo meetingListInfo = mMeetingListAdapter.getItem(position);
+                Bundle extra = new Bundle();
+                extra.putSerializable("meetingListInfo", meetingListInfo);
+                switch (view.getId()) {
+                    case R.id.item_dynamic:
+                        showIntent(WCMeetingDetailActivity.class, extra);
+                        break;
+                }
+            }
+        });
 
         mMeetingListPresenter = new WCMeetingListPresenter(mContext);
         mMeetingListPresenter.attachView(this);

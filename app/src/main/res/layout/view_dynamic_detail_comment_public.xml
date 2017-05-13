@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="49dp"
+    android:layout_alignParentBottom="true"
+    android:background="@color/colorPrimary">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorLine" />
+
+    <ImageView
+        android:id="@+id/btn_voice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_voice"/>
+
+    <EditText
+        android:id="@+id/input_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/btn_voice"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@+id/btn_emoji"
+        android:maxLines="4"
+        android:textSize="16sp"
+        android:textColor="@color/colorCommonText"
+        android:layout_marginBottom="4dp"/>
+
+    <ImageView
+        android:id="@+id/btn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_plus"/>
+
+    <ImageView
+        android:id="@+id/btn_emoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_toLeftOf="@id/btn_more"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_expression"/>
+
+</RelativeLayout>

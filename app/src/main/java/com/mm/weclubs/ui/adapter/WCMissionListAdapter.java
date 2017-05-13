@@ -77,5 +77,6 @@ public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionLis
 
         holder.setViewOnClick(R.id.btn_finish);
         holder.setViewOnClick(R.id.btn_confirm);
+        holder.setViewOnClick(R.id.item_dynamic);
     }
 }

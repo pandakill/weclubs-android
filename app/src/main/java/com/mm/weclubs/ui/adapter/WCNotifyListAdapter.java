@@ -25,7 +25,7 @@ public class WCNotifyListAdapter extends WCBaseRecyclerViewAdapter<WCNotifyListI
 
     @Override
     public int getItemLayoutID(int viewType) {
-        return R.layout.view_notify_list_item;
+        return R.layout.view_dynamic_notify_list_item;
     }
 
     @Override
@@ -62,5 +62,8 @@ public class WCNotifyListAdapter extends WCBaseRecyclerViewAdapter<WCNotifyListI
             ((TextView) holder.getView(R.id.tv_btn_receive_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
         }
+
+        holder.setViewOnClick(R.id.item_dynamic);
+        holder.setViewOnClick(R.id.btn_receive);
     }
 }

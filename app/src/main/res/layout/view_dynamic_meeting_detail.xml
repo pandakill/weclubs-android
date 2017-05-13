@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/img_sponsor_logo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="8dp"
+        android:src="@mipmap/login_logo_weclubs"
+        android:background="@drawable/bg_my_dynamic_club_logo"/>
+
+    <TextView
+        android:id="@+id/tv_sponsor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:maxLines="1"
+        android:textSize="14sp"
+        android:textColor="@color/colorCommonText.666"
+        android:layout_toRightOf="@+id/img_sponsor_logo"
+        android:text="林佐佐"/>
+
+    <TextView
+        android:id="@+id/tv_create_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/tv_sponsor_name"
+        android:layout_marginTop="21dp"
+        android:layout_marginLeft="12dp"
+        android:textSize="12sp"
+        android:textColor="@color/colorCommonText.Tips"
+        android:text="2月11日"/>
+
+    <TextView
+        android:id="@+id/tv_meeting_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="28dp"
+        android:textSize="16sp"
+        android:textColor="@color/colorCommonText"
+        android:layout_below="@+id/tv_sponsor_name"
+        android:layout_toRightOf="@id/img_sponsor_logo"
+        android:text="机构通讯录已做好机构通讯录已做好机构通讯录已做好机构通讯录已做好机构通讯录已做好"/>
+
+    <LinearLayout
+        android:id="@+id/ll_deadline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_meeting_content"
+        android:layout_toRightOf="@id/img_sponsor_logo"
+        android:layout_marginTop="9dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/meeting_ic_time"
+            android:layout_marginRight="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:textColor="@color/colorCommonText.eb4856"
+            android:text="2月13日  18:00"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:textSize="12dp"
+            android:textColor="@color/colorHintText"
+            android:text="到场"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_deadline"
+        android:layout_toRightOf="@id/img_sponsor_logo"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/icon_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/meeting_ic_place"
+            android:layout_marginRight="8dp"/>
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:maxLines="1"
+            android:layout_marginRight="28dp"
+            android:textColor="@color/colorCommonText.eb4856"
+            android:text="东区综合楼501教室"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_below="@id/ll_address"
+        android:background="@color/colorLine"/>
+
+    <LinearLayout
+        android:id="@+id/ll_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"
+        android:orientation="horizontal"
+        android:splitMotionEvents="false"
+        android:clickable="false">
+
+        <LinearLayout
+            android:id="@+id/btn_confirm"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:src="@mipmap/ic_confirm"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_btn_confirm_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorCommonText.666"
+                android:text="已确认参与"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:background="@color/colorLine"/>
+
+        <LinearLayout
+            android:id="@+id/btn_sign"
+            android:layout_width="0dp"
+            android:layout_height="38dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:foreground="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/icon_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:src="@mipmap/ic_confirm"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_btn_sign_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/themeColor"
+                android:text="扫一扫签到"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

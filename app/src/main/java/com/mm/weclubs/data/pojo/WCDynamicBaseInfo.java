@@ -38,7 +38,7 @@ public class WCDynamicBaseInfo implements Serializable {
         return JsonHelper.getJsonStrFromObj(this);
     }
 
-    public class SponsorObj {
+    public class SponsorObj implements Serializable {
         private long sponsor_id;
         private String sponsor_avatar;
         private String sponsor_name;

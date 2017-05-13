@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
 import com.mm.weclubs.app.mission_list.WCMissionListView;
 import com.mm.weclubs.data.pojo.WCMissionListInfo;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.ui.activity.WCMissionDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMissionListAdapter;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 
 import java.util.ArrayList;
 
@@ -75,6 +78,19 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
     private void afterView() {
         mMissionListAdapter = new WCMissionListAdapter(mContext);
         mRecyclerView.setAdapter(mMissionListAdapter);
+        mMissionListAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCMissionListInfo missionListInfo = mMissionListAdapter.getItem(position);
+                Bundle extra = new Bundle();
+                extra.putSerializable("missionListInfo", missionListInfo);
+                switch (view.getId()) {
+                    case R.id.item_dynamic:
+                        showIntent(WCMissionDetailActivity.class, extra);
+                        break;
+                }
+            }
+        });
 
         mMissionListPresenter = new WCMissionListPresenter(mContext);
         mMissionListPresenter.attachView(this);

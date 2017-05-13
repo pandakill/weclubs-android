@@ -44,7 +44,7 @@ public class WCMeetingListAdapter extends WCBaseRecyclerViewAdapter<WCMeetingLis
         holder.setText(R.id.tv_sponsor_name, getItem(position).getSponsor().getSponsor_name());
         holder.setImage(R.id.img_sponsor_logo, getItem(position).getSponsor().getSponsor_avatar());
         holder.setText(R.id.tv_create_date, TimeUtils.millis2String(getItem(position).getCreate_date(), "MMMdd日"));
-        holder.setText(R.id.tv_mission_content, getItem(position).getContent());
+        holder.setText(R.id.tv_meeting_content, getItem(position).getContent());
         holder.setText(R.id.tv_deadline, TimeUtils.millis2String(getItem(position).getDeadline(), "MMMdd日  HH:mm"));
         holder.setText(R.id.tv_address, getItem(position).getAddress());
 
@@ -78,5 +78,6 @@ public class WCMeetingListAdapter extends WCBaseRecyclerViewAdapter<WCMeetingLis
 
         holder.setViewOnClick(R.id.btn_confirm);
         holder.setViewOnClick(R.id.btn_sign);
+        holder.setViewOnClick(R.id.item_dynamic);
     }
 }

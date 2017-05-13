@@ -132,9 +132,13 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
 
     protected abstract void afterView();
 
-    protected abstract boolean toggleOverridePendingTransition();
+    protected boolean toggleOverridePendingTransition() {
+        return true;
+    }
 
-    protected abstract TransitionMode getOverridePendingTransitionMode();
+    protected TransitionMode getOverridePendingTransitionMode() {
+        return TransitionMode.RIGHT;
+    }
 
     protected abstract boolean leftBtnIsReturn();
 

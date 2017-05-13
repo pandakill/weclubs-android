@@ -13,7 +13,8 @@
     app:cardElevation="2dp"
     app:cardMaxElevation="2dp"
     android:layout_marginLeft="4dp"
-    android:layout_marginRight="4dp">
+    android:layout_marginRight="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -62,6 +63,7 @@
             android:layout_below="@+id/tv_sponsor_name"
             android:layout_toRightOf="@id/img_sponsor_logo"
             android:maxLines="2"
+            android:ellipsize="end"
             android:text="机构通讯录已做好机构通讯录已做好机构通讯录已做好机构通讯录已做好机构通讯录已做好"/>
 
         <LinearLayout
