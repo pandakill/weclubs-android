@@ -23,6 +23,7 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
     private EditText mInputPassword;
 
     private WCLoginPresenter mLoginPresenter;
+    private boolean mNeedGetUserInfo = true;
 
     @Override
     protected int getContentLayout() {
@@ -56,7 +57,9 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
         findViewById(R.id.btn_register).setOnClickListener(view -> showIntent(WCRegisterActivity.class));
         findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("忘记密码"));
 
-        mLoginPresenter.checkLogin();
+        if (mNeedGetUserInfo) {
+            mLoginPresenter.checkLogin();
+        }
     }
 
     @Override
@@ -81,7 +84,9 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        if (extras != null) {
+            mNeedGetUserInfo = extras.getBoolean("getUserInfo", true);
+        }
     }
 
     @Override

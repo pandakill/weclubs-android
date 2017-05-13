@@ -12,4 +12,9 @@ public interface MVPView {
     void showProgressDialog(String msg, boolean cancel);
 
     void hideProgressDialog();
+
+    /**
+     * 返回登录页面，但是不需要请求用户数据
+     */
+    void backToLoginActivity();
 }

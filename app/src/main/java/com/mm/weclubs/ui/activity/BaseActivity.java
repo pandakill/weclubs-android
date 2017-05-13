@@ -341,4 +341,11 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             }
         });
     }
+
+    @Override
+    public void backToLoginActivity() {
+        Bundle extra = new Bundle();
+        extra.putBoolean("getUserInfo", false);
+        showIntentThenKill(WCLoginActivity.class, extra);
+    }
 }

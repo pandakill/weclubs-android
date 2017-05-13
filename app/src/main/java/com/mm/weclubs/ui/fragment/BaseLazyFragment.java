@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.app.base.MVPView;
 import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.ui.activity.WCLoginActivity;
 import com.mm.weclubs.util.WCLog;
 
 import java.lang.reflect.Field;
@@ -248,6 +249,7 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         if (extras != null) {
             intent.putExtras(extras);
         }
+        startActivity(intent);
         getActivity().finish();
     }
 
@@ -294,5 +296,12 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         if (mSwipeRefreshLayout != null && mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
         }
+    }
+
+    @Override
+    public void backToLoginActivity() {
+        Bundle extra = new Bundle();
+        extra.putBoolean("getUserInfo", false);
+        showIntentThenKill(WCLoginActivity.class, extra);
     }
 }

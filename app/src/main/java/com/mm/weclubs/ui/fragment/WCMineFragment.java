@@ -7,7 +7,6 @@ import android.widget.Button;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.datacenter.WCUserDataCenter;
-import com.mm.weclubs.ui.activity.WCLoginActivity;
 import com.mm.weclubs.util.WCLog;
 
 /**
@@ -40,7 +39,7 @@ public class WCMineFragment extends BaseLazyFragment {
             @Override
             public void onClick(View view) {
                 WCUserDataCenter.getInstance(mContext.getApplicationContext()).deleteUserInfo();
-                showIntentThenKill(WCLoginActivity.class);
+                backToLoginActivity();
             }
         });
     }
