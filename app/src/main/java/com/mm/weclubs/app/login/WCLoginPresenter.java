@@ -28,11 +28,13 @@ import rx.schedulers.Schedulers;
 public class WCLoginPresenter extends BasePresenter<WCLoginView> {
 
     private WCUserService mUserService = null;
+    private WCUserDataCenter mUserDataCenter;
 
     public WCLoginPresenter(Context context) {
         super(context);
 
         mUserService = WCServiceFactory.getUserService();
+        mUserDataCenter = WCUserDataCenter.getInstance(mContext);
     }
 
     @Override
@@ -94,10 +96,11 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                     public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
                         log.d("login：onNext = " + userInfo.toString());
                         if (userInfo.getResult_code() == 2000) {
-                            WCUserDataCenter.getInstance(mContext.getApplicationContext()).saveUserInfo(userInfo.getData());
+                            mUserDataCenter.saveUserInfo(userInfo.getData());
                             getMvpView().loginSuccess(userInfo.getData());
                         } else {
                             getMvpView().loginFail(userInfo.getResult_msg());
+                            mUserDataCenter.deleteUserInfo();
                         }
 
                         getMvpView().hideProgressDialog();
@@ -177,7 +180,7 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                     public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
                         log.d("register：onNext = " + userInfo.toString());
                         if (userInfo.getResult_code() == 2000) {
-                            WCUserDataCenter.getInstance(mContext.getApplicationContext()).saveUserInfo(userInfo.getData());
+                            mUserDataCenter.saveUserInfo(userInfo.getData());
                             getMvpView().registerSuccess(userInfo.getData());
                         } else {
                             getMvpView().showToast(userInfo.getResult_msg());
@@ -187,5 +190,51 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                     }
                 });
 
+    }
+
+    public void checkLogin() {
+
+        getMvpView().showProgressDialog("登录中...", false);
+
+        WCUserInfoInfo userInfoInfo = mUserDataCenter.getCurrentUserInfo();
+
+        if (userInfoInfo != null) {
+
+            HashMap<String, Object> params = new HashMap<>();
+            params.put("mobile", userInfoInfo.getMobile());
+            params.put("token", userInfoInfo.getToken());
+
+            mUserService.getUserInfo(WCUserService.URL_GET_USER_INFO, mHttpParamsPresenter.initRequestParam(mContext, params))
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
+                        @Override
+                        public void onCompleted() {
+                            log.d("checkLogin：onCompleted");
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            e.printStackTrace();
+                            log.d("checkLogin：onError - " + e.getMessage());
+                            getMvpView().hideProgressDialog();
+                        }
+
+                        @Override
+                        public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
+                            log.d("checkLogin：onNext = " + userInfo.toString());
+                            if (userInfo.getResult_code() == 2000) {
+                                userInfo.getData().setToken(mUserDataCenter.getCurrentUserInfo().getToken());
+                                mUserDataCenter.saveUserInfo(userInfo.getData());
+                                getMvpView().loginSuccess(userInfo.getData());
+                            } else {
+                                mUserDataCenter.deleteUserInfo();
+                                log.d("checkLogin：获取用户信息失败 - " + userInfo.getResult_msg());
+                            }
+
+                            getMvpView().hideProgressDialog();
+                        }
+                    });
+        }
     }
 }

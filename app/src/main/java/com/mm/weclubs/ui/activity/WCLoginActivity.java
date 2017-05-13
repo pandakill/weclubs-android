@@ -9,6 +9,7 @@ import com.mm.weclubs.R;
 import com.mm.weclubs.app.login.WCLoginPresenter;
 import com.mm.weclubs.app.login.WCLoginView;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
+import com.mm.weclubs.datacenter.WCUserDataCenter;
 
 /**
  * 创建人: fangzanpan
@@ -50,8 +51,12 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
             }
         });
 
+        mInputMobile.setText(WCUserDataCenter.getInstance(getApplicationContext()).getLastTimeLoginMobile());
+
         findViewById(R.id.btn_register).setOnClickListener(view -> showIntent(WCRegisterActivity.class));
-        findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("注册新用户"));
+        findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("忘记密码"));
+
+        mLoginPresenter.checkLogin();
     }
 
     @Override

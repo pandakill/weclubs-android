@@ -58,6 +58,11 @@ public class WCUserDataCenter {
         PreferencesHelper.getInstance(mContext).put(USER_CENTER_LOGIN_USER, userInfo, EncodeType.BASE_64);
     }
 
+    public void deleteUserInfo() {
+        mCurrentUserInfo = null;
+        PreferencesHelper.getInstance(mContext).put(USER_CENTER_LOGIN_USER, null, EncodeType.BASE_64);
+    }
+
     /**
      * 获取当前登录的用户信息
      *
