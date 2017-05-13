@@ -9,6 +9,7 @@ import android.view.View;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
 import com.mm.weclubs.app.mission_list.WCMissionListView;
+import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
 import com.mm.weclubs.data.pojo.WCMissionListInfo;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMissionDetailActivity;
@@ -139,5 +140,9 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
         mMissionListAdapter.addItems(list);
 
         hideProgressDialog();
+    }
+
+    @Override
+    public void getMissionDetailSuccess(WCMissionDetailInfo missionDetailInfo) {
     }
 }

@@ -6,8 +6,9 @@ import com.mm.weclubs.data.bean.WCMissionListBean;
 import com.mm.weclubs.data.bean.WCNotifyListBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCDynamicBaseInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
+import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
+import com.mm.weclubs.data.pojo.WCNotifyListInfo;
 
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
@@ -40,9 +41,13 @@ public interface WCDynamicService {
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
+    Observable<WCResponseParamBean<WCMissionDetailInfo>> getMissionDetail(@Url String url, @Body WCRequestParamBean requestBean);
+
+    @POST
+    @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
     Observable<WCResponseParamBean<WCNotifyListBean>> getNotifyList(@Url String url, @Body WCRequestParamBean requestBean);
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCDynamicBaseInfo>> getDynamicDetail(@Url String url, @Body WCRequestParamBean requestParam);
+    Observable<WCResponseParamBean<WCNotifyListInfo>> getNotifyDetail(@Url String url, @Body WCRequestParamBean requestBean);
 }

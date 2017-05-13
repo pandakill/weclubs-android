@@ -16,4 +16,11 @@ public interface WCNotifyListView extends MVPView {
     void refreshNotifyList(ArrayList<WCNotifyListInfo> list);
 
     void addNotifyList(ArrayList<WCNotifyListInfo> list, boolean hasMore);
+
+    /**
+     * 获取通知详情接口请求成功
+     *
+     * @param notifyListInfo 请求成功得到的通知详情
+     */
+    void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo);
 }

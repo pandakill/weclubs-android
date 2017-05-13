@@ -140,4 +140,9 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
 
         hideProgressDialog();
     }
+
+    @Override
+    public void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo) {
+
+    }
 }

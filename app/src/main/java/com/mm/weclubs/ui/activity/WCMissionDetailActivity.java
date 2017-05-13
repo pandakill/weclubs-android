@@ -1,6 +1,9 @@
 package com.mm.weclubs.ui.activity;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -8,12 +11,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
+import com.mm.weclubs.app.comment.WCCommentPresenter;
+import com.mm.weclubs.app.comment.WCCommentView;
+import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
+import com.mm.weclubs.app.mission_list.WCMissionListView;
+import com.mm.weclubs.config.WCConstantsUtil;
+import com.mm.weclubs.data.pojo.WCCommentListInfo;
+import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
 import com.mm.weclubs.data.pojo.WCMissionListInfo;
 import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.widget.RoundImageView;
 
-import me.fangx.haorefresh.HaoRecyclerView;
+import java.util.ArrayList;
 
 /**
  * 创建人: fangzanpan
@@ -21,7 +33,7 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:
  */
 
-public class WCMissionDetailActivity extends BaseActivity {
+public class WCMissionDetailActivity extends BaseActivity implements WCMissionListView, WCCommentView {
 
     private ImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -35,13 +47,21 @@ public class WCMissionDetailActivity extends BaseActivity {
     private TextView mTvBtnFinish;
     private LinearLayout mBtnFinish;
     private TextView mTvCommentCount;
-    private HaoRecyclerView mRcyCommentList;
+    private LinearLayout mRcyCommentList;
     private ImageView mBtnVoice;
     private ImageView mBtnEmoji;
     private ImageView mBtnMore;
     private EditText mInputComment;
+    private SwipeRefreshLayout mRefreshLayout;
 
     private WCMissionListInfo mMissionListInfo;
+
+    private WCMissionListPresenter mMissionListPresenter;
+    private WCCommentPresenter mCommentPresenter;
+
+    private WCMissionDetailInfo mMissionDetailInfo;
+
+    private int mCommentPageNo = 1;
 
     @Override
     protected int getContentLayout() {
@@ -73,11 +93,14 @@ public class WCMissionDetailActivity extends BaseActivity {
         mTvBtnFinish = (TextView) findViewById(R.id.tv_btn_finish_text);
         mBtnFinish = (LinearLayout) findViewById(R.id.btn_finish);
         mTvCommentCount = (TextView) findViewById(R.id.tv_comment_count);
-        mRcyCommentList = (HaoRecyclerView) findViewById(R.id.comment_recycler);
+        mRcyCommentList = (LinearLayout) findViewById(R.id.comment_recycler);
         mBtnVoice = (ImageView) findViewById(R.id.btn_voice);
         mBtnEmoji = (ImageView) findViewById(R.id.btn_emoji);
         mBtnMore = (ImageView) findViewById(R.id.btn_more);
         mInputComment = (EditText) findViewById(R.id.input_comment);
+        mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        attachRefreshLayout(mRefreshLayout, null);
     }
 
     @Override
@@ -86,6 +109,12 @@ public class WCMissionDetailActivity extends BaseActivity {
             onBackPressed();
             return;
         }
+
+        mCommentPresenter = new WCCommentPresenter(this);
+        mCommentPresenter.attachView(this);
+
+        mMissionListPresenter = new WCMissionListPresenter(this);
+        mMissionListPresenter.attachView(this);
 
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
@@ -122,7 +151,15 @@ public class WCMissionDetailActivity extends BaseActivity {
             }
         });
 
+        mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mMissionListPresenter.getMissionDetail(mMissionListInfo.getMission_id());
+            }
+        });
+
         initBaseInfo();
+        mMissionListPresenter.getMissionDetail(mMissionListInfo.getMission_id());
     }
 
     private void initBaseInfo() {
@@ -167,6 +204,53 @@ public class WCMissionDetailActivity extends BaseActivity {
         }
     }
 
+    private void initDetailInfo() {
+        if (mMissionDetailInfo == null) {
+            log.e("initDetailInfo：mMissionDetailInfo 不能为空！");
+            return;
+        }
+
+        ImageLoaderHelper.getInstance(getApplicationContext())
+                .loadImage(mIvSponsorLogo, mMissionDetailInfo.getSponsor().getSponsor_avatar());
+        mTvSponsorName.setText(mMissionDetailInfo.getSponsor().getSponsor_name());
+        mTvCreateDate.setText(TimeUtils.millis2String(mMissionDetailInfo.getCreate_date(), "MMMdd日"));
+        mTvMissionContent.setText(mMissionDetailInfo.getContent());
+        mTvDeadline.setText(TimeUtils.millis2String(mMissionDetailInfo.getDeadline(), "MMMdd日  HH:mm"));
+
+
+        if (mMissionDetailInfo.getConfirm_date() > 0) {
+            mIcConfirm.setVisibility(View.VISIBLE);
+
+            mTvBtnConfirm.setText("已确认任务");
+            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+            mBtnConfirm.setEnabled(false);
+        } else {
+            mIcConfirm.setVisibility(View.GONE);
+
+            mTvBtnConfirm.setText("确认任务");
+            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.themeColor));
+
+            mBtnConfirm.setEnabled(true);
+        }
+
+        if (mMissionDetailInfo.getFinish() == 1) {
+            mIcFinish.setVisibility(View.VISIBLE);
+
+            mTvBtnFinish.setText("已完成任务");
+            mTvBtnFinish.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+            mBtnFinish.setEnabled(false);
+        } else {
+            mIcFinish.setVisibility(View.GONE);
+
+            mTvBtnFinish.setText("完成任务");
+            mTvBtnFinish.setTextColor(getResources().getColor(R.color.themeColor));
+
+            mBtnFinish.setEnabled(true);
+        }
+    }
+
     @Override
     protected boolean toggleOverridePendingTransition() {
         return false;
@@ -184,6 +268,73 @@ public class WCMissionDetailActivity extends BaseActivity {
 
     @Override
     protected void unSubscribeObservable() {
+    }
 
+    private View getCommentView(WCCommentListInfo commentListInfo) {
+        View itemView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_comment_item, null);
+
+        RoundImageView sponsorLogo = (RoundImageView) itemView.findViewById(R.id.img_sponsor_logo);
+        sponsorLogo.setRectAdius(SizeUtils.dp2px(36));
+
+        TextView sponsorName = (TextView) itemView.findViewById(R.id.tv_sponsor_name);
+        TextView createDate = (TextView) itemView.findViewById(R.id.tv_create_date);
+        TextView commentContent = (TextView) itemView.findViewById(R.id.tv_comment_content);
+
+        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
+        sponsorName.setText(commentListInfo.getStudent_name());
+        createDate.setText(TimeUtils.millis2String(commentListInfo.getCreate_date(), "MM-dd  HH:mm"));
+        commentContent.setText(commentListInfo.getContent());
+
+        return itemView;
+    }
+
+    @Override
+    public void refreshCommentList(ArrayList<WCCommentListInfo> list) {
+        mRcyCommentList.removeAllViews();
+
+        if (list != null) {
+            for (WCCommentListInfo commentListInfo : list) {
+                if (mRcyCommentList.getChildCount() == 0) {
+                    mRcyCommentList.addView(getCommentView(commentListInfo), 0);
+                } else {
+                    mRcyCommentList.addView(getCommentView(commentListInfo), (mRcyCommentList.getChildCount() - 1));
+                }
+            }
+        }
+
+        mTvCommentCount.setText("共" + mRcyCommentList.getChildCount() + "条回复");
+
+        mCommentPageNo ++;
+    }
+
+    @Override
+    public void addCommentList(ArrayList<WCCommentListInfo> list, boolean hasMore) {
+        if (list != null) {
+            for (WCCommentListInfo commentListInfo : list) {
+                mRcyCommentList.addView(getCommentView(commentListInfo), (mRcyCommentList.getChildCount() - 1));
+            }
+        }
+
+        mTvCommentCount.setText("共" + mRcyCommentList.getChildCount() + "条回复");
+
+        mCommentPageNo ++;
+    }
+
+    @Override
+    public void refreshMissionList(ArrayList<WCMissionListInfo> list) {
+    }
+
+    @Override
+    public void addMissionList(ArrayList<WCMissionListInfo> list, boolean hasMore) {
+    }
+
+    @Override
+    public void getMissionDetailSuccess(WCMissionDetailInfo missionListInfo) {
+        mMissionDetailInfo = missionListInfo;
+
+        initDetailInfo();
+
+        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MISSION,
+                mMissionListInfo.getMission_id(), mCommentPageNo);
     }
 }

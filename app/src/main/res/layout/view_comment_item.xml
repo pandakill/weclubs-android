@@ -49,4 +49,12 @@
         android:layout_marginTop="4dp"
         android:text="评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容评论内容"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorLine"
+        android:layout_below="@id/tv_comment_content"
+        android:layout_toRightOf="@id/img_sponsor_logo"
+        android:layout_marginTop="12dp"/>
+
 </RelativeLayout>

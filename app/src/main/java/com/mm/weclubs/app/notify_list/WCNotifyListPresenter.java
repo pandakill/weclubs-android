@@ -7,6 +7,7 @@ import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCNotifyListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
+import com.mm.weclubs.data.pojo.WCNotifyListInfo;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
 import com.mm.weclubs.util.WCLog;
@@ -75,6 +76,48 @@ public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
                             } else {
                                 getMvpView().addNotifyList(object.getData().getNotify(), object.getData().getHas_more() == 1);
                             }
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+
+                            checkResult(object);
+                        }
+
+                        getMvpView().hideProgressDialog();
+                    }
+                });
+    }
+
+    public void getNotifyDetail(long notifyId) {
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("dynamic_id", notifyId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
+
+        mDynamicService.getNotifyDetail(WCDynamicService.GET_DYNAMIC_DETAIL,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<WCNotifyListInfo>>() {
+                    @Override
+                    public void onCompleted() {
+                        log.d("getNotifyDetail：onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log.d("getNotifyDetail：onError");
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<WCNotifyListInfo> object) {
+                        log.d("getNotifyDetail：onNext = " + object.toString());
+
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().getNotifyDetailSuccess(object.getData());
                         } else {
                             getMvpView().showToast(object.getResult_msg());
 
