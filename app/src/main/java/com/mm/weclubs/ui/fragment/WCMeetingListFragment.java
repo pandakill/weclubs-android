@@ -9,6 +9,7 @@ import android.view.View;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
 import com.mm.weclubs.app.meeting_list.WCMeetingListView;
+import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCMeetingListInfo;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMeetingDetailActivity;
@@ -139,5 +140,9 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
         mMeetingListAdapter.addItems(list);
 
         hideProgressDialog();
+    }
+
+    @Override
+    public void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo) {
     }
 }

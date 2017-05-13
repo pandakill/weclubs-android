@@ -8,6 +8,7 @@ import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCMeetingListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
+import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
 import com.mm.weclubs.util.WCLog;
@@ -76,6 +77,48 @@ public class WCMeetingListPresenter extends BasePresenter<WCMeetingListView> {
                             } else {
                                 getMvpView().addMeetingList(object.getData().getMeeting(), object.getData().getHas_more() == 1);
                             }
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+
+                            checkResult(object);
+                        }
+
+                        getMvpView().hideProgressDialog();
+                    }
+                });
+    }
+
+    public void getMeetingDetail(long meetingId) {
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("dynamic_id", meetingId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MEETING);
+
+        mDynamicService.getMeetingDetail(WCDynamicService.GET_DYNAMIC_DETAIL,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<WCMeetingDetailInfo>>() {
+                    @Override
+                    public void onCompleted() {
+                        log.d("getMeetingDetail：onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log.d("getMeetingDetail：onError");
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<WCMeetingDetailInfo> object) {
+                        log.d("getMeetingDetail：onNext = " + object.toString());
+
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().getMeetingDetailSuccess(object.getData());
                         } else {
                             getMvpView().showToast(object.getResult_msg());
 

@@ -50,4 +50,6 @@ public interface WCConfigConstants {
             this.signSecret = signSecret;
         }
     }
+
+    int ONE_PAGE_SIZE = 20; // 一页的加载数量大小
 }

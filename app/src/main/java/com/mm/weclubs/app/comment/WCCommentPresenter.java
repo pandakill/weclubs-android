@@ -54,9 +54,9 @@ public class WCCommentPresenter extends BasePresenter<WCCommentView> {
         }
 
         if (!WCConstantsUtil.DYNAMIC_TYPE_MEETING.equals(type)
-                || !WCConstantsUtil.DYNAMIC_TYPE_ACTIVITY.equals(type)
-                || !WCConstantsUtil.DYNAMIC_TYPE_MISSION.equals(type)
-                || !WCConstantsUtil.DYNAMIC_TYPE_NOTIFY.equals(type)) {
+                && !WCConstantsUtil.DYNAMIC_TYPE_ACTIVITY.equals(type)
+                && !WCConstantsUtil.DYNAMIC_TYPE_MISSION.equals(type)
+                && !WCConstantsUtil.DYNAMIC_TYPE_NOTIFY.equals(type)) {
             log.e("传入的 type 类型不正确，传入的类型为：" + type);
             return;
         }

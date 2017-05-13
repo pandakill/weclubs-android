@@ -23,10 +23,17 @@
         android:layout_height="1dp"
         android:background="@color/colorLine" />
 
-    <me.fangx.haorefresh.HaoRecyclerView
+    <LinearLayout
         android:id="@+id/sign_leader_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"/>
+
+    <!--<me.fangx.haorefresh.HaoRecyclerView-->
+        <!--android:id="@+id/sign_leader_recycler"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/colorPrimary" />-->
 
 </LinearLayout>

@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="wrap_content"
+    android:minHeight="64dp"
     android:background="@color/colorPrimary">
 
     <com.mm.weclubs.widget.RoundImageView
@@ -20,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/img_leader_logo"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="13dp"
         android:textSize="16sp"
         android:textColor="@color/colorCommonText"
         android:text="帅小伙儿"/>
@@ -70,6 +71,7 @@
         android:layout_height="1dp"
         android:background="@color/colorLine"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="12dp"
         android:layout_toRightOf="@id/img_leader_logo"/>
 
 </RelativeLayout>

@@ -35,7 +35,7 @@
         android:layout_marginTop="16dp"
         android:textSize="11sp"
         android:textColor="@color/colorCommonText.Tips"
-        android:text="3-26 18:00"/>
+        android:text="3-26  18:00"/>
 
     <TextView
         android:id="@+id/tv_comment_content"
