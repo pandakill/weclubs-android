@@ -71,6 +71,11 @@
             android:windowSoftInputMode="stateHidden|adjustResize"
             android:launchMode="singleTask"/>
 
+        <activity
+            android:name=".ui.activity.manage.WCMeetingManageListActivity"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
+            android:launchMode="singleTask"/>
+
         <!-- SMS SDK_MOB要求的 activity START -->
         <activity
             android:name="com.mob.tools.MobUIShell"

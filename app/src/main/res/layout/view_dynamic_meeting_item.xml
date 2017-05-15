@@ -177,6 +177,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/btn_line"
                 android:layout_width="1dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"

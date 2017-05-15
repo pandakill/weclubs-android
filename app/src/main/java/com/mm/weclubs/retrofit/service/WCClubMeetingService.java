@@ -1,7 +1,7 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCMyClubsBean;
+import com.mm.weclubs.data.bean.WCClubMeetingBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 
@@ -13,15 +13,15 @@ import rx.Observable;
 
 /**
  * 创建人: fangzanpan
- * 创建时间: 2017/5/5 下午5:05
+ * 创建时间: 2017/5/15 下午5:47
  * 描述:
  */
 
-public interface WCClubService {
+public interface WCClubMeetingService {
 
-    String GET_MY_CLUBS = "/club/get_my_clubs";
+    String GET_MY_MEETING = "/manage/club_meeting/get_my_meeting";
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCMyClubsBean>> getMyClubs(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCClubMeetingBean>> getMyMeeting(@Url String url, @Body WCRequestParamBean requestBean);
 }

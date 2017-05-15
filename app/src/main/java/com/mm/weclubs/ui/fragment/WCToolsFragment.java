@@ -3,6 +3,7 @@ package com.mm.weclubs.ui.fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout.LayoutParams;
 
@@ -10,7 +11,9 @@ import com.blankj.utilcode.utils.ScreenUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCToolBean;
+import com.mm.weclubs.ui.activity.manage.WCMeetingManageListActivity;
 import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
 
@@ -106,6 +109,43 @@ public class WCToolsFragment extends BaseLazyFragment {
 
         mManageItemAdapter.setItems(mManageTools);
         mInformationItemAdapter.setItems(mInformationTools);
+
+        mManageItemAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCToolBean toolBean = mManageItemAdapter.getItem(position);
+                if (toolBean != null) {
+                    switch (toolBean.getTitle()) {
+                        case "通知管理":
+                            showToast("通知管理");
+                            break;
+                        case "会议管理":
+                            showIntent(WCMeetingManageListActivity.class);
+                            break;
+                        case "任务管理":
+                            showToast("任务管理");
+                            break;
+                    }
+                }
+            }
+        });
+
+        mInformationItemAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCToolBean toolBean = mInformationItemAdapter.getItem(position);
+                if (toolBean != null) {
+                    switch (toolBean.getTitle()) {
+                        case "组织设置":
+                            showToast("组织设置");
+                            break;
+                        case "创建组织":
+                            showToast("创建组织");
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     @Override

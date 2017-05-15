@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <cn.bingoogolapple.titlebar.BGATitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBar"
+        app:bgatitlebar_titleText="会议管理"
+        app:bgatitlebar_leftDrawable="@mipmap/icon_return"
+        app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
+        app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"
+        app:bgatitlebar_isTitleTextBold="@bool/title_bar_text_bold"
+        app:bgatitlebar_leftAndRightPadding="@dimen/title_bar_right_padding"
+        android:background="@color/title_bar_bg"/>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:background="@color/colorCommonBg"
+        android:layout_height="match_parent">
+
+        <me.fangx.haorefresh.HaoRecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+</LinearLayout>
