@@ -29,6 +29,8 @@ public class ImageLoaderHelper {
 
     private static ImageLoaderHelper mInstance;
 
+    private WCLog log = null;
+
     private ImageLoaderHelper(Context context) {
         if (sPicasso == null) {
             sPicasso = new Picasso.Builder(context)
@@ -37,6 +39,7 @@ public class ImageLoaderHelper {
                     .build();
 
             sPicasso.setLoggingEnabled(WCConfigConstants.DEV);
+            log = new WCLog(ImageLoaderHelper.class);
         }
     }
 
@@ -59,11 +62,19 @@ public class ImageLoaderHelper {
     }
 
     public void loadImage(ImageView imageView, String url) {
-        sPicasso
-        .load(url)
-        .placeholder(R.mipmap.login_logo_weclubs)
-        .error(R.mipmap.login_logo_weclubs)
-        .fit()
-        .into(imageView);
+        try {
+            sPicasso
+                    .load(url)
+                    .placeholder(R.mipmap.login_logo_weclubs)
+                    .error(R.mipmap.login_logo_weclubs)
+                    .fit()
+                    .into(imageView);
+        } catch (IllegalArgumentException e) {
+            log.e("loadImage：" + e.getMessage());
+            sPicasso
+                    .load(R.mipmap.login_logo_weclubs)
+                    .fit()
+                    .into(imageView);
+        }
     }
 }
