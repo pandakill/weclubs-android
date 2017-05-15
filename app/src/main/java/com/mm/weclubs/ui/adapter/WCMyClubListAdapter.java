@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.blankj.utilcode.utils.ConvertUtils;
+import com.blankj.utilcode.utils.SizeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
+import com.mm.weclubs.widget.RoundImageView;
 
 /**
  * 创建人: fangzanpan
@@ -41,6 +43,8 @@ public class WCMyClubListAdapter extends WCBaseRecyclerViewAdapter<WCMyClubListI
             itemView.setLayoutParams(params);
         }
 
+        ((RoundImageView) holder.getView(R.id.img_club_logo)).setRectAdius(SizeUtils.dp2px(44));
+
         holder.setImage(R.id.img_club_logo, getItem(position).getAvatar_url());
         holder.setText(R.id.tv_club_name, getItem(position).getClub_name());
         holder.setText(R.id.tv_club_member_count, getItem(position).getMember_count() + "");
@@ -68,5 +72,6 @@ public class WCMyClubListAdapter extends WCBaseRecyclerViewAdapter<WCMyClubListI
 
         holder.setViewOnClick(R.id.btn_todo);
         holder.setViewOnClick(R.id.btn_activity);
+        holder.setViewOnClick(R.id.item_dynamic);
     }
 }

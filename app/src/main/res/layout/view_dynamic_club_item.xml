@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
+        <com.mm.weclubs.widget.RoundImageView
             android:id="@+id/img_club_logo"
             android:layout_width="44dp"
             android:layout_height="44dp"
@@ -27,8 +27,7 @@
             android:layout_marginRight="12dp"
             android:layout_marginBottom="16dp"
             android:src="@mipmap/login_logo_weclubs"
-            android:background="@drawable/bg_my_dynamic_club_logo"
-            android:foreground="?android:attr/selectableItemBackground"/>
+            android:background="@drawable/bg_my_dynamic_club_logo"/>
 
         <TextView
             android:id="@+id/tv_club_name"

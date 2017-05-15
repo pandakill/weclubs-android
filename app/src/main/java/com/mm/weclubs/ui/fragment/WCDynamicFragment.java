@@ -84,6 +84,9 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListV
                             showToast(clubListInfo.getClub_name() + "：" + clubListInfo.getActivity_count());
                         }
                         break;
+                    case R.id.item_dynamic:
+                        showToast(clubListInfo.getClub_name() + ": " + clubListInfo.getClub_id());
+                        break;
                 }
             }
         });

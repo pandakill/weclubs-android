@@ -34,7 +34,7 @@ import java.util.ArrayList;
 
 public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyListView, WCCommentView {
 
-    private ImageView mIvSponsorLogo;
+    private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
     private TextView mTvCreateDate;
     private TextView mTvNotifyContent;
@@ -74,7 +74,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
 
     @Override
     protected void initView() {
-        mIvSponsorLogo = (ImageView) findViewById(R.id.img_sponsor_logo);
+        mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
         mTvNotifyContent = (TextView) findViewById(R.id.tv_notify_content);
@@ -90,6 +90,8 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         attachRefreshLayout(mRefreshLayout, null);
+
+        mIvSponsorLogo.setRectAdius(SizeUtils.dp2px(40));
     }
 
     @Override

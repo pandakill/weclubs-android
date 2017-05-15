@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingListView, WCCommentView {
 
-    private ImageView mIvSponsorLogo;
+    private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
     private TextView mTvCreateDate;
     private TextView mTvMeetingContent;
@@ -85,7 +85,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     protected void initView() {
-        mIvSponsorLogo = (ImageView) findViewById(R.id.img_sponsor_logo);
+        mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
         mTvMeetingContent = (TextView) findViewById(R.id.tv_meeting_content);
@@ -105,6 +105,8 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mBtnMore = (ImageView) findViewById(R.id.btn_more);
         mInputComment = (EditText) findViewById(R.id.input_comment);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        mIvSponsorLogo.setRectAdius(SizeUtils.dp2px(40));
 
         LinearLayoutManager commentManager = new LinearLayoutManager(this);
         commentManager.canScrollVertically();

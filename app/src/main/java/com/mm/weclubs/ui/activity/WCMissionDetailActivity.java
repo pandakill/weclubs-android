@@ -35,7 +35,7 @@ import java.util.ArrayList;
 
 public class WCMissionDetailActivity extends BaseActivity implements WCMissionListView, WCCommentView {
 
-    private ImageView mIvSponsorLogo;
+    private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
     private TextView mTvCreateDate;
     private TextView mTvMissionContent;
@@ -81,7 +81,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
     @Override
     protected void initView() {
-        mIvSponsorLogo = (ImageView) findViewById(R.id.img_sponsor_logo);
+        mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
         mTvMissionContent = (TextView) findViewById(R.id.tv_mission_content);
@@ -101,6 +101,8 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         attachRefreshLayout(mRefreshLayout, null);
+
+        mIvSponsorLogo.setRectAdius(SizeUtils.dp2px(40));
     }
 
     @Override

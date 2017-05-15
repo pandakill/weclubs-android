@@ -6,10 +6,12 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.ConvertUtils;
+import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.data.pojo.WCNotifyListInfo;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
+import com.mm.weclubs.widget.RoundImageView;
 
 /**
  * 创建人: fangzanpan
@@ -41,6 +43,8 @@ public class WCNotifyListAdapter extends WCBaseRecyclerViewAdapter<WCNotifyListI
             params.bottomMargin = ConvertUtils.dp2px(16);
             itemView.setLayoutParams(params);
         }
+
+        ((RoundImageView) holder.getView(R.id.img_sponsor_logo)).setRectAdius(SizeUtils.dp2px(32));
 
         holder.setText(R.id.tv_sponsor_name, getItem(position).getSponsor().getSponsor_name());
         holder.setText(R.id.tv_notify_content, getItem(position).getContent());
