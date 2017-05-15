@@ -52,4 +52,8 @@ public class WCConstantsUtil {
             return "活动";
         }
     }
+
+    public static int getProportionHeight(int realWidth, int defaultWidth, int defaultHeight) {
+        return (realWidth * defaultHeight) / defaultWidth;
+    }
 }

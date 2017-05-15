@@ -1,9 +1,20 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 
+import com.blankj.utilcode.utils.ScreenUtils;
 import com.mm.weclubs.R;
+import com.mm.weclubs.config.WCConstantsUtil;
+import com.mm.weclubs.data.bean.WCToolBean;
+import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
+
+import java.util.ArrayList;
 
 /**
  * 创建人: fangzanpan
@@ -12,6 +23,16 @@ import com.mm.weclubs.util.WCLog;
  */
 
 public class WCToolsFragment extends BaseLazyFragment {
+
+    private ImageView mImgToolBanner;
+    private RecyclerView mGvManageList;
+    private RecyclerView mGvInformationList;
+
+    private ArrayList<WCToolBean> mManageTools;
+    private ArrayList<WCToolBean> mInformationTools;
+
+    private WCManageItemAdapter mManageItemAdapter;
+    private WCManageItemAdapter mInformationItemAdapter;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -26,8 +47,65 @@ public class WCToolsFragment extends BaseLazyFragment {
 
     @Override
     protected void initViewsAndEvents() {
-        log.d("工具 initViewsAndEvents");
+        initTools();
+        initView();
+        afterView();
+    }
 
+    private void initView() {
+        mImgToolBanner = findViewById(R.id.img_tool_banner, ImageView.class);
+        mGvManageList = findViewById(R.id.gv_manage_list, RecyclerView.class);
+        mGvInformationList = findViewById(R.id.gv_information_list, RecyclerView.class);
+
+        GridLayoutManager managerListManager = new GridLayoutManager(mContext, 4);
+        mGvManageList.setLayoutManager(managerListManager);
+
+        GridLayoutManager informationListManager = new GridLayoutManager(mContext, 4);
+        mGvInformationList.setLayoutManager(informationListManager);
+    }
+
+    private void initTools() {
+        mManageTools = new ArrayList<>();
+        WCToolBean notify = new WCToolBean();
+        notify.setDrawable(getResources().getDrawable(R.mipmap.tool_ic_notice));
+        notify.setTitle("通知管理");
+        mManageTools.add(notify);
+        WCToolBean meeting = new WCToolBean();
+        meeting.setDrawable(getResources().getDrawable(R.mipmap.tool_ic_meeting));
+        meeting.setTitle("会议管理");
+        mManageTools.add(meeting);
+        WCToolBean mission = new WCToolBean();
+        mission.setDrawable(getResources().getDrawable(R.mipmap.tool_ic_task));
+        mission.setTitle("任务管理");
+        mManageTools.add(mission);
+
+        mInformationTools = new ArrayList<>();
+        WCToolBean setting = new WCToolBean();
+        setting.setDrawable(getResources().getDrawable(R.mipmap.tool_ic_setting));
+        setting.setTitle("组织设置");
+        mInformationTools.add(setting);
+        WCToolBean club = new WCToolBean();
+        club.setDrawable(getResources().getDrawable(R.mipmap.tool_ic_setup));
+        club.setTitle("创建组织");
+        mInformationTools.add(club);
+    }
+
+    private void afterView() {
+        ImageLoaderHelper.getInstance(mContext.getApplicationContext()).loadImage(mImgToolBanner,
+                "http://img0.pconline.com.cn/pconline/download/iosdl/1611/A4.jpg");
+
+        LayoutParams layoutParams = (LayoutParams) mImgToolBanner.getLayoutParams();
+        layoutParams.height = WCConstantsUtil.getProportionHeight(ScreenUtils.getScreenWidth(), 750, 320);
+        mImgToolBanner.setLayoutParams(layoutParams);
+
+        mManageItemAdapter = new WCManageItemAdapter(mContext);
+        mInformationItemAdapter = new WCManageItemAdapter(mContext);
+
+        mGvManageList.setAdapter(mManageItemAdapter);
+        mGvInformationList.setAdapter(mInformationItemAdapter);
+
+        mManageItemAdapter.setItems(mManageTools);
+        mInformationItemAdapter.setItems(mInformationTools);
     }
 
     @Override
