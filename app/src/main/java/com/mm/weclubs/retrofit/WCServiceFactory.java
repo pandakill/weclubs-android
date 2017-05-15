@@ -1,6 +1,7 @@
 package com.mm.weclubs.retrofit;
 
 import com.mm.weclubs.retrofit.service.WCClubMeetingService;
+import com.mm.weclubs.retrofit.service.WCClubMissionService;
 import com.mm.weclubs.retrofit.service.WCClubNotifyService;
 import com.mm.weclubs.retrofit.service.WCClubService;
 import com.mm.weclubs.retrofit.service.WCCommentService;
@@ -15,7 +16,7 @@ import com.mm.weclubs.retrofit.service.WCUserService;
 
 public class WCServiceFactory {
 
-    protected static final Object monitor = new Object();
+    private static final Object monitor = new Object();
 
     private static WCUserService mUserService = null;
     private static WCDynamicService mDynamicService = null;
@@ -23,6 +24,7 @@ public class WCServiceFactory {
     private static WCCommentService sCommentService = null;
     private static WCClubMeetingService sClubMeetingService = null;
     private static WCClubNotifyService sClubNotifyService = null;
+    private static WCClubMissionService sClubMissionService = null;
 
     //  获取 UserService
     public static WCUserService getUserService() {
@@ -86,4 +88,13 @@ public class WCServiceFactory {
         }
     }
 
+    public static WCClubMissionService getClubMissionService() {
+        synchronized (monitor) {
+            if (sClubMissionService == null) {
+                sClubMissionService = ServiceGenerator.createService(WCClubMissionService.class);
+            }
+
+            return sClubMissionService;
+        }
+    }
 }

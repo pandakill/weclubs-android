@@ -44,6 +44,9 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
     @Override
     protected void initView() {
+
+        getTitleBar().setTitleText("会议管理");
+
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
 

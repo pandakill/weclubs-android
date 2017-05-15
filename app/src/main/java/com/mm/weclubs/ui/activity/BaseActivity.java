@@ -76,8 +76,8 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             getBundleExtras(extras);
         }
 
-        initView();
         initTitleBar();
+        initView();
         afterView();
     }
 

@@ -12,6 +12,7 @@ import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCToolBean;
 import com.mm.weclubs.ui.activity.manage.WCMeetingManageListActivity;
+import com.mm.weclubs.ui.activity.manage.WCMissionManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCNotifyManageListActivity;
 import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
@@ -124,7 +125,7 @@ public class WCToolsFragment extends BaseLazyFragment {
                             showIntent(WCMeetingManageListActivity.class);
                             break;
                         case "任务管理":
-                            showToast("任务管理");
+                            showIntent(WCMissionManageListActivity.class);
                             break;
                     }
                 }
