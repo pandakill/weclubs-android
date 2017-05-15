@@ -6,11 +6,11 @@ import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
-import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
+import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
+import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
+import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
-import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
+import com.mm.weclubs.ui.adapter.manage.WCManageNotifyAdapter;
 
 import java.util.ArrayList;
 
@@ -19,17 +19,17 @@ import me.fangx.haorefresh.HaoRecyclerView;
 /**
  * 创建人: fangzanpan
  * 创建时间: 2017/5/15 下午5:39
- * 描述:  会议管理列表页面
+ * 描述:  通知管理列表页面
  */
 
-public class WCMeetingManageListActivity extends BaseActivity implements WCManageMeetingView {
+public class WCNotifyManageListActivity extends BaseActivity implements WCManageNotifyView {
 
     private SwipeRefreshLayout mRefreshLayout;
     private HaoRecyclerView mRecyclerView;
 
-    private WCManageMeetingAdapter mManageMeetingAdapter;
+    private WCManageNotifyAdapter mManageNotifyAdapter;
 
-    private WCManageMeetingPresenter mManageMeetingPresenter;
+    private WCManageNotifyPresenter mManageNotifyPresenter;
 
     private int mPageNo = 1;
 
@@ -51,15 +51,15 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMeetingAdapter = new WCManageMeetingAdapter(this);
-        mRecyclerView.setAdapter(mManageMeetingAdapter);
+        mManageNotifyAdapter = new WCManageNotifyAdapter(this);
+        mRecyclerView.setAdapter(mManageNotifyAdapter);
     }
 
     @Override
     protected void afterView() {
 
-        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
-        mManageMeetingPresenter.attachView(this);
+        mManageNotifyPresenter = new WCManageNotifyPresenter(this);
+        mManageNotifyPresenter.attachView(this);
 
         attachRefreshLayout(mRefreshLayout, mRecyclerView);
 
@@ -67,11 +67,11 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+                mManageNotifyPresenter.getNotifyListFromServer(mPageNo);
             }
         });
 
-        mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+        mManageNotifyPresenter.getNotifyListFromServer(mPageNo);
     }
 
     @Override
@@ -84,16 +84,16 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
     }
 
     @Override
-    public void refreshMeetingList(ArrayList<WCManageMeetingInfo> list) {
-        mManageMeetingAdapter.setItems(list);
+    public void refreshNotifyList(ArrayList<WCManageNotifyInfo> list) {
+        mManageNotifyAdapter.setItems(list);
 
         hideProgressDialog();
     }
 
     @Override
-    public void addMeetingList(ArrayList<WCManageMeetingInfo> list, boolean hasMore) {
+    public void addNotifyList(ArrayList<WCManageNotifyInfo> list, boolean hasMore) {
         mPageNo ++;
-        mManageMeetingAdapter.addItems(list);
+        mManageNotifyAdapter.addItems(list);
 
         hideProgressDialog();
     }

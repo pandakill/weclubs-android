@@ -55,7 +55,7 @@ public class WCManageMeetingAdapter extends WCBaseRecyclerViewAdapter<WCManageMe
         holder.setViewVisible(R.id.icon_confirm, View.GONE);
         holder.setViewVisible(R.id.icon_sign, View.GONE);
 
-        if (getItem(position).getUnconfirm_count() > 0) {   // 未确认的
+        if (getItem(position).getDeadline() < TimeUtils.getNowTimeMills()) {   // 未过期的会议
 
             String count = (getItem(position).getTotal_count() - getItem(position).getUnconfirm_count())
                     + "/" + getItem(position).getTotal_count();
@@ -63,15 +63,16 @@ public class WCManageMeetingAdapter extends WCBaseRecyclerViewAdapter<WCManageMe
             holder.setText(R.id.tv_btn_confirm_text, "提醒确认与会(" + count + ")");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
-        } else {
-            holder.setViewVisible(R.id.icon_confirm, View.GONE);
+            holder.getView(R.id.btn_confirm).setEnabled(true);
+        } else {    // 已经过去的会议
 
             String count = (getItem(position).getTotal_count() - getItem(position).getUnconfirm_count())
                     + "/" + getItem(position).getTotal_count();
 
             holder.setText(R.id.tv_btn_confirm_text, "确认与会(" + count + ")");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
-                    .setTextColor(mContext.getResources().getColor(R.color.themeColor));
+                    .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
+            holder.getView(R.id.btn_confirm).setEnabled(false);
         }
 
         if (getItem(position).getSign_type() == 0) {    // 不需要签到，隐藏按钮
