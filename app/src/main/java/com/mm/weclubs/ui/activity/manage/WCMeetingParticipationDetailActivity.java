@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.View;
+import android.widget.TextView;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
@@ -13,8 +13,7 @@ import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
-import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
+import com.mm.weclubs.ui.adapter.manage.WCMeetingParticipationAdapter;
 
 import java.util.ArrayList;
 
@@ -22,36 +21,49 @@ import me.fangx.haorefresh.HaoRecyclerView;
 
 /**
  * 创建人: fangzanpan
- * 创建时间: 2017/5/15 下午5:39
- * 描述:  会议管理列表页面
+ * 创建时间: 2017/5/16 下午4:10
+ * 描述:  会议管理-会议参与详情
  */
 
-public class WCMeetingManageListActivity extends BaseActivity implements WCManageMeetingView {
+public class WCMeetingParticipationDetailActivity extends BaseActivity implements WCManageMeetingView {
 
+    private TextView mTvConfirmCount;
+    private TextView mTvSignCount;
     private SwipeRefreshLayout mRefreshLayout;
     private HaoRecyclerView mRecyclerView;
 
-    private WCManageMeetingAdapter mManageMeetingAdapter;
-
+    private WCMeetingParticipationAdapter mMeetingParticipationAdapter;
     private WCManageMeetingPresenter mManageMeetingPresenter;
 
-    private int mPageNo = 1;
+    private long mMeetingId = 0;
 
     @Override
     protected int getContentLayout() {
-        return R.layout.activity_notify_manage_list;
+        return R.layout.activity_meeting_participation;
     }
 
     @Override
     protected void getBundleExtras(Bundle extras) {
+        if (extras == null) {
+            log.e("getBundleExtras：extras 不能为空");
+            onBackPressed();
+            return;
+        }
+
+        mMeetingId = extras.getLong("meetingId");
+    }
+
+    @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+        showToast(getTitleBar().getRightCtv().getText().toString());
     }
 
     @Override
     protected void initView() {
 
-        getTitleBar().setTitleText("会议管理");
-        getTitleBar().setRightText("发起会议");
-
+        mTvConfirmCount = (TextView) findViewById(R.id.tv_confirm_count);
+        mTvSignCount = (TextView) findViewById(R.id.tv_sign_count);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
 
@@ -59,45 +71,26 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMeetingAdapter = new WCManageMeetingAdapter(this);
-        mRecyclerView.setAdapter(mManageMeetingAdapter);
+        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
+        mManageMeetingPresenter.attachView(this);
 
-        mManageMeetingAdapter.setOnClickViewListener(new OnClickViewListener() {
-            @Override
-            public void onClick(View view, int position) {
-                WCManageMeetingInfo manageMeetingInfo = mManageMeetingAdapter.getItem(position);
-                Bundle extra = new Bundle();
-                extra.putSerializable("manageMeetingInfo", manageMeetingInfo);
-                if (manageMeetingInfo != null) {
-                    showIntent(WCMeetingManageDetailActivity.class, extra);
-                }
-            }
-        });
+        attachRefreshLayout(mRefreshLayout, mRecyclerView);
     }
 
     @Override
     protected void afterView() {
 
-        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
-        mManageMeetingPresenter.attachView(this);
+        mMeetingParticipationAdapter = new WCMeetingParticipationAdapter(this);
+        mRecyclerView.setAdapter(mMeetingParticipationAdapter);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        mManageMeetingPresenter.getMeetingParticipation(mMeetingId);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPageNo = 1;
-                mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+                mManageMeetingPresenter.getMeetingParticipation(mMeetingId);
             }
         });
-
-        mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
-    }
-
-    @Override
-    protected void onClickRightTitle() {
-        super.onClickRightTitle();
-        showToast("发起会议");
     }
 
     @Override
@@ -111,17 +104,10 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
     @Override
     public void refreshMeetingList(ArrayList<WCManageMeetingInfo> list) {
-        mManageMeetingAdapter.setItems(list);
-
-        hideProgressDialog();
     }
 
     @Override
     public void addMeetingList(ArrayList<WCManageMeetingInfo> list, boolean hasMore) {
-        mPageNo ++;
-        mManageMeetingAdapter.addItems(list);
-
-        hideProgressDialog();
     }
 
     @Override
@@ -130,5 +116,9 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
     @Override
     public void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list) {
+        mTvSignCount.setText("(TODO)");
+        mTvConfirmCount.setText("(TODO)");
+
+        mMeetingParticipationAdapter.setItems(list);
     }
 }

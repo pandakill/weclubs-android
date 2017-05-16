@@ -2,6 +2,7 @@ package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.bean.WCClubMeetingBean;
+import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
@@ -20,6 +21,7 @@ import rx.Observable;
 
 public interface WCClubMeetingService {
 
+    String GET_MEETING_PARTICIPATION = "/meeting/get_meeting_participation";
     String GET_MY_MEETING = "/manage/club_meeting/get_my_meeting";
     String GET_MY_MEETING_DETAIL = "/manage/club_meeting/get_my_meeting_detail";
 
@@ -30,4 +32,8 @@ public interface WCClubMeetingService {
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
     Observable<WCResponseParamBean<WCManageMeetingDetailInfo>> getMyMeetingDetail(@Url String url, @Body WCRequestParamBean requestBean);
+
+    @POST
+    @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
+    Observable<WCResponseParamBean<WCMeetingParticipationBean>> getMeetingParticipation(@Url String url, @Body WCRequestParamBean requestBean);
 }

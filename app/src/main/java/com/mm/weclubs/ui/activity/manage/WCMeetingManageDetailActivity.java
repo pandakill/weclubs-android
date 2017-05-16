@@ -23,6 +23,7 @@ import com.mm.weclubs.data.pojo.WCCommentListInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo.Leader;
+import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
@@ -85,6 +86,10 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
 
     @Override
     protected void initView() {
+
+        getTitleBar().setTitleText("会议详情");
+        getTitleBar().setRightText("参与详情");
+
         mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
@@ -342,6 +347,14 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
     }
 
     @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+        Bundle extra = new Bundle();
+        extra.putLong("meetingId", mManageMeetingInfo.getMeeting_id());
+        showIntent(WCMeetingParticipationDetailActivity.class, extra);
+    }
+
+    @Override
     protected void unSubscribeObservable() {
     }
 
@@ -362,6 +375,10 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
         mCommentPageNo = 1;
         mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
                 meetingDetailInfo.getMeeting_id(), mCommentPageNo);
+    }
+
+    @Override
+    public void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list) {
     }
 
     @Override
