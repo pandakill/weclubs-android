@@ -4,12 +4,15 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
+import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
 
 import java.util.ArrayList;
@@ -46,6 +49,7 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
     protected void initView() {
 
         getTitleBar().setTitleText("会议管理");
+        getTitleBar().setRightText("发起会议");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
@@ -56,6 +60,18 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
         mManageMeetingAdapter = new WCManageMeetingAdapter(this);
         mRecyclerView.setAdapter(mManageMeetingAdapter);
+
+        mManageMeetingAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCManageMeetingInfo manageMeetingInfo = mManageMeetingAdapter.getItem(position);
+                Bundle extra = new Bundle();
+                extra.putSerializable("manageMeetingInfo", manageMeetingInfo);
+                if (manageMeetingInfo != null) {
+                    showIntent(WCMeetingManageDetailActivity.class, extra);
+                }
+            }
+        });
     }
 
     @Override
@@ -75,6 +91,12 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
         });
 
         mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+    }
+
+    @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+        showToast("发起会议");
     }
 
     @Override
@@ -99,5 +121,9 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
         mManageMeetingAdapter.addItems(list);
 
         hideProgressDialog();
+    }
+
+    @Override
+    public void getMeetingDetailSuccess(WCManageMeetingDetailInfo meetingDetailInfo) {
     }
 }

@@ -45,7 +45,8 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
     @Override
     protected void initView() {
 
-        getTitleBar().setTitleText("会议管理");
+        getTitleBar().setTitleText("任务管理");
+        getTitleBar().setRightText("发起任务");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
@@ -75,6 +76,12 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
         });
 
         mManageMissionPresenter.getMissionListFromServer(mPageNo);
+    }
+
+    @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+        showToast("发起任务");
     }
 
     @Override

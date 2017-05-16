@@ -46,6 +46,7 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
     protected void initView() {
 
         getTitleBar().setTitleText("通知管理");
+        getTitleBar().setRightText("发起通知");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
@@ -75,6 +76,12 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
         });
 
         mManageNotifyPresenter.getNotifyListFromServer(mPageNo);
+    }
+
+    @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+        showToast("发起通知");
     }
 
     @Override

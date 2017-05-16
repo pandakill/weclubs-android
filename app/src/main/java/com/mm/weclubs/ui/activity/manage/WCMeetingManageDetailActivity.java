@@ -1,4 +1,4 @@
-package com.mm.weclubs.ui.activity;
+package com.mm.weclubs.ui.activity.manage;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,13 +16,14 @@ import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.comment.WCCommentPresenter;
 import com.mm.weclubs.app.comment.WCCommentView;
-import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
-import com.mm.weclubs.app.meeting_list.WCMeetingListView;
+import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
+import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
 import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.pojo.WCCommentListInfo;
-import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
+import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
+import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo.Leader;
-import com.mm.weclubs.data.pojo.WCMeetingListInfo;
+import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
 
@@ -30,11 +31,11 @@ import java.util.ArrayList;
 
 /**
  * 创建人: fangzanpan
- * 创建时间: 2017/5/13 下午2:20
- * 描述:
+ * 创建时间: 2017/5/16 下午1:59
+ * 描述:  会议管理--会议详情的页面
  */
 
-public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingListView, WCCommentView {
+public class WCMeetingManageDetailActivity extends BaseActivity implements WCManageMeetingView, WCCommentView {
 
     private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -45,6 +46,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     private ImageView mIcConfirm;
     private TextView mTvBtnConfirm;
     private LinearLayout mBtnConfirm;
+    private View mViewBtnLine;
     private ImageView mIcSign;
     private TextView mTvBtnSign;
     private LinearLayout mBtnSign;
@@ -57,10 +59,10 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     private EditText mInputComment;
     private SwipeRefreshLayout mRefreshLayout;
 
-    private WCMeetingListInfo mMeetingListInfo;
-    private WCMeetingDetailInfo mMeetingDetailInfo;
+    private WCManageMeetingInfo mManageMeetingInfo;
+    private WCManageMeetingDetailInfo mMeetingDetailInfo;
 
-    private WCMeetingListPresenter mMeetingListPresenter;
+    private WCManageMeetingPresenter mManageMeetingPresenter;
     private WCCommentPresenter mCommentPresenter;
 
     private int mCommentPageNo = 1;
@@ -72,14 +74,13 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
         if (extras == null) {
             log.e("extras不能为空");
             onBackPressed();
             return;
         }
 
-        mMeetingListInfo = (WCMeetingListInfo) extras.getSerializable("meetingListInfo");
+        mManageMeetingInfo = (WCManageMeetingInfo) extras.getSerializable("manageMeetingInfo");
     }
 
     @Override
@@ -93,6 +94,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mIcConfirm = (ImageView) findViewById(R.id.icon_confirm);
         mTvBtnConfirm = (TextView) findViewById(R.id.tv_btn_confirm_text);
         mBtnConfirm = (LinearLayout) findViewById(R.id.btn_confirm);
+        mViewBtnLine = findViewById(R.id.btn_line);
         mIcSign = (ImageView) findViewById(R.id.icon_sign);
         mTvBtnSign = (TextView) findViewById(R.id.tv_btn_sign_text);
         mBtnSign = (LinearLayout) findViewById(R.id.btn_sign);
@@ -110,7 +112,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     protected void afterView() {
-        if (mMeetingListInfo == null) {
+        if (mManageMeetingInfo == null) {
             onBackPressed();
             return;
         }
@@ -118,8 +120,8 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mCommentPresenter = new WCCommentPresenter(this);
         mCommentPresenter.attachView(this);
 
-        mMeetingListPresenter = new WCMeetingListPresenter(this);
-        mMeetingListPresenter.attachView(this);
+        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
+        mManageMeetingPresenter.attachView(this);
 
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
@@ -161,55 +163,62 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mMeetingListPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
+                mManageMeetingPresenter.getMeetingDetail(mManageMeetingInfo.getMeeting_id());
             }
         });
 
         initBaseInfo();
-        mMeetingListPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
+        mManageMeetingPresenter.getMeetingDetail(mManageMeetingInfo.getMeeting_id());
     }
 
     private void initBaseInfo() {
 
         ImageLoaderHelper.getInstance(getApplicationContext())
-                .loadImage(mIvSponsorLogo, mMeetingListInfo.getSponsor().getSponsor_avatar());
-        mTvSponsorName.setText(mMeetingListInfo.getSponsor().getSponsor_name());
-        mTvCreateDate.setText(TimeUtils.millis2String(mMeetingListInfo.getCreate_date(), "MMMdd日"));
-        mTvMeetingContent.setText(mMeetingListInfo.getContent());
-        mTvDeadline.setText(TimeUtils.millis2String(mMeetingListInfo.getDeadline(), "MMMdd日  HH:mm"));
-        mTvAddress.setText(mMeetingListInfo.getAddress());
+                .loadImage(mIvSponsorLogo, mManageMeetingInfo.getClub_avatar());
+        mTvSponsorName.setText(mManageMeetingInfo.getClub_name());
+        mTvCreateDate.setText(TimeUtils.millis2String(mManageMeetingInfo.getCreate_date(), "MMMdd日"));
+        mTvMeetingContent.setText(mManageMeetingInfo.getContent());
+        mTvDeadline.setText(TimeUtils.millis2String(mManageMeetingInfo.getDeadline(), "MMMdd日  HH:mm"));
+        mTvAddress.setText(mManageMeetingInfo.getAddress());
 
+        mIcConfirm.setVisibility(View.GONE);
+        mIcSign.setVisibility(View.GONE);
 
-        if (mMeetingListInfo.getConfirm_join() == 1) {
-            mIcConfirm.setVisibility(View.VISIBLE);
+        if (mManageMeetingInfo.getDeadline() < TimeUtils.getNowTimeMills()) {   // 未过期的会议
 
-            mTvBtnConfirm.setText("已确认参与");
-            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
-
-            mBtnConfirm.setEnabled(false);
-        } else {
-            mIcConfirm.setVisibility(View.GONE);
-
-            mTvBtnConfirm.setText("确认参与");
+            String count = (mManageMeetingInfo.getTotal_count() - mManageMeetingInfo.getUnconfirm_count())
+                    + "/" + mManageMeetingInfo.getTotal_count();
+            mTvBtnConfirm.setText("提醒确认与会(" + count + ")");
             mTvBtnConfirm.setTextColor(getResources().getColor(R.color.themeColor));
 
             mBtnConfirm.setEnabled(true);
+        } else {
+
+            String count = (mManageMeetingInfo.getTotal_count() - mManageMeetingInfo.getUnconfirm_count())
+                    + "/" + mManageMeetingInfo.getTotal_count();
+            mTvBtnConfirm.setText("确认与会(" + count + ")");
+            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+            mBtnConfirm.setEnabled(false);
         }
 
-        if (mMeetingListInfo.getHas_sign() == 1) {
-            mIcSign.setVisibility(View.VISIBLE);
-
-            mTvBtnSign.setText("已完成签到");
-            mTvBtnSign.setTextColor(getResources().getColor(R.color.colorCommonText_666));
-
-            mBtnSign.setEnabled(false);
+        if (mManageMeetingInfo.getSign_type() == 0) {
+            mViewBtnLine.setVisibility(View.GONE);
+            mBtnSign.setVisibility(View.GONE);
         } else {
-            mIcSign.setVisibility(View.GONE);
+            mViewBtnLine.setVisibility(View.VISIBLE);
+            mBtnSign.setVisibility(View.VISIBLE);
 
-            mTvBtnSign.setText("扫一扫签到");
-            mTvBtnSign.setTextColor(getResources().getColor(R.color.themeColor));
-
-            mBtnSign.setEnabled(true);
+            if (mManageMeetingInfo.getTime_to_sign() == 0) {
+                mTvBtnSign.setText("签到尚未开始");
+                mTvBtnSign.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+                mBtnSign.setEnabled(false);
+            } else {
+                String count = mManageMeetingInfo.getAlready_sign_count() + "/" + mManageMeetingInfo.getTotal_count();
+                mTvBtnSign.setText("实际签到(" + count + ")");
+                mTvBtnSign.setTextColor(getResources().getColor(R.color.themeColor));
+                mBtnSign.setEnabled(true);
+            }
         }
     }
 
@@ -220,44 +229,51 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         }
 
         ImageLoaderHelper.getInstance(getApplicationContext())
-                .loadImage(mIvSponsorLogo, mMeetingDetailInfo.getSponsor().getSponsor_avatar());
-        mTvSponsorName.setText(mMeetingDetailInfo.getSponsor().getSponsor_name());
+                .loadImage(mIvSponsorLogo, mMeetingDetailInfo.getAvatar_url());
+        mTvSponsorName.setText(mMeetingDetailInfo.getClub_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mMeetingDetailInfo.getCreate_date(), "MMMdd日"));
         mTvMeetingContent.setText(mMeetingDetailInfo.getContent());
         mTvDeadline.setText(TimeUtils.millis2String(mMeetingDetailInfo.getDeadline(), "MMMdd日  HH:mm"));
         mTvAddress.setText(mMeetingDetailInfo.getAddress());
 
+        mIcConfirm.setVisibility(View.GONE);
+        mIcSign.setVisibility(View.GONE);
 
-        if (mMeetingDetailInfo.getConfirm_join() == 1) {
-            mIcConfirm.setVisibility(View.VISIBLE);
+        if (mMeetingDetailInfo.getDeadline() < TimeUtils.getNowTimeMills()) {   // 未过期的会议
 
-            mTvBtnConfirm.setText("已确认参与");
-            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
-
-            mBtnConfirm.setEnabled(false);
-        } else {
-            mIcConfirm.setVisibility(View.GONE);
-
-            mTvBtnConfirm.setText("确认参与");
+            String count = (mMeetingDetailInfo.getTotal_count() - mManageMeetingInfo.getUnconfirm_count())
+                    + "/" + mMeetingDetailInfo.getTotal_count();
+            mTvBtnConfirm.setText("提醒确认与会(" + count + ")");
             mTvBtnConfirm.setTextColor(getResources().getColor(R.color.themeColor));
 
             mBtnConfirm.setEnabled(true);
+        } else {
+
+            String count = (mMeetingDetailInfo.getTotal_count() - mManageMeetingInfo.getUnconfirm_count())
+                    + "/" + mMeetingDetailInfo.getTotal_count();
+            mTvBtnConfirm.setText("确认与会(" + count + ")");
+            mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+            mBtnConfirm.setEnabled(false);
         }
 
-        if (mMeetingDetailInfo.getHas_sign() == 1) {
-            mIcSign.setVisibility(View.VISIBLE);
-
-            mTvBtnSign.setText("已完成签到");
-            mTvBtnSign.setTextColor(getResources().getColor(R.color.colorCommonText_666));
-
-            mBtnSign.setEnabled(false);
+        if (mMeetingDetailInfo.getSign_type() == 0) {
+            mViewBtnLine.setVisibility(View.GONE);
+            mBtnSign.setVisibility(View.GONE);
         } else {
-            mIcSign.setVisibility(View.GONE);
+            mViewBtnLine.setVisibility(View.VISIBLE);
+            mBtnSign.setVisibility(View.VISIBLE);
 
-            mTvBtnSign.setText("扫一扫签到");
-            mTvBtnSign.setTextColor(getResources().getColor(R.color.themeColor));
-
-            mBtnSign.setEnabled(true);
+            if (mMeetingDetailInfo.getTime_to_sign() == 0) {
+                mTvBtnSign.setText("签到尚未开始");
+                mTvBtnSign.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+                mBtnSign.setEnabled(false);
+            } else {
+                String count = mMeetingDetailInfo.getAlready_sign_count() + "/" + mMeetingDetailInfo.getTotal_count();
+                mTvBtnSign.setText("实际签到(" + count + ")");
+                mTvBtnSign.setTextColor(getResources().getColor(R.color.themeColor));
+                mBtnSign.setEnabled(true);
+            }
         }
 
         mRcvSignLeader.removeAllViews();
@@ -330,6 +346,25 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     }
 
     @Override
+    public void refreshMeetingList(ArrayList<WCManageMeetingInfo> list) {
+    }
+
+    @Override
+    public void addMeetingList(ArrayList<WCManageMeetingInfo> list, boolean hasMore) {
+    }
+
+    @Override
+    public void getMeetingDetailSuccess(WCManageMeetingDetailInfo meetingDetailInfo) {
+        mMeetingDetailInfo = meetingDetailInfo;
+
+        initDetailInfo();
+
+        mCommentPageNo = 1;
+        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
+                meetingDetailInfo.getMeeting_id(), mCommentPageNo);
+    }
+
+    @Override
     public void refreshCommentList(ArrayList<WCCommentListInfo> list) {
         mRcyCommentList.removeAllViews();
 
@@ -359,23 +394,5 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mTvCommentCount.setText("共" + mRcyCommentList.getChildCount() + "条回复");
 
         mCommentPageNo ++;
-    }
-
-    @Override
-    public void refreshMeetingList(ArrayList<WCMeetingListInfo> list) {
-    }
-
-    @Override
-    public void addMeetingList(ArrayList<WCMeetingListInfo> list, boolean hasMore) {
-    }
-
-    @Override
-    public void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo) {
-        mMeetingDetailInfo = meetingDetailInfo;
-
-        initDetailInfo();
-
-        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
-                mMeetingListInfo.getMeeting_id(), mCommentPageNo);
     }
 }
