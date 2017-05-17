@@ -55,7 +55,6 @@ public class WCManageNotifyAdapter extends WCBaseRecyclerViewAdapter<WCManageNot
             holder.setViewVisible(R.id.icon_receive, View.VISIBLE);
             holder.setText(R.id.tv_btn_receive_text, "所有成员都已查看该通知(" + getItem(position).getTotal_count() + ")");
 
-            holder.getView(R.id.btn_receive).setEnabled(false);
             ((TextView) holder.getView(R.id.tv_btn_receive_text))
                     .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
 
@@ -66,7 +65,6 @@ public class WCManageNotifyAdapter extends WCBaseRecyclerViewAdapter<WCManageNot
             String count = getItem(position).getUnread_count() + "/" + getItem(position).getTotal_count();
             holder.setText(R.id.tv_btn_receive_text, "再次提醒未查看成员(" + count + ")");
 
-            holder.getView(R.id.btn_receive).setEnabled(true);
             ((TextView) holder.getView(R.id.tv_btn_receive_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
 

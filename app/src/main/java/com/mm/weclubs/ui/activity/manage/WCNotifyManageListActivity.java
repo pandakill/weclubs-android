@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.View;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.ui.adapter.manage.WCManageNotifyAdapter;
 
 import java.util.ArrayList;
@@ -57,6 +59,25 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
 
         mManageNotifyAdapter = new WCManageNotifyAdapter(this);
         mRecyclerView.setAdapter(mManageNotifyAdapter);
+
+        mManageNotifyAdapter.setOnClickViewListener(new OnClickViewListener() {
+            @Override
+            public void onClick(View view, int position) {
+                WCManageNotifyInfo notifyInfo = mManageNotifyAdapter.getItem(position);
+                Bundle extra = new Bundle();
+                extra.putSerializable("manageNotifyInfo", notifyInfo);
+                if (notifyInfo != null) {
+                    switch (view.getId()) {
+                        case R.id.item_dynamic:
+                            showIntent(WCNotifyManageDetailActivity.class, extra);
+                            break;
+                        case R.id.btn_receive:
+                            showToast("提醒确认");
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -106,5 +127,9 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
         mManageNotifyAdapter.addItems(list);
 
         hideProgressDialog();
+    }
+
+    @Override
+    public void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo) {
     }
 }
