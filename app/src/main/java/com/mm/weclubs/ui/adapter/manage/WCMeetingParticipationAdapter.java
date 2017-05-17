@@ -36,7 +36,7 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
         View itemVIew = holder.getView(R.id.item_meeting_participation);
         if (position == 0) {
             itemVIew.setPadding(0, SizeUtils.dp2px(12), 0, 0);
-        } else if (position == (getItemCount() - 1)) {
+        } else if (position == (getItems().size() - 1)) {
             itemVIew.setPadding(0, 0, 0, SizeUtils.dp2px(12));
             holder.setViewVisible(R.id.line, View.GONE);
         }
@@ -72,7 +72,7 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
             confirmText.setCompoundDrawables(confirmDrawable, null, null, null);
         }
 
-        TextView signText = holder.getView(R.id.tv_confirm_status);
+        TextView signText = holder.getView(R.id.tv_sign_status);
         Drawable signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_uncertain);
         signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
         if (getItem(position).getIs_sign() == 1) {  // 已经签到
@@ -80,17 +80,25 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
             signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
             signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_sure);
             signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-            confirmText.setCompoundDrawables(signDrawable, null, null, null);
+            signText.setCompoundDrawables(signDrawable, null, null, null);
         } else if (getItem(position).getIs_leave() == 1) {  // 迟到
             signText.setText("迟到");
             signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
             signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_late);
             signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-            confirmText.setCompoundDrawables(signDrawable, null, null, null);
+            signText.setCompoundDrawables(signDrawable, null, null, null);
         } else {    // 尚未签到
             signText.setText("签到");
             signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_c3c3c3));
-            confirmText.setCompoundDrawables(signDrawable, null, null, null);
+            signText.setCompoundDrawables(signDrawable, null, null, null);
+        }
+
+        // TODO: 2017/5/17 需要填写备注信息
+        if (getItem(position).getIs_leave() == 1) {
+            holder.setViewVisible(R.id.tv_mark, View.VISIBLE);
+            holder.setText(R.id.tv_mark, "请假理由TODO");
+        } else {
+            holder.setViewVisible(R.id.tv_mark, View.GONE);
         }
     }
 }

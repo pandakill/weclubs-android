@@ -190,7 +190,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             return;
         }
 
-        showToast("点击了标题栏");
+        log.d("点击了标题栏");
     }
 
     protected void onClickLeftTitle() {
@@ -210,7 +210,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             return;
         }
 
-        showToast("点击了右侧按钮");
+        log.d("点击了右侧按钮");
     }
 
     protected void onClickRightSecondTitle() {
@@ -219,7 +219,7 @@ public abstract class BaseActivity extends AppCompatActivity implements MVPView 
             return;
         }
 
-        showToast("点击了右侧第二个按钮");
+        log.d("点击了右侧第二个按钮");
     }
 
     /**

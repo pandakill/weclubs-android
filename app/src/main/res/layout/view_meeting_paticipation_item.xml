@@ -57,7 +57,7 @@
         android:layout_marginRight="28dp"
         android:textSize="13sp"
         android:textColor="@color/colorCommonText.Tips"
-        android:text="当天要参加计算机二级考试"/>
+        android:text=""/>
 
     <View
         android:id="@+id/line"

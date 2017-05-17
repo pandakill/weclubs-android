@@ -69,7 +69,17 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
                 Bundle extra = new Bundle();
                 extra.putSerializable("manageMeetingInfo", manageMeetingInfo);
                 if (manageMeetingInfo != null) {
-                    showIntent(WCMeetingManageDetailActivity.class, extra);
+                    switch (view.getId()) {
+                        case R.id.item_dynamic:
+                            showIntent(WCMeetingManageDetailActivity.class, extra);
+                            break;
+                        case R.id.btn_confirm:
+                            showToast("确认");
+                            break;
+                        case R.id.btn_sign:
+                            showToast("签到");
+                            break;
+                    }
                 }
             }
         });
