@@ -19,6 +19,7 @@ import com.mm.weclubs.app.comment.WCCommentView;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
 import com.mm.weclubs.config.WCConstantsUtil;
+import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.pojo.WCCommentListInfo;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
@@ -75,7 +76,10 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
     @Override
     protected void onClickRightTitle() {
         super.onClickRightTitle();
-        showToast("确认详情");
+
+        Bundle extra = new Bundle();
+        extra.putLong("notifyId", mManageNotifyInfo.getNotify_id());
+        showIntent(WCNotifyReceiveStatusActivity.class, extra);
     }
 
     @Override
@@ -196,6 +200,10 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
 
         mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY
                 , mManageNotifyInfo.getNotify_id(), mCommentPageNo);
+    }
+
+    @Override
+    public void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus) {
     }
 
     private View getCommentView(WCCommentListInfo commentListInfo) {

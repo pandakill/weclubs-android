@@ -9,6 +9,7 @@ import android.view.View;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
+import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
@@ -131,5 +132,9 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
 
     @Override
     public void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo) {
+    }
+
+    @Override
+    public void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus) {
     }
 }

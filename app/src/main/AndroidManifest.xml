@@ -103,6 +103,11 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
+        <activity
+            android:name=".ui.activity.manage.WCNotifyReceiveStatusActivity"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
+            android:launchMode="singleTask"/>
+
         <!-- SMS SDK_MOB要求的 activity START -->
         <activity
             android:name="com.mob.tools.MobUIShell"

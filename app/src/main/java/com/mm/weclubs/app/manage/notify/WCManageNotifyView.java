@@ -1,6 +1,7 @@
 package com.mm.weclubs.app.manage.notify;
 
 import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 
 import java.util.ArrayList;
@@ -23,4 +24,11 @@ public interface WCManageNotifyView extends MVPView {
      * @param notifyInfo  通知详情
      */
     void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo);
+
+    /**
+     * 读取通知确认详情成功
+     *
+     * @param notifyCheckStatus  通知确认详情列表
+     */
+    void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus);
 }

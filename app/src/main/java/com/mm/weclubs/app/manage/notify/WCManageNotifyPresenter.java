@@ -5,6 +5,7 @@ import android.content.Context;
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.bean.WCClubNotifyBean;
+import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.data.pojo.WCUserInfoInfo;
@@ -132,6 +133,55 @@ public class WCManageNotifyPresenter extends BasePresenter<WCManageNotifyView> {
 
                         if (object.getResult_code() == 2000) {
                             getMvpView().getNotifyDetailSuccess(object.getData());
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+
+                            checkResult(object);
+                        }
+
+                        getMvpView().hideProgressDialog();
+                    }
+                });
+    }
+
+    public void getNotifyConfirmStatusFromServer(long notifyId) {
+
+        WCUserInfoInfo userInfoInfo = WCUserDataCenter.getInstance(mContext.getApplicationContext()).getCurrentUserInfo();
+        if (userInfoInfo == null) {
+            getMvpView().showToast("用户没有登录");
+            getMvpView().backToLoginActivity();
+            return;
+        }
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("notify_id", notifyId);
+
+        mClubNotifyService.getNotifyCheckStatusList(WCClubNotifyService.GET_NOTIFY_CHECK_STATUS,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<WCNotifyCheckStatusBean>>() {
+                    @Override
+                    public void onCompleted() {
+                        log.d("getNotifyConfirmStatusFromServer：onCompleted");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        log.d("getNotifyConfirmStatusFromServer：onError：" + e.getMessage());
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<WCNotifyCheckStatusBean> object) {
+                        log.d("getNotifyConfirmStatusFromServer：onNext = " + object.toString());
+
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().getNotifyReceiveStatusSuccess(object.getData());
                         } else {
                             getMvpView().showToast(object.getResult_msg());
 

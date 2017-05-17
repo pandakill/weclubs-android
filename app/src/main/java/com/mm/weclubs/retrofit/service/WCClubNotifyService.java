@@ -2,6 +2,7 @@ package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.bean.WCClubNotifyBean;
+import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.bean.WCRequestParamBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
@@ -22,6 +23,7 @@ public interface WCClubNotifyService {
 
     String GET_MY_NOTIFY = "/manage/club_notify/get_my_notify";
     String GET_MY_NOTIFY_DETAIL = "/manage/club_notify/get_my_notify_detail";
+    String GET_NOTIFY_CHECK_STATUS = "/manage/club_notify/get_notify_check_status";
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
@@ -30,4 +32,9 @@ public interface WCClubNotifyService {
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
     Observable<WCResponseParamBean<WCManageNotifyInfo>> getMyNotifyDetail(@Url String url, @Body WCRequestParamBean requestBean);
+
+    @POST
+    @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
+    Observable<WCResponseParamBean<WCNotifyCheckStatusBean>> getNotifyCheckStatusList(@Url String url
+            , @Body WCRequestParamBean requestBean);
 }
