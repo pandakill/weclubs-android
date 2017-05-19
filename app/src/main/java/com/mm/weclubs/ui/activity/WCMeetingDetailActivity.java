@@ -23,6 +23,7 @@ import com.mm.weclubs.data.pojo.WCCommentListInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo.Leader;
 import com.mm.weclubs.data.pojo.WCMeetingListInfo;
+import com.mm.weclubs.ui.activity.manage.WCMeetingParticipationDetailActivity;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
 
@@ -84,6 +85,8 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     protected void initView() {
+        getTitleBar().setRightText("参与详情");
+
         mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
@@ -106,6 +109,15 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         mIvSponsorLogo.setRectAdius(SizeUtils.dp2px(40));
+    }
+
+    @Override
+    protected void onClickRightTitle() {
+        super.onClickRightTitle();
+
+        Bundle extra = new Bundle();
+        extra.putLong("meetingId", mMeetingListInfo.getMeeting_id());
+        showIntent(WCMeetingParticipationDetailActivity.class, extra);
     }
 
     @Override

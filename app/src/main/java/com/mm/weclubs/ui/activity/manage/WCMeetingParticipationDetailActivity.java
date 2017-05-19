@@ -9,9 +9,9 @@ import android.widget.TextView;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
+import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
-import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.ui.adapter.manage.WCMeetingParticipationAdapter;
 
@@ -115,10 +115,14 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     }
 
     @Override
-    public void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list) {
-        mTvSignCount.setText("(TODO)");
-        mTvConfirmCount.setText("(TODO)");
+    public void getMeetingParticipationSuccess(WCMeetingParticipationBean participationBean) {
+        String signCount = participationBean.getAlready_sign_count() + "/"
+                + participationBean.getTotal_count();
+        String confirmCount = participationBean.getAlready_confirm_count() + "/"
+                + participationBean.getTotal_count();
+        mTvSignCount.setText("(" + signCount + ")");
+        mTvConfirmCount.setText("(" + confirmCount + ")");
 
-        mMeetingParticipationAdapter.setItems(list);
+        mMeetingParticipationAdapter.setItems(participationBean.getParticipation());
     }
 }

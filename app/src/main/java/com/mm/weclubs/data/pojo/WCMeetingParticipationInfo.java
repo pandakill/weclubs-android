@@ -34,7 +34,9 @@ public class WCMeetingParticipationInfo implements Serializable {
     private String sign_date;
     private long student_id;
     private int is_sign;
+    private int is_late;
     private long dynamic_date;
+    private String comment;
 
     public String getAvatar_url() {
         return avatar_url;
@@ -114,6 +116,22 @@ public class WCMeetingParticipationInfo implements Serializable {
 
     public void setDynamic_date(long dynamic_date) {
         this.dynamic_date = dynamic_date;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public int getIs_late() {
+        return is_late;
+    }
+
+    public void setIs_late(int is_late) {
+        this.is_late = is_late;
     }
 
     @Override

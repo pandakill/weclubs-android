@@ -1,9 +1,9 @@
 package com.mm.weclubs.app.manage.meeting;
 
 import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
-import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 
 import java.util.ArrayList;
 
@@ -24,7 +24,7 @@ public interface WCManageMeetingView extends MVPView {
     /**
      * 读取会议参与详情成功
      *
-     * @param list  参与详情列表
+     * @param participationBean  参与详情实体
      */
-    void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list);
+    void getMeetingParticipationSuccess(WCMeetingParticipationBean participationBean);
 }

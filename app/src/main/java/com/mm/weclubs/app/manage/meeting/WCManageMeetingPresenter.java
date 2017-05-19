@@ -172,7 +172,7 @@ public class WCManageMeetingPresenter extends BasePresenter<WCManageMeetingView>
                         log.d("getMeetingParticipation：onNext = " + object.toString());
 
                         if (object.getResult_code() == 2000) {
-                            getMvpView().getMeetingParticipationSuccess(object.getData().getParticipation());
+                            getMvpView().getMeetingParticipationSuccess(object.getData());
                         } else {
                             getMvpView().showToast(object.getResult_msg());
 

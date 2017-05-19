@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.SizeUtils;
+import com.blankj.utilcode.utils.StringUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
@@ -54,16 +55,16 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
         TextView confirmText = holder.getView(R.id.tv_confirm_status);
         Drawable confirmDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_uncertain);
         confirmDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-        if (getItem(position).getIs_confirm() == 1) {   // 已经确认
-            confirmText.setText("确认");
-            confirmText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
-            confirmDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_sure);
-            confirmDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-            confirmText.setCompoundDrawables(confirmDrawable, null, null, null);
-        } else if (getItem(position).getIs_leave() == 1) {  // 请假
+        if (getItem(position).getIs_leave() == 1) {  // 请假
             confirmText.setText("请假");
             confirmText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
             confirmDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_leave);
+            confirmDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
+            confirmText.setCompoundDrawables(confirmDrawable, null, null, null);
+        } else if (getItem(position).getIs_confirm() == 1) {   // 已经确认
+            confirmText.setText("确认");
+            confirmText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
+            confirmDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_sure);
             confirmDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
             confirmText.setCompoundDrawables(confirmDrawable, null, null, null);
         } else {    // 尚未确认
@@ -75,16 +76,16 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
         TextView signText = holder.getView(R.id.tv_sign_status);
         Drawable signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_uncertain);
         signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-        if (getItem(position).getIs_sign() == 1) {  // 已经签到
-            signText.setText("签到");
-            signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
-            signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_sure);
-            signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
-            signText.setCompoundDrawables(signDrawable, null, null, null);
-        } else if (getItem(position).getIs_leave() == 1) {  // 迟到
+        if (getItem(position).getIs_late() == 1) {  // 迟到
             signText.setText("迟到");
             signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
             signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_late);
+            signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
+            signText.setCompoundDrawables(signDrawable, null, null, null);
+        } else if (getItem(position).getIs_sign() == 1) {  // 已经签到
+            signText.setText("签到");
+            signText.setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
+            signDrawable = mContext.getResources().getDrawable(R.mipmap.sign_ic_sure);
             signDrawable.setBounds(0, 0, confirmDrawable.getMinimumWidth(), confirmDrawable.getMinimumHeight());
             signText.setCompoundDrawables(signDrawable, null, null, null);
         } else {    // 尚未签到
@@ -93,10 +94,9 @@ public class WCMeetingParticipationAdapter extends WCBaseRecyclerViewAdapter<WCM
             signText.setCompoundDrawables(signDrawable, null, null, null);
         }
 
-        // TODO: 2017/5/17 需要填写备注信息
-        if (getItem(position).getIs_leave() == 1) {
+        if (!StringUtils.isEmpty(getItem(position).getComment())) {
             holder.setViewVisible(R.id.tv_mark, View.VISIBLE);
-            holder.setText(R.id.tv_mark, "请假理由TODO");
+            holder.setText(R.id.tv_mark, getItem(position).getComment());
         } else {
             holder.setViewVisible(R.id.tv_mark, View.GONE);
         }

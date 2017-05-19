@@ -19,11 +19,11 @@ import com.mm.weclubs.app.comment.WCCommentView;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
 import com.mm.weclubs.config.WCConstantsUtil;
+import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.pojo.WCCommentListInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo.Leader;
-import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
@@ -378,7 +378,7 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
     }
 
     @Override
-    public void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list) {
+    public void getMeetingParticipationSuccess(WCMeetingParticipationBean participationBean) {
     }
 
     @Override

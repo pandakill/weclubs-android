@@ -9,9 +9,9 @@ import android.view.View;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
+import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
-import com.mm.weclubs.data.pojo.WCMeetingParticipationInfo;
 import com.mm.weclubs.ui.activity.BaseActivity;
 import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
@@ -139,6 +139,6 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
     }
 
     @Override
-    public void getMeetingParticipationSuccess(ArrayList<WCMeetingParticipationInfo> list) {
+    public void getMeetingParticipationSuccess(WCMeetingParticipationBean participationBean) {
     }
 }
