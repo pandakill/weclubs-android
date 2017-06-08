@@ -51,18 +51,20 @@ public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionLis
         holder.setText(R.id.tv_mission_content, getItem(position).getContent());
         holder.setText(R.id.tv_deadline, TimeUtils.millis2String(getItem(position).getDeadline(), "MMMdd日  HH:mm"));
 
-        if (getItem(position).getConfirm_date() > 0) {
+        if (getItem(position).getConfirm_receive() > 0) {
             holder.setViewVisible(R.id.icon_confirm, View.VISIBLE);
 
             holder.setText(R.id.tv_btn_confirm_text, "已确认任务");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
                     .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
+            holder.getView(R.id.btn_confirm).setEnabled(false);
         } else {
             holder.setViewVisible(R.id.icon_confirm, View.GONE);
 
             holder.setText(R.id.tv_btn_confirm_text, "确认任务");
             ((TextView) holder.getView(R.id.tv_btn_confirm_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
+            holder.getView(R.id.btn_confirm).setEnabled(true);
         }
 
         if (getItem(position).getFinish() == 1) {
@@ -71,12 +73,14 @@ public class WCMissionListAdapter extends WCBaseRecyclerViewAdapter<WCMissionLis
             holder.setText(R.id.tv_btn_finish_text, "已完成任务");
             ((TextView) holder.getView(R.id.tv_btn_finish_text))
                     .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
+            holder.getView(R.id.btn_finish).setEnabled(false);
         } else {
             holder.setViewVisible(R.id.icon_finish, View.GONE);
 
             holder.setText(R.id.tv_btn_finish_text, "完成任务");
             ((TextView) holder.getView(R.id.tv_btn_finish_text))
                     .setTextColor(mContext.getResources().getColor(R.color.themeColor));
+            holder.getView(R.id.btn_finish).setEnabled(true);
         }
 
         holder.setViewOnClick(R.id.btn_finish);

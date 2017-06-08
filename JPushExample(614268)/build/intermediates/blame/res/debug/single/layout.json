@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/push_set_dialog.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/push_set_dialog.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/customer_notitfication_layout_one.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/customer_notitfication_layout_one.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/set_push_time.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/set_push_time.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/jpush_popwin_layout.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/jpush_popwin_layout.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/customer_notitfication_layout.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/customer_notitfication_layout.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/jpush_webview_layout.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/jpush_webview_layout.xml"
+    },
+    {
+        "merged": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/res/merged/debug/layout/main.xml",
+        "source": "/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/res/layout/main.xml"
+    }
+]

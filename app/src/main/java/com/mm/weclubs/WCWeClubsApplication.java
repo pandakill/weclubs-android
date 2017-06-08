@@ -12,6 +12,7 @@ import com.mm.weclubs.util.WCLog;
 
 import java.util.UUID;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.smssdk.SMSSDK;
 
 /**
@@ -35,6 +36,10 @@ public class WCWeClubsApplication extends Application {
         initScreenWidth();
         initScreenHeight();
         initUUID();
+
+        JPushInterface.setDebugMode(true);  // 设置开启日志,发布时请关闭日志
+        JPushInterface.init(this);          // 初始化 JPush
+        log.d("JPush RegistrationId = " + JPushInterface.getRegistrationID(this));
     }
 
     /**

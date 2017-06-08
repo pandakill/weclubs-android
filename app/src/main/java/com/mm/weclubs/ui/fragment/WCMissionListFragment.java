@@ -89,6 +89,9 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
                     case R.id.item_dynamic:
                         showIntent(WCMissionDetailActivity.class, extra);
                         break;
+                    case R.id.btn_confirm:
+                        mMissionListPresenter.setMissionConfirm(missionListInfo.getMission_id(), position, missionListInfo);
+                        break;
                 }
             }
         });
@@ -144,5 +147,10 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
 
     @Override
     public void getMissionDetailSuccess(WCMissionDetailInfo missionDetailInfo) {
+    }
+
+    @Override
+    public void notifyChangeList(WCMissionListInfo missionListInfo, int position) {
+        mMissionListAdapter.notifyItemChanged(position, missionListInfo);
     }
 }

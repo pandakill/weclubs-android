@@ -26,6 +26,7 @@ public interface WCDynamicService {
 
     String GET_DYNAMIC_LIST = "/dynamic/get_dynamic_list";
     String GET_DYNAMIC_DETAIL = "/dynamic/get_dynamic_detail";
+    String SET_DYNAMIC_STATUS = "/dynamic/set_dynamic_status";
 
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
@@ -50,4 +51,9 @@ public interface WCDynamicService {
     @POST
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
     Observable<WCResponseParamBean<WCNotifyListInfo>> getNotifyDetail(@Url String url, @Body WCRequestParamBean requestBean);
+
+    //  设置任务的状态
+    @POST
+    @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
+    Observable<WCResponseParamBean<Object>> setMissionStatus(@Url String url, @Body WCRequestParamBean requestBean);
 }

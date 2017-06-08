@@ -18,6 +18,7 @@ public class WCMissionListInfo extends WCDynamicBaseInfo implements Serializable
     private String content;
     private long create_date;
     private long confirm_date;
+    private int confirm_receive;
     private long deadline;
     private int finish;
 
@@ -51,6 +52,14 @@ public class WCMissionListInfo extends WCDynamicBaseInfo implements Serializable
 
     public void setConfirm_date(long confirm_date) {
         this.confirm_date = confirm_date;
+    }
+
+    public int getConfirm_receive() {
+        return confirm_receive;
+    }
+
+    public void setConfirm_receive(int confirm_receive) {
+        this.confirm_receive = confirm_receive;
     }
 
     public long getDeadline() {

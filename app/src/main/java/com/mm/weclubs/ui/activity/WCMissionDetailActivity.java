@@ -121,7 +121,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast(mTvBtnConfirm.getText().toString());
+                mMissionListPresenter.setMissionConfirm(mMissionListInfo.getMission_id());
             }
         });
 
@@ -338,5 +338,9 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
         mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MISSION,
                 mMissionListInfo.getMission_id(), mCommentPageNo);
+    }
+
+    @Override
+    public void notifyChangeList(WCMissionListInfo missionListInfo, int position) {
     }
 }

@@ -8,6 +8,7 @@ import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCMissionListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
+import com.mm.weclubs.data.pojo.WCMissionListInfo;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
 import com.mm.weclubs.util.WCLog;
@@ -125,6 +126,52 @@ public class WCMissionListPresenter extends BasePresenter<WCMissionListView> {
                         }
 
                         getMvpView().hideProgressDialog();
+                    }
+                });
+    }
+
+    public void setMissionConfirm(long missionId) {
+        setMissionConfirm(missionId, 0, null);
+    }
+
+    public void setMissionConfirm(long missionId, int position, WCMissionListInfo missionListInfo) {
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("dynamic_id", missionId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MISSION);
+        params.put("status", "confirm");
+
+        mDynamicService.setMissionStatus(WCDynamicService.SET_DYNAMIC_STATUS,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<Object>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log.d("setMissionConfirm：onError");
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<Object> object) {
+                        getMvpView().hideProgressDialog();
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().showToast("任务确认成功");
+                            if (missionListInfo != null) {
+                                missionListInfo.setConfirm_receive(1);
+                                getMvpView().notifyChangeList(missionListInfo, position);
+                            }
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+                            checkResult(object);
+                        }
                     }
                 });
     }
