@@ -9,6 +9,7 @@ import com.mm.weclubs.config.WCConstantsUtil;
 import com.mm.weclubs.data.bean.WCMeetingListBean;
 import com.mm.weclubs.data.bean.WCResponseParamBean;
 import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
+import com.mm.weclubs.data.pojo.WCMeetingListInfo;
 import com.mm.weclubs.retrofit.WCServiceFactory;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
 import com.mm.weclubs.util.WCLog;
@@ -126,6 +127,52 @@ public class WCMeetingListPresenter extends BasePresenter<WCMeetingListView> {
                         }
 
                         getMvpView().hideProgressDialog();
+                    }
+                });
+    }
+
+    public void setMeetingConfirm(long meetingId) {
+        setMeetingConfirm(meetingId, 0, null);
+    }
+
+    public void setMeetingConfirm(long meetingId, int position, WCMeetingListInfo meetingListInfo) {
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("dynamic_id", meetingId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_MEETING);
+        params.put("status", "confirm");
+
+        mDynamicService.setMissionStatus(WCDynamicService.SET_DYNAMIC_STATUS,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<Object>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log.d("setMissionConfirm：onError");
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<Object> object) {
+                        getMvpView().hideProgressDialog();
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().showToast("任务确认成功");
+                            if (meetingListInfo != null) {
+                                meetingListInfo.setConfirm_join(1);
+                                getMvpView().notifyChangeList(meetingListInfo, position);
+                            }
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+                            checkResult(object);
+                        }
                     }
                 });
     }

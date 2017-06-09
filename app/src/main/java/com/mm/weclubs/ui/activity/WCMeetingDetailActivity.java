@@ -136,7 +136,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast(mTvBtnConfirm.getText().toString());
+                mMeetingListPresenter.setMeetingConfirm(mMeetingListInfo.getMeeting_id());
             }
         });
 
@@ -389,5 +389,9 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
         mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
                 mMeetingListInfo.getMeeting_id(), mCommentPageNo);
+    }
+
+    @Override
+    public void notifyChangeList(WCMeetingListInfo meetingListInfo, int position) {
     }
 }

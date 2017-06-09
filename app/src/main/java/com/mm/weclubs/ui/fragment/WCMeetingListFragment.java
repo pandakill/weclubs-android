@@ -89,6 +89,9 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
                     case R.id.item_dynamic:
                         showIntent(WCMeetingDetailActivity.class, extra);
                         break;
+                    case R.id.btn_confirm:
+                        mMeetingListPresenter.setMeetingConfirm(meetingListInfo.getMeeting_id(), position, meetingListInfo);
+                        break;
                 }
             }
         });
@@ -144,5 +147,10 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
 
     @Override
     public void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo) {
+    }
+
+    @Override
+    public void notifyChangeList(WCMeetingListInfo meetingListInfo, int position) {
+        mMeetingListAdapter.notifyItemChanged(position, meetingListInfo);
     }
 }

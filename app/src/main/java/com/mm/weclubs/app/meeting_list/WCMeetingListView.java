@@ -24,4 +24,12 @@ public interface WCMeetingListView extends MVPView {
      * @param meetingDetailInfo 请求成功得到的会议详情
      */
     void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo);
+
+    /**
+     * 刷新会议列表
+     *
+     * @param meetingListInfo   会议实体
+     * @param position  定位
+     */
+    void notifyChangeList(WCMeetingListInfo meetingListInfo, int position);
 }

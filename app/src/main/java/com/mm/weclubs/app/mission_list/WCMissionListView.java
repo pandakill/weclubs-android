@@ -25,5 +25,11 @@ public interface WCMissionListView extends MVPView {
      */
     void getMissionDetailSuccess(WCMissionDetailInfo missionDetailInfo);
 
+    /**
+     * 刷新任务列表
+     *
+     * @param missionListInfo   任务实体
+     * @param position  定位
+     */
     void notifyChangeList(WCMissionListInfo missionListInfo, int position);
 }
