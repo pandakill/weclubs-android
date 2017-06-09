@@ -23,4 +23,12 @@ public interface WCNotifyListView extends MVPView {
      * @param notifyListInfo 请求成功得到的通知详情
      */
     void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo);
+
+    /**
+     * 刷新任务列表
+     *
+     * @param notifyListInfo   通知实体
+     * @param position  定位
+     */
+    void notifyChangeList(WCNotifyListInfo notifyListInfo, int position);
 }

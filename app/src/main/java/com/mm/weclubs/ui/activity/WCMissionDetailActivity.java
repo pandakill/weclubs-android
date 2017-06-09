@@ -342,5 +342,11 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
     @Override
     public void notifyChangeList(WCMissionListInfo missionListInfo, int position) {
+        mIcConfirm.setVisibility(View.VISIBLE);
+
+        mTvBtnConfirm.setText("已确认任务");
+        mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+        mBtnConfirm.setEnabled(false);
     }
 }

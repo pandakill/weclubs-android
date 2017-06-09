@@ -393,5 +393,11 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     public void notifyChangeList(WCMeetingListInfo meetingListInfo, int position) {
+        mIcConfirm.setVisibility(View.VISIBLE);
+
+        mTvBtnConfirm.setText("已确认参与");
+        mTvBtnConfirm.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+        mBtnConfirm.setEnabled(false);
     }
 }

@@ -128,4 +128,50 @@ public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
                     }
                 });
     }
+
+    public void setNotifyConfirm(long notifyId) {
+        setNotifyConfirm(notifyId, 0, null);
+    }
+
+    public void setNotifyConfirm(long notifyId, int position, WCNotifyListInfo notifyListInfo) {
+
+        getMvpView().showProgressDialog("加载中...", false);
+
+        HashMap<String, Object> params = new HashMap<>();
+
+        params.put("dynamic_id", notifyId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
+        params.put("status", "confirm");
+
+        mDynamicService.setMissionStatus(WCDynamicService.SET_DYNAMIC_STATUS,
+                mHttpParamsPresenter.initRequestParam(mContext, params))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<WCResponseParamBean<Object>>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        log.d("setMissionConfirm：onError");
+                        getMvpView().hideProgressDialog();
+                    }
+
+                    @Override
+                    public void onNext(WCResponseParamBean<Object> object) {
+                        getMvpView().hideProgressDialog();
+                        if (object.getResult_code() == 2000) {
+                            getMvpView().showToast("通知确认成功");
+                            if (notifyListInfo != null) {
+                                notifyListInfo.setConfirm_receive(1);
+                                getMvpView().notifyChangeList(notifyListInfo, position);
+                            }
+                        } else {
+                            getMvpView().showToast(object.getResult_msg());
+                            checkResult(object);
+                        }
+                    }
+                });
+    }
 }

@@ -110,7 +110,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
         mBtnReceive.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast(mTvBtnReceive.getText().toString());
+                mNotifyListPresenter.setNotifyConfirm(mNotifyListInfo.getNotify_id());
             }
         });
 
@@ -286,5 +286,15 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
 
         mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY,
                 mNotifyListInfo.getNotify_id(), mCommentPageNo);
+    }
+
+    @Override
+    public void notifyChangeList(WCNotifyListInfo notifyListInfo, int position) {
+        mIcReceive.setVisibility(View.VISIBLE);
+
+        mTvBtnReceive.setText("已确认收到");
+        mTvBtnReceive.setTextColor(getResources().getColor(R.color.colorCommonText_666));
+
+        mBtnReceive.setEnabled(false);
     }
 }

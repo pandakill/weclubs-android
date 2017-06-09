@@ -88,6 +88,9 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
                     case R.id.item_dynamic:
                         showIntent(WCNotifyDetailActivity.class, extra);
                         break;
+                    case R.id.btn_receive:
+                        mNotifyListPresenter.setNotifyConfirm(notifyListInfo.getNotify_id(), position, notifyListInfo);
+                        break;
                 }
             }
         });
@@ -144,5 +147,10 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
     @Override
     public void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo) {
 
+    }
+
+    @Override
+    public void notifyChangeList(WCNotifyListInfo notifyListInfo, int position) {
+        mNotifyListAdapter.notifyItemChanged(position, notifyListInfo);
     }
 }
