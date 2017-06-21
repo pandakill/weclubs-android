@@ -7,6 +7,11 @@ import com.mm.weclubs.util.DecodeHelper.EncodeType;
 import com.mm.weclubs.util.PreferencesHelper;
 import com.mm.weclubs.util.WCLog;
 
+import java.util.Set;
+
+import cn.jpush.android.api.JPushInterface;
+import cn.jpush.android.api.TagAliasCallback;
+
 /**
  * 创建人: fangzanpan
  * 创建时间: 2017/4/29 下午12:52
@@ -54,6 +59,14 @@ public class WCUserDataCenter {
 
         mCurrentUserInfo = userInfo;
 
+        String alias = "user_" + userInfo.getUser_id();
+        JPushInterface.setAlias(mContext, alias, new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+                log.d("setAlias i = " + i + "; s = " + s + "; set = " + (set != null ? set.toString() : "null"));
+            }
+        });
+
         PreferencesHelper.getInstance(mContext).put(USER_CENTER_LAST_TIME_LOGIN, userInfo.getMobile());
         PreferencesHelper.getInstance(mContext).put(USER_CENTER_LOGIN_USER, userInfo, EncodeType.BASE_64);
     }
@@ -61,6 +74,11 @@ public class WCUserDataCenter {
     public void deleteUserInfo() {
         mCurrentUserInfo = null;
         PreferencesHelper.getInstance(mContext).put(USER_CENTER_LOGIN_USER, null, EncodeType.BASE_64);
+        JPushInterface.setAlias(mContext, null, new TagAliasCallback() {
+            @Override
+            public void gotResult(int i, String s, Set<String> set) {
+            }
+        });
     }
 
     /**

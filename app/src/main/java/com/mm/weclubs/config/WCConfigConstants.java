@@ -11,7 +11,7 @@ public interface WCConfigConstants {
 
     boolean RELEASE = false;    // 是否为正式版，true正式生产环境，false测试环境
 
-    boolean DEV = true;    // 是否为正在开发，true开发版，false非开发版
+    boolean DEV = false;    // 是否为正在开发，true开发版，false非开发版
 
     boolean ENABLE_SSL = false;  // 是否支持https
 

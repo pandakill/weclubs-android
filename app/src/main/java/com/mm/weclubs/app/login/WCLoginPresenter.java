@@ -14,10 +14,7 @@ import com.mm.weclubs.util.MD5Util;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.HashMap;
-import java.util.Set;
 
-import cn.jpush.android.api.JPushInterface;
-import cn.jpush.android.api.TagAliasCallback;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -101,14 +98,6 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
                         if (userInfo.getResult_code() == 2000) {
                             mUserDataCenter.saveUserInfo(userInfo.getData());
                             getMvpView().loginSuccess(userInfo.getData());
-
-                            String alias = "user_" + userInfo.getData().getUser_id();
-                            JPushInterface.setAlias(mContext, alias, new TagAliasCallback() {
-                                @Override
-                                public void gotResult(int i, String s, Set<String> set) {
-                                    log.d("setAlias i = " + i + "; s = " + s + "; set = " + (set != null ? set.toString() : "null"));
-                                }
-                            });
                         } else {
                             getMvpView().loginFail(userInfo.getResult_msg());
                             mUserDataCenter.deleteUserInfo();
