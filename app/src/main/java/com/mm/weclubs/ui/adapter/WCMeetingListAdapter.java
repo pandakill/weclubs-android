@@ -1,6 +1,6 @@
 package com.mm.weclubs.ui.adapter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -9,9 +9,14 @@ import com.blankj.utilcode.utils.ConvertUtils;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.data.pojo.WCMeetingListInfo;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
+import com.mm.weclubs.data.network.pojo.WCMeetingListInfo;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
+
+import xyz.zpayh.adapter.BaseAdapter;
+import xyz.zpayh.adapter.BaseViewHolder;
+import xyz.zpayh.adapter.TextCallback;
+import xyz.zpayh.adapter.ViewCallback;
 
 /**
  * 创建人: fangzanpan
@@ -19,69 +24,86 @@ import com.mm.weclubs.widget.RoundImageView;
  * 描述:
  */
 
-public class WCMeetingListAdapter extends WCBaseRecyclerViewAdapter<WCMeetingListInfo> {
-
-    public WCMeetingListAdapter(Context context) {
-        super(context);
-    }
+public class WCMeetingListAdapter extends BaseAdapter<WCMeetingListInfo> {
 
     @Override
-    public int getItemLayoutID(int viewType) {
+    public int getLayoutRes(int index) {
         return R.layout.view_dynamic_meeting_item;
     }
 
     @Override
-    protected void onBindDataToView(WCBaseViewHolder holder, int position) {
-        View itemView = holder.getView(R.id.item_dynamic);
-        if (position == 0) {
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-            params.topMargin = ConvertUtils.dp2px(16);
-            itemView.setLayoutParams(params);
-        } else if (position == (getItems().size() - 1)) {
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) itemView.getLayoutParams();
-            params.bottomMargin = ConvertUtils.dp2px(16);
-            itemView.setLayoutParams(params);
+    public void convert(BaseViewHolder holder,final WCMeetingListInfo data,final int index) {
+        holder.setView(R.id.item_dynamic, new ViewCallback() {
+            @Override
+            public void callback(@NonNull View view) {
+                if (index == 0){
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
+                    params.topMargin = ConvertUtils.dp2px(16);
+                    view.setLayoutParams(params);
+                } else if (index == (getData().size() - 1)) {
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) view.getLayoutParams();
+                    params.bottomMargin = ConvertUtils.dp2px(16);
+                    view.setLayoutParams(params);
+                }
+            }
+        }).setView(R.id.img_sponsor_logo, new ViewCallback<RoundImageView>() {
+            @Override
+            public void callback(@NonNull RoundImageView view) {
+                view.setRectAdius(SizeUtils.dp2px(32));
+                ImageLoaderHelper.getInstance(view.getContext())
+                        .loadImage(view,data.getSponsor().getSponsor_avatar());
+            }
+        }).setText(R.id.tv_sponsor_name,data.getSponsor().getSponsor_name())
+                .setText(R.id.tv_meeting_content,data.getContent())
+                .setText(R.id.tv_create_date,TimeUtils.millis2String(data.getCreate_date(), "MMMdd日"))
+                .setText(R.id.tv_deadline,TimeUtils.millis2String(data.getDeadline(), "MMMdd日  HH:mm"))
+                .setText(R.id.tv_address,data.getAddress());
+
+        if (data.getConfirm_join() == 1){
+            holder.setVisibility(R.id.icon_confirm,View.VISIBLE);
+            holder.setText(R.id.tv_btn_confirm_text, new TextCallback() {
+                @Override
+                public void callback(@NonNull TextView textView) {
+                    textView.setText("已确认参与");
+                    textView.setTextColor(textView.getResources().getColor(R.color.colorCommonText_666));
+                }
+            });
+        }else{
+            holder.setVisibility(R.id.icon_confirm,View.GONE);
+            holder.setText(R.id.tv_btn_confirm_text, new TextCallback() {
+                @Override
+                public void callback(@NonNull TextView textView) {
+                    textView.setText("确认参与");
+                    textView.setTextColor(textView.getResources().getColor(R.color.themeColor));
+                }
+            });
         }
 
-        ((RoundImageView) holder.getView(R.id.img_sponsor_logo)).setRectAdius(SizeUtils.dp2px(32));
-
-        holder.setText(R.id.tv_sponsor_name, getItem(position).getSponsor().getSponsor_name());
-        holder.setImage(R.id.img_sponsor_logo, getItem(position).getSponsor().getSponsor_avatar());
-        holder.setText(R.id.tv_create_date, TimeUtils.millis2String(getItem(position).getCreate_date(), "MMMdd日"));
-        holder.setText(R.id.tv_meeting_content, getItem(position).getContent());
-        holder.setText(R.id.tv_deadline, TimeUtils.millis2String(getItem(position).getDeadline(), "MMMdd日  HH:mm"));
-        holder.setText(R.id.tv_address, getItem(position).getAddress());
-
-        if (getItem(position).getConfirm_join() == 1) {
-            holder.setViewVisible(R.id.icon_confirm, View.VISIBLE);
-
-            holder.setText(R.id.tv_btn_confirm_text, "已确认参与");
-            ((TextView) holder.getView(R.id.tv_btn_confirm_text))
-                    .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
-        } else {
-            holder.setViewVisible(R.id.icon_confirm, View.GONE);
-
-            holder.setText(R.id.tv_btn_confirm_text, "确认参与");
-            ((TextView) holder.getView(R.id.tv_btn_confirm_text))
-                    .setTextColor(mContext.getResources().getColor(R.color.themeColor));
+        if (data.getHas_sign() == 1){
+            holder.setVisibility(R.id.icon_sign,View.VISIBLE);
+            holder.setText(R.id.tv_btn_sign_text, new TextCallback() {
+                @Override
+                public void callback(@NonNull TextView textView) {
+                    textView.setText("已完成签到");
+                    textView.setTextColor(textView.getResources().getColor(R.color.colorCommonText_666));
+                }
+            });
+        }else{
+            holder.setVisibility(R.id.icon_sign,View.VISIBLE);
+            holder.setText(R.id.tv_btn_sign_text, new TextCallback() {
+                @Override
+                public void callback(@NonNull TextView textView) {
+                    textView.setText("扫一扫签到");
+                    textView.setTextColor(textView.getResources().getColor(R.color.colorCommonText_666));
+                }
+            });
         }
+    }
 
-        if (getItem(position).getHas_sign() == 1) {
-            holder.setViewVisible(R.id.icon_sign, View.VISIBLE);
-
-            holder.setText(R.id.tv_btn_sign_text, "已完成签到");
-            ((TextView) holder.getView(R.id.tv_btn_sign_text))
-                    .setTextColor(mContext.getResources().getColor(R.color.colorCommonText_666));
-        } else {
-            holder.setViewVisible(R.id.icon_sign, View.GONE);
-
-            holder.setText(R.id.tv_btn_sign_text, "扫一扫签到");
-            ((TextView) holder.getView(R.id.tv_btn_sign_text))
-                    .setTextColor(mContext.getResources().getColor(R.color.themeColor));
-        }
-
-        holder.setViewOnClick(R.id.btn_confirm);
-        holder.setViewOnClick(R.id.btn_sign);
-        holder.setViewOnClick(R.id.item_dynamic);
+    @Override
+    public void bind(BaseViewHolder holder, int layoutRes) {
+        holder.setClickable(R.id.btn_confirm,true)
+                .setClickable(R.id.btn_sign,true)
+                .setClickable(R.id.item_dynamic,true);
     }
 }

@@ -1,15 +1,17 @@
 package com.mm.weclubs.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.login.WCLoginPresenter;
-import com.mm.weclubs.app.login.WCLoginView;
-import com.mm.weclubs.data.pojo.WCUserInfoInfo;
-import com.mm.weclubs.datacenter.WCUserDataCenter;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.login.WCLoginContract;
+import com.mm.weclubs.data.network.pojo.WCUserInfoInfo;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -17,13 +19,14 @@ import com.mm.weclubs.datacenter.WCUserDataCenter;
  * 描述:
  */
 
-public class WCLoginActivity extends BaseActivity implements WCLoginView {
+public class WCLoginActivity extends BaseActivity implements WCLoginContract.View {
 
     private EditText mInputMobile;
     private EditText mInputPassword;
-
-    private WCLoginPresenter mLoginPresenter;
     private boolean mNeedGetUserInfo = true;
+
+    @Inject
+    WCLoginContract.Presenter<WCLoginContract.View> mLoginPresenter;
 
     @Override
     protected int getContentLayout() {
@@ -32,18 +35,17 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
 
     @Override
     protected void initView() {
+        getActivityComponent()
+                .inject(this);
+
         mInputMobile = (EditText) findViewById(R.id.input_mobile);
         mInputPassword = (EditText) findViewById(R.id.input_password);
 
-        mLoginPresenter = new WCLoginPresenter(getApplicationContext());
         mLoginPresenter.attachView(this);
     }
 
     @Override
     protected void afterView() {
-//        findViewById(R.id.btn_login).setOnClickListener(view ->
-//                mLoginPresenter.login(mInputMobile.getText().toString(),
-//                        mInputPassword.getText().toString()));
         findViewById(R.id.btn_login).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -52,14 +54,28 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
             }
         });
 
-        mInputMobile.setText(WCUserDataCenter.getInstance(getApplicationContext()).getLastTimeLoginMobile());
-
-        findViewById(R.id.btn_register).setOnClickListener(view -> showIntent(WCRegisterActivity.class));
-        findViewById(R.id.btn_forget_password).setOnClickListener(view -> showToast("忘记密码"));
+        findViewById(R.id.btn_register).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showIntent(WCRegisterActivity.class);
+            }
+        });
+        findViewById(R.id.btn_forget_password).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("忘记密码");
+            }
+        });
 
         if (mNeedGetUserInfo) {
             mLoginPresenter.checkLogin();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLoginPresenter.detachView();
     }
 
     @Override
@@ -78,19 +94,13 @@ public class WCLoginActivity extends BaseActivity implements WCLoginView {
     }
 
     @Override
-    protected void unSubscribeObservable() {
-
+    protected void getBundleExtras(@NonNull Bundle extras) {
+        mNeedGetUserInfo = extras.getBoolean("getUserInfo", false);
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-        if (extras != null) {
-            mNeedGetUserInfo = extras.getBoolean("getUserInfo", false);
-        }
-    }
-
-    @Override
-    public void registerSuccess(WCUserInfoInfo userInfo) {
+    public void setDefaultMobile(String mobile) {
+        mInputMobile.setText(mobile);
     }
 
     @Override

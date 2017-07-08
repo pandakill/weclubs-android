@@ -1,23 +1,25 @@
 package com.mm.weclubs.ui.activity.manage;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
-import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
-import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.notify.WCManageNotifyListContract;
+import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageNotifyAdapter;
 
 import java.util.ArrayList;
 
-import me.fangx.haorefresh.HaoRecyclerView;
+import javax.inject.Inject;
+
+import xyz.zpayh.adapter.OnItemClickListener;
+import xyz.zpayh.adapter.OnLoadMoreListener;
 
 /**
  * 创建人: fangzanpan
@@ -25,14 +27,15 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  通知管理列表页面
  */
 
-public class WCNotifyManageListActivity extends BaseActivity implements WCManageNotifyView {
+public class WCNotifyManageListActivity extends BaseActivity implements WCManageNotifyListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCManageNotifyAdapter mManageNotifyAdapter;
 
-    private WCManageNotifyPresenter mManageNotifyPresenter;
+    @Inject
+    WCManageNotifyListContract.Presenter<WCManageNotifyListContract.View> mPresenter;
 
     private int mPageNo = 1;
 
@@ -47,24 +50,24 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
 
     @Override
     protected void initView() {
-
+        getActivityComponent().inject(this);
         getTitleBar().setTitleText("通知管理");
         getTitleBar().setRightText("发起通知");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageNotifyAdapter = new WCManageNotifyAdapter(this);
+        mManageNotifyAdapter = new WCManageNotifyAdapter();
         mRecyclerView.setAdapter(mManageNotifyAdapter);
 
-        mManageNotifyAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mManageNotifyAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCManageNotifyInfo notifyInfo = mManageNotifyAdapter.getItem(position);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCManageNotifyInfo notifyInfo = mManageNotifyAdapter.getData(adapterPosition);
                 Bundle extra = new Bundle();
                 extra.putSerializable("manageNotifyInfo", notifyInfo);
                 if (notifyInfo != null) {
@@ -84,20 +87,32 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
     @Override
     protected void afterView() {
 
-        mManageNotifyPresenter = new WCManageNotifyPresenter(this);
-        mManageNotifyPresenter.attachView(this);
+        mPresenter.attachView(this);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        attachRefreshLayout(mRefreshLayout, null);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mManageNotifyPresenter.getNotifyListFromServer(mPageNo);
+                mPresenter.refresh();
             }
         });
 
-        mManageNotifyPresenter.getNotifyListFromServer(mPageNo);
+        mManageNotifyAdapter.openAutoLoadMore(true);
+        mManageNotifyAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                mPresenter.getNotifyListFromServer(mPageNo);
+            }
+        });
+        mPresenter.refresh();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     @Override
@@ -117,7 +132,7 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
 
     @Override
     public void refreshNotifyList(ArrayList<WCManageNotifyInfo> list) {
-        mManageNotifyAdapter.setItems(list);
+        mManageNotifyAdapter.setData(list);
 
         hideProgressDialog();
     }
@@ -125,16 +140,17 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
     @Override
     public void addNotifyList(ArrayList<WCManageNotifyInfo> list, boolean hasMore) {
         mPageNo ++;
-        mManageNotifyAdapter.addItems(list);
+        mManageNotifyAdapter.addData(list);
 
         hideProgressDialog();
+
+        if (!hasMore){
+            mManageNotifyAdapter.loadCompleted();
+        }
     }
 
     @Override
-    public void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo) {
-    }
-
-    @Override
-    public void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus) {
+    public void loadFail() {
+        mManageNotifyAdapter.loadFailed();
     }
 }

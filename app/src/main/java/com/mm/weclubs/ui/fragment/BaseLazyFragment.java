@@ -4,22 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.blankj.utilcode.utils.ToastUtils;
+import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.base.MVPView;
-import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.di.component.ActivityComponent;
 import com.mm.weclubs.ui.activity.WCLoginActivity;
 import com.mm.weclubs.util.WCLog;
 
 import java.lang.reflect.Field;
-
-import me.fangx.haorefresh.HaoRecyclerView;
 
 /**
  * 创建人: fangzanpan
@@ -42,7 +43,11 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
 
     private View mRootView;
     private SwipeRefreshLayout mSwipeRefreshLayout = null;
-    private HaoRecyclerView mRecyclerView = null;
+    private RecyclerView mRecyclerView = null;
+
+    public ActivityComponent getActivityComponent() {
+        return ((BaseActivity)getActivity()).getActivityComponent();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -161,7 +166,7 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         }
     }
 
-    protected void attachRefreshLayout(SwipeRefreshLayout refreshLayout, HaoRecyclerView recyclerView) {
+    protected void attachRefreshLayout(SwipeRefreshLayout refreshLayout, RecyclerView recyclerView) {
         this.mSwipeRefreshLayout = refreshLayout;
         this.mRecyclerView = recyclerView;
     }
@@ -285,6 +290,21 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     }
 
     @Override
+    public void onError(@StringRes int resId) {
+        ToastUtils.showShortToastSafe(resId);
+    }
+
+    @Override
+    public void onError(String message) {
+        ToastUtils.showShortToastSafe(message);
+    }
+
+    @Override
+    public void showToast(@StringRes int resId) {
+        ToastUtils.showShortToastSafe(resId);
+    }
+
+    @Override
     public void showProgressDialog(String msg, boolean cancel) {
         ((BaseActivity) getActivity()).showProgressDialog(msg, cancel);
     }
@@ -303,5 +323,10 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         Bundle extra = new Bundle();
         extra.putBoolean("getUserInfo", false);
         showIntentThenKill(WCLoginActivity.class, extra);
+    }
+
+    @Override
+    public void close() {
+        getActivity().finish();
     }
 }

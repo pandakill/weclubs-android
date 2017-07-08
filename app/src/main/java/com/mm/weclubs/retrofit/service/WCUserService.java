@@ -1,15 +1,14 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCRequestParamBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCUserInfoInfo;
+import com.mm.weclubs.data.network.bean.WCRequestParamBean;
+import com.mm.weclubs.data.network.bean.WCResponseParamBean;
+import com.mm.weclubs.data.network.pojo.WCUserInfoInfo;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Url;
-import rx.Observable;
 
 /**
  * 创建人: fangzanpan
@@ -24,23 +23,23 @@ public interface WCUserService {
     String URL_CHANGE_PASSWORD = "/user/change_password";
     String URL_UPDATE_SCHOOL_INFO = "/user/update_school_info";
 
-    @POST
+    @POST(URL_LOGIN)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCUserInfoInfo>> login(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> login(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(URL_GET_USER_INFO)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCUserInfoInfo>> getUserInfo(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> getUserInfo(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(URL_REGISTER)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCUserInfoInfo>> register(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> register(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(URL_CHANGE_PASSWORD)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCUserInfoInfo>> changePassword(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCUserInfoInfo>> changePassword(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(URL_UPDATE_SCHOOL_INFO)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean> updateSchoolInfo(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean> updateSchoolInfo(@Body WCRequestParamBean requestBean);
 }

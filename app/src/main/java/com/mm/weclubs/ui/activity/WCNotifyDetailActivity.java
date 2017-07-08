@@ -1,6 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -14,17 +15,18 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.comment.WCCommentPresenter;
-import com.mm.weclubs.app.comment.WCCommentView;
-import com.mm.weclubs.app.notify_list.WCNotifyListPresenter;
-import com.mm.weclubs.app.notify_list.WCNotifyListView;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.notify_detail.WCNotifyDetailContract;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.pojo.WCCommentListInfo;
-import com.mm.weclubs.data.pojo.WCNotifyListInfo;
+import com.mm.weclubs.data.network.pojo.WCCommentListInfo;
+import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -32,7 +34,7 @@ import java.util.ArrayList;
  * 描述:
  */
 
-public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyListView, WCCommentView {
+public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyDetailContract.View {
 
     private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -51,8 +53,8 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
 
     private WCNotifyListInfo mNotifyListInfo;
 
-    private WCNotifyListPresenter mNotifyListPresenter;
-    private WCCommentPresenter mCommentPresenter;
+    @Inject
+    WCNotifyDetailContract.Presenter<WCNotifyDetailContract.View> mPresenter;
 
     private int mCommentPageNo = 1;
 
@@ -62,18 +64,14 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-        if (extras == null) {
-            log.e("extras不能为空");
-            onBackPressed();
-            return;
-        }
-
+    protected void getBundleExtras(@NonNull Bundle extras) {
         mNotifyListInfo = (WCNotifyListInfo) extras.getSerializable("notifyListInfo");
     }
 
     @Override
     protected void initView() {
+        getActivityComponent().inject(this);
+
         mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
@@ -101,16 +99,12 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
             return;
         }
 
-        mNotifyListPresenter = new WCNotifyListPresenter(this);
-        mNotifyListPresenter.attachView(this);
-
-        mCommentPresenter = new WCCommentPresenter(this);
-        mCommentPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mBtnReceive.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mNotifyListPresenter.setNotifyConfirm(mNotifyListInfo.getNotify_id());
+                mPresenter.setNotifyConfirm(mNotifyListInfo.getNotify_id());
             }
         });
 
@@ -138,12 +132,18 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mNotifyListPresenter.getNotifyDetail(mNotifyListInfo.getNotify_id());
+                mPresenter.getNotifyDetail(mNotifyListInfo.getNotify_id());
             }
         });
 
         initBaseInfo();
-        mNotifyListPresenter.getNotifyDetail(mNotifyListInfo.getNotify_id());
+        mPresenter.getNotifyDetail(mNotifyListInfo.getNotify_id());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     private void initBaseInfo() {
@@ -173,7 +173,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
 
     private void initDetailInfo() {
         if (mNotifyListInfo == null) {
-            log.e("initDetailInfo：mNotifyListInfo 不能为空！");
+            KLog.e("initDetailInfo：mNotifyListInfo 不能为空！");
             return;
         }
 
@@ -214,10 +214,6 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
     @Override
     protected boolean leftBtnIsReturn() {
         return true;
-    }
-
-    @Override
-    protected void unSubscribeObservable() {
     }
 
     private View getCommentView(WCCommentListInfo commentListInfo) {
@@ -271,20 +267,12 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyList
     }
 
     @Override
-    public void refreshNotifyList(ArrayList<WCNotifyListInfo> list) {
-    }
-
-    @Override
-    public void addNotifyList(ArrayList<WCNotifyListInfo> list, boolean hasMore) {
-    }
-
-    @Override
-    public void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo) {
+    public void getNotifyDetailSuccess(@NonNull WCNotifyListInfo notifyListInfo) {
         mNotifyListInfo = notifyListInfo;
 
         initDetailInfo();
 
-        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY,
+        mPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY,
                 mNotifyListInfo.getNotify_id(), mCommentPageNo);
     }
 

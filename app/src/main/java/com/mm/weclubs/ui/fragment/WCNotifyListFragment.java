@@ -1,24 +1,26 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.notify_list.WCNotifyListPresenter;
-import com.mm.weclubs.app.notify_list.WCNotifyListView;
-import com.mm.weclubs.data.pojo.WCMyClubListInfo;
-import com.mm.weclubs.data.pojo.WCNotifyListInfo;
+import com.mm.weclubs.app.notify_list.WCNotifyListContract;
+import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
+import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
 import com.mm.weclubs.ui.activity.WCNotifyDetailActivity;
 import com.mm.weclubs.ui.adapter.WCNotifyListAdapter;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
+import com.socks.library.KLog;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import me.fangx.haorefresh.HaoRecyclerView;
-import me.fangx.haorefresh.LoadMoreListener;
+import javax.inject.Inject;
+import xyz.zpayh.adapter.OnItemClickListener;
+import xyz.zpayh.adapter.OnLoadMoreListener;
 
 /**
  * 创建人: fangzanpan
@@ -26,13 +28,14 @@ import me.fangx.haorefresh.LoadMoreListener;
  * 描述:  通知列表
  */
 
-public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyListView {
+public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCNotifyListAdapter mNotifyListAdapter;
-    private WCNotifyListPresenter mNotifyListPresenter;
+    @Inject
+    WCNotifyListContract.Presenter<WCNotifyListContract.View> mPresenter;
 
     private int mPageNo = 1;
 
@@ -55,6 +58,7 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
 
     @Override
     protected void initViewsAndEvents() {
+        getActivityComponent().inject(this);
         if (mExtra == null) {
             mExtra = getArguments();
             mClubListInfo = (WCMyClubListInfo) mExtra.getSerializable("clubListInfo");
@@ -66,57 +70,66 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
 
     private void initView() {
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
-        mRecyclerView = findViewById(R.id.recycler_view, HaoRecyclerView.class);
+        mRecyclerView = findViewById(R.id.recycler_view, RecyclerView.class);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        attachRefreshLayout(mRefreshLayout, null);
     }
 
     private void afterView() {
-        mNotifyListAdapter = new WCNotifyListAdapter(mContext);
+        mNotifyListAdapter = new WCNotifyListAdapter();
         mRecyclerView.setAdapter(mNotifyListAdapter);
-        mNotifyListAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mNotifyListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCNotifyListInfo notifyListInfo = mNotifyListAdapter.getItem(position);
-                Bundle extra = new Bundle();
-                extra.putSerializable("notifyListInfo", notifyListInfo);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCNotifyListInfo notifyListInfo = mNotifyListAdapter.getData(adapterPosition);
+                if (notifyListInfo == null){
+                    return;
+                }
                 switch (view.getId()) {
                     case R.id.item_dynamic:
+                        Bundle extra = new Bundle();
+                        extra.putSerializable("notifyListInfo", notifyListInfo);
                         showIntent(WCNotifyDetailActivity.class, extra);
                         break;
                     case R.id.btn_receive:
-                        mNotifyListPresenter.setNotifyConfirm(notifyListInfo.getNotify_id(), position, notifyListInfo);
+                        mPresenter.setNotifyConfirm(notifyListInfo.getNotify_id(), adapterPosition, notifyListInfo);
                         break;
                 }
             }
         });
 
-        mNotifyListPresenter = new WCNotifyListPresenter(mContext);
-        mNotifyListPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mNotifyListPresenter.getNotifyFromServer(mClubListInfo.getClub_id(), mPageNo);
+                mPresenter.refresh(mClubListInfo.getClub_id());
             }
         });
 
-        mRecyclerView.setLoadMoreListener(new LoadMoreListener() {
+        mNotifyListAdapter.openAutoLoadMore(true);
+        mNotifyListAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                mNotifyListPresenter.getNotifyFromServer(mClubListInfo.getClub_id(), mPageNo);
+                mPresenter.getNotifyFromServer(mClubListInfo.getClub_id(), mPageNo);
             }
         });
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView();
+    }
+
+    @Override
     protected void onFirstUserVisible() {
-        mNotifyListPresenter.getNotifyFromServer(mClubListInfo.getClub_id(), mPageNo);
+        mPresenter.getNotifyFromServer(mClubListInfo.getClub_id(), mPageNo);
     }
 
     @Override
@@ -130,23 +143,30 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
     }
 
     @Override
-    public void refreshNotifyList(ArrayList<WCNotifyListInfo> list) {
-        mNotifyListAdapter.setItems(list);
+    public void refreshNotifyList(List<WCNotifyListInfo> list) {
+        mNotifyListAdapter.setData(list);
 
         hideProgressDialog();
     }
 
     @Override
-    public void addNotifyList(ArrayList<WCNotifyListInfo> list, boolean hasMore) {
+    public void addNotifyList(List<WCNotifyListInfo> list, boolean hasMore) {
         mPageNo ++;
-        mNotifyListAdapter.addItems(list);
+        mNotifyListAdapter.addData(list);
 
         hideProgressDialog();
+
+        if (!hasMore) {
+            mNotifyListAdapter.loadCompleted();
+            KLog.d("已经没有更多了");
+        }else {
+            KLog.d("还有更多");
+        }
     }
 
     @Override
-    public void getNotifyDetailSuccess(WCNotifyListInfo notifyListInfo) {
-
+    public void loadFail() {
+        mNotifyListAdapter.loadFailed();
     }
 
     @Override

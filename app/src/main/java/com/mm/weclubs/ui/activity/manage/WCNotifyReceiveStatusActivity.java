@@ -4,20 +4,18 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
-import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
-import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
-import com.mm.weclubs.ui.adapter.manage.WCNotifyRecieveAdapter;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.notify.WCNotifyReceiveStatusContract;
+import com.mm.weclubs.data.network.bean.WCNotifyCheckStatusBean;
+import com.mm.weclubs.ui.adapter.manage.WCNotifyReceiveAdapter;
+import com.socks.library.KLog;
 
-import java.util.ArrayList;
-
-import me.fangx.haorefresh.HaoRecyclerView;
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -25,16 +23,17 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  通知管理-通知确认详情
  */
 
-public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCManageNotifyView {
+public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCNotifyReceiveStatusContract.View {
 
     private TextView mTvNotifyListTitle;
     private TextView mTvConfirmCount;
     private TextView mTvSignCount;
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
-    private WCNotifyRecieveAdapter mNotifyRecieveAdapter;
-    private WCManageNotifyPresenter mManageNotifyPresenter;
+    private WCNotifyReceiveAdapter mAdapter;
+    @Inject
+    WCNotifyReceiveStatusContract.Presenter<WCNotifyReceiveStatusContract.View> mPresenter;
 
     private long mNotifyId = 0;
 
@@ -46,7 +45,7 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras == null) {
-            log.e("getBundleExtras：extras 不能为空");
+            KLog.e("getBundleExtras：extras 不能为空");
             onBackPressed();
             return;
         }
@@ -62,7 +61,7 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
 
     @Override
     protected void initView() {
-
+        getActivityComponent().inject(this);
         getTitleBar().setRightText("再次通知");
         getTitleBar().setTitleText("确认详情");
 
@@ -70,16 +69,21 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
         mTvConfirmCount = (TextView) findViewById(R.id.tv_confirm_count);
         mTvSignCount = (TextView) findViewById(R.id.tv_sign_count);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageNotifyPresenter = new WCManageNotifyPresenter(this);
-        mManageNotifyPresenter.attachView(this);
+        mPresenter.attachView(this);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        attachRefreshLayout(mRefreshLayout, null);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     @Override
@@ -88,15 +92,15 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
         mTvNotifyListTitle.setText("通知成员");
         mTvConfirmCount.setVisibility(View.GONE);
 
-        mNotifyRecieveAdapter = new WCNotifyRecieveAdapter(this);
-        mRecyclerView.setAdapter(mNotifyRecieveAdapter);
+        mAdapter = new WCNotifyReceiveAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
-        mManageNotifyPresenter.getNotifyConfirmStatusFromServer(mNotifyId);
+        mPresenter.getNotifyConfirmStatusFromServer(mNotifyId);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mManageNotifyPresenter.getNotifyConfirmStatusFromServer(mNotifyId);
+                mPresenter.getNotifyConfirmStatusFromServer(mNotifyId);
             }
         });
     }
@@ -111,18 +115,6 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
     }
 
     @Override
-    public void refreshNotifyList(ArrayList<WCManageNotifyInfo> list) {
-    }
-
-    @Override
-    public void addNotifyList(ArrayList<WCManageNotifyInfo> list, boolean hasMore) {
-    }
-
-    @Override
-    public void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo) {
-    }
-
-    @Override
     public void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus) {
 
         String count = "(" + notifyCheckStatus.getUnread_count()
@@ -130,6 +122,6 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCMan
 
         mTvSignCount.setText(count);
 
-        mNotifyRecieveAdapter.setItems(notifyCheckStatus.getConfirm_status());
+        mAdapter.setData(notifyCheckStatus.getConfirm_status());
     }
 }

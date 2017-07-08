@@ -6,7 +6,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.datacenter.WCUserDataCenter;
 import com.mm.weclubs.util.WCLog;
 
 /**
@@ -38,7 +37,8 @@ public class WCMineFragment extends BaseLazyFragment {
         mBtnLogout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                WCUserDataCenter.getInstance(mContext.getApplicationContext()).deleteUserInfo();
+                //退出登录
+                //WCUserDataCenter.getInstance(mContext.getApplicationContext()).deleteUserInfo();
                 backToLoginActivity();
             }
         });

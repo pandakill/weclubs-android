@@ -11,7 +11,7 @@ import android.widget.TabWidget;
 import android.widget.TextView;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.rxbus.RxBus;
+import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.rxbus.RxEvents;
 import com.mm.weclubs.ui.fragment.WCDynamicFragment;
 import com.mm.weclubs.ui.fragment.WCIndexFragment;
@@ -19,8 +19,8 @@ import com.mm.weclubs.ui.fragment.WCMineFragment;
 import com.mm.weclubs.ui.fragment.WCToolsFragment;
 import com.mm.weclubs.widget.FragmentTabHost;
 
-import rx.Subscription;
-
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 
 public class WCMainActivity extends BaseActivity {
 
@@ -28,8 +28,6 @@ public class WCMainActivity extends BaseActivity {
     private FragmentTabHost mTabHost;
 
     private FragmentManager mFragmentManager;
-
-    Subscription mRxSubscription = null;
 
     // tabHost 图标
     private int mFragmentDrawables[] = {
@@ -68,14 +66,17 @@ public class WCMainActivity extends BaseActivity {
     protected void afterView() {
         initTabHost();
 
-        mRxSubscription = RxBus.getDefault().toObservable(RxEvents.class)
-                .subscribe(rxEvents -> {
-                    switch (rxEvents.getEventName()) {
-                        case RxEvents.loginSuccess:
-                            showToast("登录成功");
-                            break;
+        mBus.addDisposable(this,mBus.toObservable(RxEvents.class)
+                .subscribe(new Consumer<RxEvents>() {
+                    @Override
+                    public void accept(@NonNull RxEvents rxEvents) throws Exception {
+                        switch (rxEvents.getEventName()) {
+                            case RxEvents.loginSuccess:
+                                showToast("登录成功");
+                                break;
+                        }
                     }
-                });
+                }));
     }
 
     @Override
@@ -94,14 +95,7 @@ public class WCMainActivity extends BaseActivity {
     }
 
     @Override
-    protected void unSubscribeObservable() {
-        if (!mRxSubscription.isUnsubscribed()) {
-            mRxSubscription.unsubscribe();
-        }
-    }
-
-    @Override
-    protected void getBundleExtras(Bundle extras) {
+    protected void getBundleExtras(@android.support.annotation.NonNull Bundle extras) {
 
     }
 

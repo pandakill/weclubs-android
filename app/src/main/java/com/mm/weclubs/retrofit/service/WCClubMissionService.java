@@ -1,15 +1,14 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCClubMissionBean;
-import com.mm.weclubs.data.bean.WCRequestParamBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
+import com.mm.weclubs.data.network.bean.WCClubMissionBean;
+import com.mm.weclubs.data.network.bean.WCRequestParamBean;
+import com.mm.weclubs.data.network.bean.WCResponseParamBean;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Url;
-import rx.Observable;
 
 /**
  * 创建人: fangzanpan
@@ -21,7 +20,7 @@ public interface WCClubMissionService {
 
     String GET_MY_MISSION = "/manage/club_mission/get_my_mission";
 
-    @POST
+    @POST(GET_MY_MISSION)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCClubMissionBean>> getMyMission(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCClubMissionBean>> getMyMission(@Body WCRequestParamBean requestBean);
 }

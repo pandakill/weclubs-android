@@ -14,20 +14,21 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.comment.WCCommentPresenter;
-import com.mm.weclubs.app.comment.WCCommentView;
-import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
-import com.mm.weclubs.app.meeting_list.WCMeetingListView;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.meeting_detail.WCMeetingDetailContract;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.pojo.WCCommentListInfo;
-import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
-import com.mm.weclubs.data.pojo.WCMeetingDetailInfo.Leader;
-import com.mm.weclubs.data.pojo.WCMeetingListInfo;
+import com.mm.weclubs.data.network.pojo.WCCommentListInfo;
+import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo;
+import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo.Leader;
+import com.mm.weclubs.data.network.pojo.WCMeetingListInfo;
 import com.mm.weclubs.ui.activity.manage.WCMeetingParticipationDetailActivity;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -35,7 +36,7 @@ import java.util.ArrayList;
  * 描述:
  */
 
-public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingListView, WCCommentView {
+public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingDetailContract.View {
 
     private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -61,8 +62,8 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     private WCMeetingListInfo mMeetingListInfo;
     private WCMeetingDetailInfo mMeetingDetailInfo;
 
-    private WCMeetingListPresenter mMeetingListPresenter;
-    private WCCommentPresenter mCommentPresenter;
+    @Inject
+    WCMeetingDetailContract.Presenter<WCMeetingDetailContract.View> mPresenter;
 
     private int mCommentPageNo = 1;
 
@@ -75,7 +76,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     protected void getBundleExtras(Bundle extras) {
 
         if (extras == null) {
-            log.e("extras不能为空");
+            KLog.e("extras不能为空");
             onBackPressed();
             return;
         }
@@ -85,6 +86,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     @Override
     protected void initView() {
+        getActivityComponent().inject(this);
         getTitleBar().setRightText("参与详情");
 
         mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
@@ -127,16 +129,12 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
             return;
         }
 
-        mCommentPresenter = new WCCommentPresenter(this);
-        mCommentPresenter.attachView(this);
-
-        mMeetingListPresenter = new WCMeetingListPresenter(this);
-        mMeetingListPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMeetingListPresenter.setMeetingConfirm(mMeetingListInfo.getMeeting_id());
+                mPresenter.setMeetingConfirm(mMeetingListInfo.getMeeting_id());
             }
         });
 
@@ -173,12 +171,18 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mMeetingListPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
+                mPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
             }
         });
 
         initBaseInfo();
-        mMeetingListPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
+        mPresenter.getMeetingDetail(mMeetingListInfo.getMeeting_id());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     private void initBaseInfo() {
@@ -227,7 +231,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
 
     private void initDetailInfo() {
         if (mMeetingDetailInfo == null) {
-            log.e("initDetailInfo：mMeetingDetailInfo不能为空！");
+            KLog.e("initDetailInfo：mMeetingDetailInfo不能为空！");
             return;
         }
 
@@ -280,7 +284,7 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
         }
     }
 
-    private View getLeaderItemView(Leader leader) {
+    private View getLeaderItemView(final Leader leader) {
         View itemView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.view_sign_leader_item, null);
 
         RoundImageView leaderLogo = (RoundImageView) itemView.findViewById(R.id.img_leader_logo);
@@ -338,10 +342,6 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     }
 
     @Override
-    protected void unSubscribeObservable() {
-    }
-
-    @Override
     public void refreshCommentList(ArrayList<WCCommentListInfo> list) {
         mRcyCommentList.removeAllViews();
 
@@ -374,20 +374,12 @@ public class WCMeetingDetailActivity extends BaseActivity implements WCMeetingLi
     }
 
     @Override
-    public void refreshMeetingList(ArrayList<WCMeetingListInfo> list) {
-    }
-
-    @Override
-    public void addMeetingList(ArrayList<WCMeetingListInfo> list, boolean hasMore) {
-    }
-
-    @Override
     public void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo) {
         mMeetingDetailInfo = meetingDetailInfo;
 
         initDetailInfo();
 
-        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
+        mPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MEETING,
                 mMeetingListInfo.getMeeting_id(), mCommentPageNo);
     }
 

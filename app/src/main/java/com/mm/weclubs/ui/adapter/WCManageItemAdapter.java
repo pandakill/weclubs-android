@@ -1,14 +1,17 @@
 package com.mm.weclubs.ui.adapter;
 
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView.LayoutParams;
-import android.widget.ImageView;
+import android.view.View;
 
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.bean.WCToolBean;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
+import com.mm.weclubs.data.network.bean.WCToolBean;
+
+import xyz.zpayh.adapter.BaseAdapter;
+import xyz.zpayh.adapter.BaseViewHolder;
+import xyz.zpayh.adapter.ViewCallback;
 
 /**
  * 创建人: fangzanpan
@@ -16,26 +19,30 @@ import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter;
  * 描述:
  */
 
-public class WCManageItemAdapter extends WCBaseRecyclerViewAdapter<WCToolBean> {
-
-    public WCManageItemAdapter(Context context) {
-        super(context);
-    }
+public class WCManageItemAdapter extends BaseAdapter<WCToolBean> {
 
     @Override
-    public int getItemLayoutID(int viewType) {
+    public int getLayoutRes(int index) {
         return R.layout.view_tool_item;
     }
 
     @Override
-    protected void onBindDataToView(WCBaseViewHolder holder, int position) {
-        holder.setText(R.id.tv_tool_name, getItem(position).getTitle());
-        ((ImageView) holder.getView(R.id.icon_tool)).setImageDrawable(getItem(position).getDrawable());
+    public void convert(BaseViewHolder holder, WCToolBean data, int index) {
 
-        LayoutParams params = (LayoutParams) holder.getView(R.id.item_tool).getLayoutParams();
-        params.height = WCConstantsUtil.getProportionHeight(ScreenUtils.getScreenWidth() / 4, 188, 162);
-        holder.getView(R.id.item_tool).setLayoutParams(params);
+        holder.setText(R.id.tv_tool_name, data.getTitle())
+                .setImage(R.id.icon_tool,data.getDrawable())
+                .setView(R.id.item_tool, new ViewCallback() {
+                    @Override
+                    public void callback(@NonNull View view) {
+                        LayoutParams params = (LayoutParams) view.getLayoutParams();
+                        params.height = WCConstantsUtil.getProportionHeight(ScreenUtils.getScreenWidth() / 4, 188, 162);
+                        view.setLayoutParams(params);
+                    }
+                });
+    }
 
-        holder.setViewOnClick(R.id.item_tool);
+    @Override
+    public void bind(BaseViewHolder holder, int layoutRes) {
+        holder.setClickable(R.id.item_tool,true);
     }
 }

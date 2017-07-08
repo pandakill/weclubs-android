@@ -4,20 +4,17 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
-import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
-import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
-import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.meeting.WCMeetingParticipationDetailContract;
+import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.ui.adapter.manage.WCMeetingParticipationAdapter;
+import com.socks.library.KLog;
 
-import java.util.ArrayList;
-
-import me.fangx.haorefresh.HaoRecyclerView;
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -25,15 +22,16 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  会议管理-会议参与详情
  */
 
-public class WCMeetingParticipationDetailActivity extends BaseActivity implements WCManageMeetingView {
+public class WCMeetingParticipationDetailActivity extends BaseActivity implements WCMeetingParticipationDetailContract.View {
 
     private TextView mTvConfirmCount;
     private TextView mTvSignCount;
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCMeetingParticipationAdapter mMeetingParticipationAdapter;
-    private WCManageMeetingPresenter mManageMeetingPresenter;
+    @Inject
+    WCMeetingParticipationDetailContract.Presenter<WCMeetingParticipationDetailContract.View> mPresenter;
 
     private long mMeetingId = 0;
 
@@ -45,7 +43,7 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     @Override
     protected void getBundleExtras(Bundle extras) {
         if (extras == null) {
-            log.e("getBundleExtras：extras 不能为空");
+            KLog.e("getBundleExtras：extras 不能为空");
             onBackPressed();
             return;
         }
@@ -61,18 +59,17 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
 
     @Override
     protected void initView() {
-
+        getActivityComponent().inject(this);
         mTvConfirmCount = (TextView) findViewById(R.id.tv_confirm_count);
         mTvSignCount = (TextView) findViewById(R.id.tv_sign_count);
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
-        mManageMeetingPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         attachRefreshLayout(mRefreshLayout, mRecyclerView);
     }
@@ -80,15 +77,15 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     @Override
     protected void afterView() {
 
-        mMeetingParticipationAdapter = new WCMeetingParticipationAdapter(this);
+        mMeetingParticipationAdapter = new WCMeetingParticipationAdapter();
         mRecyclerView.setAdapter(mMeetingParticipationAdapter);
 
-        mManageMeetingPresenter.getMeetingParticipation(mMeetingId);
+        mPresenter.getMeetingParticipation(mMeetingId);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mManageMeetingPresenter.getMeetingParticipation(mMeetingId);
+                mPresenter.getMeetingParticipation(mMeetingId);
             }
         });
     }
@@ -96,22 +93,6 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     @Override
     protected boolean leftBtnIsReturn() {
         return true;
-    }
-
-    @Override
-    protected void unSubscribeObservable() {
-    }
-
-    @Override
-    public void refreshMeetingList(ArrayList<WCManageMeetingInfo> list) {
-    }
-
-    @Override
-    public void addMeetingList(ArrayList<WCManageMeetingInfo> list, boolean hasMore) {
-    }
-
-    @Override
-    public void getMeetingDetailSuccess(WCManageMeetingDetailInfo meetingDetailInfo) {
     }
 
     @Override
@@ -123,6 +104,6 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
         mTvSignCount.setText("(" + signCount + ")");
         mTvConfirmCount.setText("(" + confirmCount + ")");
 
-        mMeetingParticipationAdapter.setItems(participationBean.getParticipation());
+        mMeetingParticipationAdapter.setData(participationBean.getParticipation());
     }
 }

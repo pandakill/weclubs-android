@@ -1,24 +1,24 @@
 package com.mm.weclubs.ui.activity.manage;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingPresenter;
-import com.mm.weclubs.app.manage.meeting.WCManageMeetingView;
-import com.mm.weclubs.data.bean.WCMeetingParticipationBean;
-import com.mm.weclubs.data.pojo.WCManageMeetingDetailInfo;
-import com.mm.weclubs.data.pojo.WCManageMeetingInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.meeting.WCManageMeetingListContract;
+import com.mm.weclubs.data.network.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import me.fangx.haorefresh.HaoRecyclerView;
+import javax.inject.Inject;
+
+import xyz.zpayh.adapter.OnItemClickListener;
 
 /**
  * 创建人: fangzanpan
@@ -26,14 +26,15 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  会议管理列表页面
  */
 
-public class WCMeetingManageListActivity extends BaseActivity implements WCManageMeetingView {
+public class WCMeetingManageListActivity extends BaseActivity implements WCManageMeetingListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCManageMeetingAdapter mManageMeetingAdapter;
 
-    private WCManageMeetingPresenter mManageMeetingPresenter;
+    @Inject
+    WCManageMeetingListContract.Presenter<WCManageMeetingListContract.View> mPresenter;
 
     private int mPageNo = 1;
 
@@ -48,24 +49,24 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
     @Override
     protected void initView() {
-
+        getActivityComponent().inject(this);
         getTitleBar().setTitleText("会议管理");
         getTitleBar().setRightText("发起会议");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMeetingAdapter = new WCManageMeetingAdapter(this);
+        mManageMeetingAdapter = new WCManageMeetingAdapter();
         mRecyclerView.setAdapter(mManageMeetingAdapter);
 
-        mManageMeetingAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mManageMeetingAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCManageMeetingInfo manageMeetingInfo = mManageMeetingAdapter.getItem(position);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCManageMeetingInfo manageMeetingInfo = mManageMeetingAdapter.getData(adapterPosition);
                 Bundle extra = new Bundle();
                 extra.putSerializable("manageMeetingInfo", manageMeetingInfo);
                 if (manageMeetingInfo != null) {
@@ -88,8 +89,7 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
     @Override
     protected void afterView() {
 
-        mManageMeetingPresenter = new WCManageMeetingPresenter(this);
-        mManageMeetingPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         attachRefreshLayout(mRefreshLayout, mRecyclerView);
 
@@ -97,11 +97,17 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+                mPresenter.refresh();
             }
         });
 
-        mManageMeetingPresenter.getMeetingListFromServer(mPageNo);
+        mPresenter.getMeetingListFromServer(mPageNo);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     @Override
@@ -116,29 +122,22 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
     }
 
     @Override
-    protected void unSubscribeObservable() {
-    }
-
-    @Override
-    public void refreshMeetingList(ArrayList<WCManageMeetingInfo> list) {
-        mManageMeetingAdapter.setItems(list);
+    public void refreshMeetingList(List<WCManageMeetingInfo> list) {
+        mManageMeetingAdapter.setData(list);
 
         hideProgressDialog();
     }
 
     @Override
-    public void addMeetingList(ArrayList<WCManageMeetingInfo> list, boolean hasMore) {
+    public void addMeetingList(List<WCManageMeetingInfo> list, boolean hasMore) {
         mPageNo ++;
-        mManageMeetingAdapter.addItems(list);
+        mManageMeetingAdapter.addData(list);
 
         hideProgressDialog();
     }
 
     @Override
-    public void getMeetingDetailSuccess(WCManageMeetingDetailInfo meetingDetailInfo) {
-    }
-
-    @Override
-    public void getMeetingParticipationSuccess(WCMeetingParticipationBean participationBean) {
+    public void loadFail() {
+        mManageMeetingAdapter.loadFailed();
     }
 }

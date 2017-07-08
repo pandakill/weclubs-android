@@ -1,6 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.LayoutInflater;
@@ -14,18 +15,19 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.comment.WCCommentPresenter;
-import com.mm.weclubs.app.comment.WCCommentView;
-import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
-import com.mm.weclubs.app.mission_list.WCMissionListView;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.mission_detail.WCMissionDetailContract;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.pojo.WCCommentListInfo;
-import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
-import com.mm.weclubs.data.pojo.WCMissionListInfo;
+import com.mm.weclubs.data.network.pojo.WCCommentListInfo;
+import com.mm.weclubs.data.network.pojo.WCMissionDetailInfo;
+import com.mm.weclubs.data.network.pojo.WCMissionListInfo;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
+import com.socks.library.KLog;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -33,7 +35,7 @@ import java.util.ArrayList;
  * 描述:
  */
 
-public class WCMissionDetailActivity extends BaseActivity implements WCMissionListView, WCCommentView {
+public class WCMissionDetailActivity extends BaseActivity implements WCMissionDetailContract.View{
 
     private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -56,8 +58,8 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
     private WCMissionListInfo mMissionListInfo;
 
-    private WCMissionListPresenter mMissionListPresenter;
-    private WCCommentPresenter mCommentPresenter;
+    @Inject
+    WCMissionDetailContract.Presenter<WCMissionDetailContract.View> mPresenter;
 
     private WCMissionDetailInfo mMissionDetailInfo;
 
@@ -69,18 +71,14 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-        if (extras == null) {
-            log.e("extras不能为空");
-            onBackPressed();
-            return;
-        }
+    protected void getBundleExtras(@NonNull Bundle extras) {
 
         mMissionListInfo = (WCMissionListInfo) extras.getSerializable("missionListInfo");
     }
 
     @Override
     protected void initView() {
+        getActivityComponent().inject(this);
         mIvSponsorLogo = (RoundImageView) findViewById(R.id.img_sponsor_logo);
         mTvSponsorName = (TextView) findViewById(R.id.tv_sponsor_name);
         mTvCreateDate = (TextView) findViewById(R.id.tv_create_date);
@@ -106,22 +104,24 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
+    }
+
+    @Override
     protected void afterView() {
         if (mMissionListInfo == null) {
             onBackPressed();
             return;
         }
 
-        mCommentPresenter = new WCCommentPresenter(this);
-        mCommentPresenter.attachView(this);
-
-        mMissionListPresenter = new WCMissionListPresenter(this);
-        mMissionListPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mBtnConfirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMissionListPresenter.setMissionConfirm(mMissionListInfo.getMission_id());
+                mPresenter.setMissionConfirm(mMissionListInfo.getMission_id());
             }
         });
 
@@ -156,12 +156,12 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mMissionListPresenter.getMissionDetail(mMissionListInfo.getMission_id());
+                mPresenter.getMissionDetail(mMissionListInfo.getMission_id());
             }
         });
 
         initBaseInfo();
-        mMissionListPresenter.getMissionDetail(mMissionListInfo.getMission_id());
+        mPresenter.getMissionDetail(mMissionListInfo.getMission_id());
     }
 
     private void initBaseInfo() {
@@ -208,7 +208,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
     private void initDetailInfo() {
         if (mMissionDetailInfo == null) {
-            log.e("initDetailInfo：mMissionDetailInfo 不能为空！");
+            KLog.e("initDetailInfo：mMissionDetailInfo 不能为空！");
             return;
         }
 
@@ -322,13 +322,6 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
         mCommentPageNo ++;
     }
 
-    @Override
-    public void refreshMissionList(ArrayList<WCMissionListInfo> list) {
-    }
-
-    @Override
-    public void addMissionList(ArrayList<WCMissionListInfo> list, boolean hasMore) {
-    }
 
     @Override
     public void getMissionDetailSuccess(WCMissionDetailInfo missionListInfo) {
@@ -336,7 +329,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionLi
 
         initDetailInfo();
 
-        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MISSION,
+        mPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_MISSION,
                 mMissionListInfo.getMission_id(), mCommentPageNo);
     }
 

@@ -1,22 +1,22 @@
 package com.mm.weclubs.app.notify_list;
 
-import android.content.Context;
-
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.bean.WCNotifyListBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCNotifyListInfo;
-import com.mm.weclubs.retrofit.WCServiceFactory;
-import com.mm.weclubs.retrofit.service.WCDynamicService;
-import com.mm.weclubs.util.WCLog;
+import com.mm.weclubs.data.DataManager;
+import com.mm.weclubs.data.network.bean.WCNotifyListBean;
+import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
+import com.mm.weclubs.util.rx.SchedulerProvider;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
+
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+
 
 /**
  * 创建人: fangzanpan
@@ -24,116 +24,70 @@ import rx.schedulers.Schedulers;
  * 描述:
  */
 
-public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
+public class WCNotifyListPresenter<V extends WCNotifyListContract.View> extends BasePresenter<V>
+    implements WCNotifyListContract.Presenter<V>{
 
-    private WCDynamicService mDynamicService = null;
-
-    public WCNotifyListPresenter(Context context) {
-        super(context);
-
-        mDynamicService = WCServiceFactory.getDynamicService();
+    @Inject
+    public WCNotifyListPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    protected void initLog() {
-        log = new WCLog(WCNotifyListPresenter.class);
-    }
-
-    public void getNotifyFromServer(long clubId, int pageNo) {
-
+    public void refresh(long clubId) {
         getMvpView().showProgressDialog("注册中...", false);
 
-        HashMap<String, Object> params = new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
+        params.put("page_no", 1);
+        params.put("club_id", clubId);
+        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
+
+        getCompositeDisposable().add(getDataManager().getNotifyList(params)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<WCNotifyListBean>() {
+                    @Override
+                    public void accept(@NonNull WCNotifyListBean wcNotifyListBean) throws Exception {
+                        getMvpView().refreshNotifyList(wcNotifyListBean.getNotify());
+                        getMvpView().hideProgressDialog();
+                    }
+                },this));
+    }
+
+    @Override
+    public void getNotifyFromServer(long clubId,final  int pageNo) {
+
+        Map<String, Object> params = new HashMap<>();
 
         params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
         params.put("page_no", pageNo);
         params.put("club_id", clubId);
         params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
 
-        mDynamicService.getNotifyList(WCDynamicService.GET_DYNAMIC_LIST,
-                mHttpParamsPresenter.initRequestParam(mContext, params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCNotifyListBean>>() {
+        getCompositeDisposable().add(getDataManager().getNotifyList(params)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<WCNotifyListBean>() {
                     @Override
-                    public void onCompleted() {
-                        log.d("getNotifyFromServer：onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        log.d("getNotifyFromServer：onError");
+                    public void accept(@NonNull WCNotifyListBean wcNotifyListBean) throws Exception {
+                        getMvpView().addNotifyList(wcNotifyListBean.getNotify(), wcNotifyListBean.getHas_more() == 1);
                         getMvpView().hideProgressDialog();
                     }
-
+                },new Consumer<Throwable>() {
                     @Override
-                    public void onNext(WCResponseParamBean<WCNotifyListBean> object) {
-                        log.d("getNotifyFromServer：onNext = " + object.toString());
-
-                        if (object.getResult_code() == 2000) {
-                            if (pageNo == 1) {
-                                getMvpView().refreshNotifyList(object.getData().getNotify());
-                            } else {
-                                getMvpView().addNotifyList(object.getData().getNotify(), object.getData().getHas_more() == 1);
-                            }
-                        } else {
-                            getMvpView().showToast(object.getResult_msg());
-
-                            checkResult(object);
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        WCNotifyListPresenter.this.accept(throwable);
+                        if (isViewAttachView()){
+                            //加载更多失败
+                            getMvpView().loadFail();
                         }
-
-                        getMvpView().hideProgressDialog();
                     }
-                });
+                }));
     }
 
-    public void getNotifyDetail(long notifyId) {
-
-        getMvpView().showProgressDialog("加载中...", false);
-
-        HashMap<String, Object> params = new HashMap<>();
-
-        params.put("dynamic_id", notifyId);
-        params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
-
-        mDynamicService.getNotifyDetail(WCDynamicService.GET_DYNAMIC_DETAIL,
-                mHttpParamsPresenter.initRequestParam(mContext, params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCNotifyListInfo>>() {
-                    @Override
-                    public void onCompleted() {
-                        log.d("getNotifyDetail：onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        log.d("getNotifyDetail：onError");
-                        getMvpView().hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(WCResponseParamBean<WCNotifyListInfo> object) {
-                        log.d("getNotifyDetail：onNext = " + object.toString());
-
-                        if (object.getResult_code() == 2000) {
-                            getMvpView().getNotifyDetailSuccess(object.getData());
-                        } else {
-                            getMvpView().showToast(object.getResult_msg());
-
-                            checkResult(object);
-                        }
-
-                        getMvpView().hideProgressDialog();
-                    }
-                });
-    }
-
-    public void setNotifyConfirm(long notifyId) {
-        setNotifyConfirm(notifyId, 0, null);
-    }
-
-    public void setNotifyConfirm(long notifyId, int position, WCNotifyListInfo notifyListInfo) {
+    @Override
+    public void setNotifyConfirm(long notifyId,final  int position,final  WCNotifyListInfo notifyListInfo) {
 
         getMvpView().showProgressDialog("加载中...", false);
 
@@ -143,35 +97,19 @@ public class WCNotifyListPresenter extends BasePresenter<WCNotifyListView> {
         params.put("dynamic_type", WCConstantsUtil.DYNAMIC_TYPE_NOTIFY);
         params.put("status", "confirm");
 
-        mDynamicService.setMissionStatus(WCDynamicService.SET_DYNAMIC_STATUS,
-                mHttpParamsPresenter.initRequestParam(mContext, params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<Object>>() {
+        getCompositeDisposable().add(getDataManager().setMissionStatus(params)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<Object>() {
                     @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        log.d("setMissionConfirm：onError");
+                    public void accept(@NonNull Object object) throws Exception {
                         getMvpView().hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(WCResponseParamBean<Object> object) {
-                        getMvpView().hideProgressDialog();
-                        if (object.getResult_code() == 2000) {
-                            getMvpView().showToast("通知确认成功");
-                            if (notifyListInfo != null) {
-                                notifyListInfo.setConfirm_receive(1);
-                                getMvpView().notifyChangeList(notifyListInfo, position);
-                            }
-                        } else {
-                            getMvpView().showToast(object.getResult_msg());
-                            checkResult(object);
+                        getMvpView().showToast("通知确认成功");
+                        if (notifyListInfo != null) {
+                            notifyListInfo.setConfirm_receive(1);
+                            getMvpView().notifyChangeList(notifyListInfo, position);
                         }
                     }
-                });
+                },this));
     }
 }

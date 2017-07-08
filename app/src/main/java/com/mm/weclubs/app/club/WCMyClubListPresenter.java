@@ -1,22 +1,21 @@
 package com.mm.weclubs.app.club;
 
-import android.content.Context;
-
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCMyClubsBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCMyClubListInfo;
-import com.mm.weclubs.retrofit.WCServiceFactory;
-import com.mm.weclubs.retrofit.service.WCClubService;
-import com.mm.weclubs.util.WCLog;
+import com.mm.weclubs.data.DataManager;
+import com.mm.weclubs.data.network.bean.WCMyClubsBean;
+import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
+import com.mm.weclubs.util.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
+
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * 创建人: fangzanpan
@@ -24,64 +23,57 @@ import rx.schedulers.Schedulers;
  * 描述:
  */
 
-public class WCMyClubListPresenter extends BasePresenter<WCMyClubListView> {
+public class WCMyClubListPresenter<V extends WCMyClubListContract.View> extends BasePresenter<V>
+    implements WCMyClubListContract.Presenter<V>{
 
-    private WCClubService mClubService = null;
-
-    public WCMyClubListPresenter(Context context) {
-        super(context);
-
-        mClubService = WCServiceFactory.getClubService();
+    @Inject
+    public WCMyClubListPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    protected void initLog() {
-        log = new WCLog(WCMyClubListPresenter.class);
+    public void refresh() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("page_no", 1);
+        params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
+
+        getCompositeDisposable().add(getDataManager().getMyClubs(params)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<WCMyClubsBean>() {
+                    @Override
+                    public void accept(@NonNull WCMyClubsBean wcMyClubsBean) throws Exception {
+                        getMvpView().setClubList(wcMyClubsBean.getClub());
+                        getMvpView().hideProgressDialog();
+                    }
+                },this));
     }
 
-    public void getMyClubsList(int pageNo) {
+    @Override
+    public void getMyClubsList(final int pageNo) {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("page_no", pageNo);
         params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
 
-        mClubService.getMyClubs(WCClubService.GET_MY_CLUBS, mHttpParamsPresenter.initRequestParam(mContext, params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCMyClubsBean>>() {
-                    @Override
-                    public void onCompleted() {
-                        log.d("getMyClubsList：onCompleted");
+        getCompositeDisposable().add(getDataManager().getMyClubs(params)
+            .subscribeOn(getSchedulerProvider().io())
+            .observeOn(getSchedulerProvider().ui())
+            .subscribe(new Consumer<WCMyClubsBean>() {
+                @Override
+                public void accept(@NonNull WCMyClubsBean wcMyClubsBean) throws Exception {
+                    ArrayList<WCMyClubListInfo> list = wcMyClubsBean.getClub();
+                    getMvpView().addClubList(list, wcMyClubsBean.getHas_more() == 1);
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(@NonNull Throwable throwable) throws Exception {
+                    WCMyClubListPresenter.this.accept(throwable);
+                    if (isViewAttachView()){
+                        //加载更多失败
+                        getMvpView().loadFail();
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        log.d("getMyClubsList：onError");
-                        e.printStackTrace();
-                        getMvpView().showToast(e.getMessage());
-                        getMvpView().hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(WCResponseParamBean<WCMyClubsBean> responseParamBean) {
-                        log.d("getMyClubsList：responseParamBean = " + responseParamBean.toString());
-                        if (responseParamBean.getResult_code() == 2000) {
-                            ArrayList<WCMyClubListInfo> list = responseParamBean.getData().getClub();
-
-                            if (pageNo == 1) {
-                                getMvpView().refreshClubList(list);
-                            } else {
-                                getMvpView().addClubList(list, responseParamBean.getData().getHas_more() == 1);
-                            }
-                        } else {
-                            getMvpView().showToast(responseParamBean.getResult_msg());
-
-                            checkResult(responseParamBean);
-                        }
-
-                        getMvpView().hideProgressDialog();
-
-                    }
-                });
+                }
+            }));
     }
 }

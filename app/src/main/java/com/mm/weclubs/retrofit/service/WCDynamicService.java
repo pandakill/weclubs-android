@@ -1,20 +1,19 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCMeetingListBean;
-import com.mm.weclubs.data.bean.WCMissionListBean;
-import com.mm.weclubs.data.bean.WCNotifyListBean;
-import com.mm.weclubs.data.bean.WCRequestParamBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
-import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
-import com.mm.weclubs.data.pojo.WCNotifyListInfo;
+import com.mm.weclubs.data.network.bean.WCMeetingListBean;
+import com.mm.weclubs.data.network.bean.WCMissionListBean;
+import com.mm.weclubs.data.network.bean.WCNotifyListBean;
+import com.mm.weclubs.data.network.bean.WCRequestParamBean;
+import com.mm.weclubs.data.network.bean.WCResponseParamBean;
+import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo;
+import com.mm.weclubs.data.network.pojo.WCMissionDetailInfo;
+import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Url;
-import rx.Observable;
 
 /**
  * 创建人: fangzanpan
@@ -28,32 +27,32 @@ public interface WCDynamicService {
     String GET_DYNAMIC_DETAIL = "/dynamic/get_dynamic_detail";
     String SET_DYNAMIC_STATUS = "/dynamic/set_dynamic_status";
 
-    @POST
+    @POST(GET_DYNAMIC_LIST)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCMeetingListBean>> getMeetingList(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCMeetingListBean>> getMeetingList(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(GET_DYNAMIC_DETAIL)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCMeetingDetailInfo>> getMeetingDetail(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCMeetingDetailInfo>> getMeetingDetail(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(GET_DYNAMIC_LIST)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCMissionListBean>> getMissionList(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCMissionListBean>> getMissionList(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(GET_DYNAMIC_DETAIL)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCMissionDetailInfo>> getMissionDetail(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCMissionDetailInfo>> getMissionDetail(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(GET_DYNAMIC_LIST)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCNotifyListBean>> getNotifyList(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCNotifyListBean>> getNotifyList(@Body WCRequestParamBean requestBean);
 
-    @POST
+    @POST(GET_DYNAMIC_DETAIL)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCNotifyListInfo>> getNotifyDetail(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCNotifyListInfo>> getNotifyDetail(@Body WCRequestParamBean requestBean);
 
     //  设置任务的状态
-    @POST
+    @POST(SET_DYNAMIC_STATUS)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<Object>> setMissionStatus(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<Object>> setMissionStatus(@Body WCRequestParamBean requestBean);
 }

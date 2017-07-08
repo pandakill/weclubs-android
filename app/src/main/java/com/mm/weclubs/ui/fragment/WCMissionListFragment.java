@@ -1,25 +1,27 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.mission_list.WCMissionListPresenter;
-import com.mm.weclubs.app.mission_list.WCMissionListView;
-import com.mm.weclubs.data.pojo.WCMissionDetailInfo;
-import com.mm.weclubs.data.pojo.WCMissionListInfo;
-import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.app.mission_list.WCMissionListContract;
+import com.mm.weclubs.data.network.pojo.WCMissionListInfo;
+import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMissionDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMissionListAdapter;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 
 import java.util.ArrayList;
 
-import me.fangx.haorefresh.HaoRecyclerView;
-import me.fangx.haorefresh.LoadMoreListener;
+import javax.inject.Inject;
+
+import xyz.zpayh.adapter.OnItemClickListener;
+import xyz.zpayh.adapter.OnLoadMoreListener;
+
 
 /**
  * 创建人: fangzanpan
@@ -27,13 +29,14 @@ import me.fangx.haorefresh.LoadMoreListener;
  * 描述:  通知列表
  */
 
-public class WCMissionListFragment extends BaseLazyFragment implements WCMissionListView {
+public class WCMissionListFragment extends BaseLazyFragment implements WCMissionListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCMissionListAdapter mMissionListAdapter;
-    private WCMissionListPresenter mMissionListPresenter;
+    @Inject
+    WCMissionListContract.Presenter<WCMissionListContract.View> mPresenter;
 
     private int mPageNo = 1;
 
@@ -65,59 +68,70 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
         afterView();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView();
+    }
+
     private void initView() {
+        getActivityComponent().inject(this);
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
-        mRecyclerView = findViewById(R.id.recycler_view, HaoRecyclerView.class);
+        mRecyclerView = findViewById(R.id.recycler_view, RecyclerView.class);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        attachRefreshLayout(mRefreshLayout, null);
     }
 
     private void afterView() {
-        mMissionListAdapter = new WCMissionListAdapter(mContext);
+        mMissionListAdapter = new WCMissionListAdapter();
         mRecyclerView.setAdapter(mMissionListAdapter);
-        mMissionListAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mMissionListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCMissionListInfo missionListInfo = mMissionListAdapter.getItem(position);
-                Bundle extra = new Bundle();
-                extra.putSerializable("missionListInfo", missionListInfo);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCMissionListInfo missionListInfo = mMissionListAdapter.getData(adapterPosition);
+                if (missionListInfo == null){
+                    return;
+                }
+
                 switch (view.getId()) {
                     case R.id.item_dynamic:
+                        Bundle extra = new Bundle();
+                        extra.putSerializable("missionListInfo", missionListInfo);
                         showIntent(WCMissionDetailActivity.class, extra);
                         break;
                     case R.id.btn_confirm:
-                        mMissionListPresenter.setMissionConfirm(missionListInfo.getMission_id(), position, missionListInfo);
+                        mPresenter.setMissionConfirm(missionListInfo.getMission_id(), adapterPosition, missionListInfo);
                         break;
                 }
             }
         });
 
-        mMissionListPresenter = new WCMissionListPresenter(mContext);
-        mMissionListPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mMissionListPresenter.getMissionListFromServer(mClubListInfo.getClub_id(), mPageNo);
+                mPresenter.refresh(mClubListInfo.getClub_id());
             }
         });
 
-        mRecyclerView.setLoadMoreListener(new LoadMoreListener() {
+        mMissionListAdapter.openAutoLoadMore(true);
+        mMissionListAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
-                mMissionListPresenter.getMissionListFromServer(mClubListInfo.getClub_id(), mPageNo);
+                mPresenter.getMissionListFromServer(mClubListInfo.getClub_id(), mPageNo);
             }
         });
     }
 
     @Override
     protected void onFirstUserVisible() {
-        mMissionListPresenter.getMissionListFromServer(mClubListInfo.getClub_id(), mPageNo);
+        mPresenter.getMissionListFromServer(mClubListInfo.getClub_id(), mPageNo);
     }
 
     @Override
@@ -132,7 +146,7 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
 
     @Override
     public void refreshMissionList(ArrayList<WCMissionListInfo> list) {
-        mMissionListAdapter.setItems(list);
+        mMissionListAdapter.setData(list);
 
         hideProgressDialog();
     }
@@ -140,13 +154,18 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
     @Override
     public void addMissionList(ArrayList<WCMissionListInfo> list, boolean hasMore) {
         mPageNo ++;
-        mMissionListAdapter.addItems(list);
+        mMissionListAdapter.addData(list);
 
         hideProgressDialog();
+
+        if (!hasMore){
+            mMissionListAdapter.loadCompleted();
+        }
     }
 
     @Override
-    public void getMissionDetailSuccess(WCMissionDetailInfo missionDetailInfo) {
+    public void loadFail() {
+        mMissionListAdapter.loadFailed();
     }
 
     @Override

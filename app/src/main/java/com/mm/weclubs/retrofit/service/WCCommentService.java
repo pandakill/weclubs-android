@@ -1,15 +1,14 @@
 package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.data.bean.WCCommentListBean;
-import com.mm.weclubs.data.bean.WCRequestParamBean;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
+import com.mm.weclubs.data.network.bean.WCCommentListBean;
+import com.mm.weclubs.data.network.bean.WCRequestParamBean;
+import com.mm.weclubs.data.network.bean.WCResponseParamBean;
 
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
-import retrofit2.http.Url;
-import rx.Observable;
 
 /**
  * 创建人: fangzanpan
@@ -21,7 +20,7 @@ public interface WCCommentService {
 
     String GET_COMMENT_LIST = "/comment/get_comment_list";
 
-    @POST
+    @POST(GET_COMMENT_LIST)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
-    Observable<WCResponseParamBean<WCCommentListBean>> getCommentList(@Url String url, @Body WCRequestParamBean requestBean);
+    Observable<WCResponseParamBean<WCCommentListBean>> getCommentList(@Body WCRequestParamBean requestBean);
 }

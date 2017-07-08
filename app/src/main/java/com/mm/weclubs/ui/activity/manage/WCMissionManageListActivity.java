@@ -4,17 +4,18 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.manage.mission.WCManageMissionPresenter;
-import com.mm.weclubs.app.manage.mission.WCManageMissionView;
-import com.mm.weclubs.data.pojo.WCManageMissionInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.mission.WCManageMissionListContract;
+import com.mm.weclubs.data.network.pojo.WCManageMissionInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageMissionAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import me.fangx.haorefresh.HaoRecyclerView;
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -22,14 +23,15 @@ import me.fangx.haorefresh.HaoRecyclerView;
  * 描述:  任务管理列表页面
  */
 
-public class WCMissionManageListActivity extends BaseActivity implements WCManageMissionView {
+public class WCMissionManageListActivity extends BaseActivity implements WCManageMissionListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCManageMissionAdapter mManageMissionAdapter;
 
-    private WCManageMissionPresenter mManageMissionPresenter;
+    @Inject
+    WCManageMissionListContract.Presenter<WCManageMissionListContract.View> mPresenter;
 
     private int mPageNo = 1;
 
@@ -44,26 +46,25 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
 
     @Override
     protected void initView() {
+        getActivityComponent().inject(this);
 
         getTitleBar().setTitleText("任务管理");
         getTitleBar().setRightText("发起任务");
 
         mRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
-        mRecyclerView = (HaoRecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMissionAdapter = new WCManageMissionAdapter(this);
+        mManageMissionAdapter = new WCManageMissionAdapter();
         mRecyclerView.setAdapter(mManageMissionAdapter);
     }
 
     @Override
     protected void afterView() {
-
-        mManageMissionPresenter = new WCManageMissionPresenter(this);
-        mManageMissionPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         attachRefreshLayout(mRefreshLayout, mRecyclerView);
 
@@ -71,11 +72,17 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mManageMissionPresenter.getMissionListFromServer(mPageNo);
+                mPresenter.getMissionListFromServer(mPageNo);
             }
         });
 
-        mManageMissionPresenter.getMissionListFromServer(mPageNo);
+        mPresenter.getMissionListFromServer(mPageNo);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.detachView();
     }
 
     @Override
@@ -94,8 +101,8 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
     }
 
     @Override
-    public void refreshMissionList(ArrayList<WCManageMissionInfo> list) {
-        mManageMissionAdapter.setItems(list);
+    public void refreshMissionList(List<WCManageMissionInfo> list) {
+        mManageMissionAdapter.setData(list);
 
         hideProgressDialog();
     }
@@ -103,8 +110,13 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
     @Override
     public void addMissionList(ArrayList<WCManageMissionInfo> list, boolean hasMore) {
         mPageNo ++;
-        mManageMissionAdapter.addItems(list);
+        mManageMissionAdapter.addData(list);
 
         hideProgressDialog();
+    }
+
+    @Override
+    public void loadFail() {
+        mManageMissionAdapter.loadFailed();
     }
 }

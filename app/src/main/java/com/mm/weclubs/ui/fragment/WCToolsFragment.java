@@ -1,6 +1,7 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,16 +11,17 @@ import android.widget.LinearLayout.LayoutParams;
 import com.blankj.utilcode.utils.ScreenUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.bean.WCToolBean;
+import com.mm.weclubs.data.network.bean.WCToolBean;
 import com.mm.weclubs.ui.activity.manage.WCMeetingManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCMissionManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCNotifyManageListActivity;
 import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
+
+import xyz.zpayh.adapter.OnItemClickListener;
 
 /**
  * 创建人: fangzanpan
@@ -103,19 +105,19 @@ public class WCToolsFragment extends BaseLazyFragment {
         layoutParams.height = WCConstantsUtil.getProportionHeight(ScreenUtils.getScreenWidth(), 750, 320);
         mImgToolBanner.setLayoutParams(layoutParams);
 
-        mManageItemAdapter = new WCManageItemAdapter(mContext);
-        mInformationItemAdapter = new WCManageItemAdapter(mContext);
+        mManageItemAdapter = new WCManageItemAdapter();
+        mInformationItemAdapter = new WCManageItemAdapter();
 
         mGvManageList.setAdapter(mManageItemAdapter);
         mGvInformationList.setAdapter(mInformationItemAdapter);
 
-        mManageItemAdapter.setItems(mManageTools);
-        mInformationItemAdapter.setItems(mInformationTools);
+        mManageItemAdapter.setData(mManageTools);
+        mInformationItemAdapter.setData(mInformationTools);
 
-        mManageItemAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mManageItemAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCToolBean toolBean = mManageItemAdapter.getItem(position);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCToolBean toolBean = mManageItemAdapter.getData(adapterPosition);
                 if (toolBean != null) {
                     switch (toolBean.getTitle()) {
                         case "通知管理":
@@ -132,10 +134,10 @@ public class WCToolsFragment extends BaseLazyFragment {
             }
         });
 
-        mInformationItemAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mInformationItemAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCToolBean toolBean = mInformationItemAdapter.getItem(position);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCToolBean toolBean = mInformationItemAdapter.getData(adapterPosition);
                 if (toolBean != null) {
                     switch (toolBean.getTitle()) {
                         case "组织设置":

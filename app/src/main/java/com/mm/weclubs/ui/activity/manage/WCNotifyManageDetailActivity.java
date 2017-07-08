@@ -14,19 +14,17 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.blankj.utilcode.utils.TimeUtils;
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.comment.WCCommentPresenter;
-import com.mm.weclubs.app.comment.WCCommentView;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyPresenter;
-import com.mm.weclubs.app.manage.notify.WCManageNotifyView;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.app.manage.notify.WCManageNotifyDetailContract;
 import com.mm.weclubs.config.WCConstantsUtil;
-import com.mm.weclubs.data.bean.WCNotifyCheckStatusBean;
-import com.mm.weclubs.data.pojo.WCCommentListInfo;
-import com.mm.weclubs.data.pojo.WCManageNotifyInfo;
-import com.mm.weclubs.ui.activity.BaseActivity;
+import com.mm.weclubs.data.network.pojo.WCCommentListInfo;
+import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.widget.RoundImageView;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -34,7 +32,7 @@ import java.util.ArrayList;
  * 描述:
  */
 
-public class WCNotifyManageDetailActivity extends BaseActivity implements WCManageNotifyView, WCCommentView {
+public class WCNotifyManageDetailActivity extends BaseActivity implements WCManageNotifyDetailContract.View{
 
     private RoundImageView mIvSponsorLogo;
     private TextView mTvSponsorName;
@@ -53,8 +51,8 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
 
     private WCManageNotifyInfo mManageNotifyInfo;
 
-    private WCManageNotifyPresenter mManageNotifyPresenter;
-    private WCCommentPresenter mCommentPresenter;
+    @Inject
+    WCManageNotifyDetailContract.Presenter<WCManageNotifyDetailContract.View> mPresenter;
 
     private int mCommentPageNo = 1;
 
@@ -84,6 +82,7 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
 
     @Override
     protected void initView() {
+        getActivityComponent().inject(this);
         getTitleBar().setTitleText("通知详情");
         getTitleBar().setRightText("确认详情");
 
@@ -106,16 +105,12 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
 
         mIvSponsorLogo.setRectAdius(SizeUtils.dp2px(40));
 
-        mManageNotifyPresenter = new WCManageNotifyPresenter(this);
-        mManageNotifyPresenter.attachView(this);
-
-        mCommentPresenter = new WCCommentPresenter(this);
-        mCommentPresenter.attachView(this);
+        mPresenter.attachView(this);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mManageNotifyPresenter.getNotifyDetailFromServer(mManageNotifyInfo.getNotify_id());
+                mPresenter.getNotifyDetailFromServer(mManageNotifyInfo.getNotify_id());
             }
         });
     }
@@ -172,7 +167,7 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
 
         initBaseInfo();
 
-        mManageNotifyPresenter.getNotifyDetailFromServer(mManageNotifyInfo.getNotify_id());
+        mPresenter.getNotifyDetailFromServer(mManageNotifyInfo.getNotify_id());
     }
 
     @Override
@@ -181,29 +176,13 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
     }
 
     @Override
-    protected void unSubscribeObservable() {
-    }
-
-    @Override
-    public void refreshNotifyList(ArrayList<WCManageNotifyInfo> list) {
-    }
-
-    @Override
-    public void addNotifyList(ArrayList<WCManageNotifyInfo> list, boolean hasMore) {
-    }
-
-    @Override
     public void getNotifyDetailSuccess(WCManageNotifyInfo notifyInfo) {
 
         mManageNotifyInfo = notifyInfo;
         initBaseInfo();
 
-        mCommentPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY
+        mPresenter.getCommentList(WCConstantsUtil.DYNAMIC_TYPE_NOTIFY
                 , mManageNotifyInfo.getNotify_id(), mCommentPageNo);
-    }
-
-    @Override
-    public void getNotifyReceiveStatusSuccess(WCNotifyCheckStatusBean notifyCheckStatus) {
     }
 
     private View getCommentView(WCCommentListInfo commentListInfo) {

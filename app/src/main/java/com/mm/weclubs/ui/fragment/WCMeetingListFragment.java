@@ -1,25 +1,25 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
-import com.mm.weclubs.app.meeting_list.WCMeetingListView;
-import com.mm.weclubs.data.pojo.WCMeetingDetailInfo;
-import com.mm.weclubs.data.pojo.WCMeetingListInfo;
-import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.app.meeting_list.WCMeetingListContract;
+import com.mm.weclubs.data.network.pojo.WCMeetingListInfo;
+import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMeetingDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMeetingListAdapter;
-import com.mm.weclubs.ui.adapter.base.WCBaseRecyclerViewAdapter.OnClickViewListener;
 
 import java.util.ArrayList;
 
-import me.fangx.haorefresh.HaoRecyclerView;
-import me.fangx.haorefresh.LoadMoreListener;
+import javax.inject.Inject;
+import xyz.zpayh.adapter.OnItemClickListener;
+import xyz.zpayh.adapter.OnLoadMoreListener;
 
 /**
  * 创建人: fangzanpan
@@ -27,13 +27,15 @@ import me.fangx.haorefresh.LoadMoreListener;
  * 描述:  通知列表
  */
 
-public class WCMeetingListFragment extends BaseLazyFragment implements WCMeetingListView {
+public class WCMeetingListFragment extends BaseLazyFragment implements WCMeetingListContract.View {
 
     private SwipeRefreshLayout mRefreshLayout;
-    private HaoRecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
 
     private WCMeetingListAdapter mMeetingListAdapter;
-    private WCMeetingListPresenter mMeetingListPresenter;
+
+    @Inject
+    WCMeetingListContract.Presenter<WCMeetingListContract.View> mMeetingListPresenter;
 
     private int mPageNo = 1;
 
@@ -66,53 +68,65 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
     }
 
     private void initView() {
+        getActivityComponent().inject(this);
+
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
-        mRecyclerView = findViewById(R.id.recycler_view, HaoRecyclerView.class);
+        mRecyclerView = findViewById(R.id.recycler_view, RecyclerView.class);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        attachRefreshLayout(mRefreshLayout, mRecyclerView);
+        attachRefreshLayout(mRefreshLayout, null);
     }
 
     private void afterView() {
-        mMeetingListAdapter = new WCMeetingListAdapter(mContext);
+        mMeetingListAdapter = new WCMeetingListAdapter();
         mRecyclerView.setAdapter(mMeetingListAdapter);
-        mMeetingListAdapter.setOnClickViewListener(new OnClickViewListener() {
+        mMeetingListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onClick(View view, int position) {
-                WCMeetingListInfo meetingListInfo = mMeetingListAdapter.getItem(position);
-                Bundle extra = new Bundle();
-                extra.putSerializable("meetingListInfo", meetingListInfo);
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                WCMeetingListInfo meetingListInfo = mMeetingListAdapter.getData(adapterPosition);
+                if (meetingListInfo == null){
+                    return;
+                }
                 switch (view.getId()) {
                     case R.id.item_dynamic:
+                        Bundle extra = new Bundle();
+                        extra.putSerializable("meetingListInfo", meetingListInfo);
                         showIntent(WCMeetingDetailActivity.class, extra);
                         break;
                     case R.id.btn_confirm:
-                        mMeetingListPresenter.setMeetingConfirm(meetingListInfo.getMeeting_id(), position, meetingListInfo);
+                        mMeetingListPresenter.setMeetingConfirm(meetingListInfo.getMeeting_id(), adapterPosition, meetingListInfo);
                         break;
                 }
             }
         });
 
-        mMeetingListPresenter = new WCMeetingListPresenter(mContext);
+
         mMeetingListPresenter.attachView(this);
 
         mRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh() {
                 mPageNo = 1;
-                mMeetingListPresenter.getMeetingListFromServer(mClubListInfo.getClub_id(), mPageNo);
+                mMeetingListPresenter.refresh(mClubListInfo.getClub_id());
             }
         });
 
-        mRecyclerView.setLoadMoreListener(new LoadMoreListener() {
+        mMeetingListAdapter.openAutoLoadMore(true);
+        mMeetingListAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 mMeetingListPresenter.getMeetingListFromServer(mClubListInfo.getClub_id(), mPageNo);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mMeetingListPresenter.detachView();
     }
 
     @Override
@@ -132,7 +146,7 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
 
     @Override
     public void refreshMeetingList(ArrayList<WCMeetingListInfo> list) {
-        mMeetingListAdapter.setItems(list);
+        mMeetingListAdapter.setData(list);
 
         hideProgressDialog();
     }
@@ -140,13 +154,18 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
     @Override
     public void addMeetingList(ArrayList<WCMeetingListInfo> list, boolean hasMore) {
         mPageNo ++;
-        mMeetingListAdapter.addItems(list);
+        mMeetingListAdapter.addData(list);
 
         hideProgressDialog();
+
+        if (!hasMore){
+            mMeetingListAdapter.loadCompleted();
+        }
     }
 
     @Override
-    public void getMeetingDetailSuccess(WCMeetingDetailInfo meetingDetailInfo) {
+    public void loadFail() {
+        mMeetingListAdapter.loadFailed();
     }
 
     @Override

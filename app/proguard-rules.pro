@@ -22,3 +22,7 @@
 
 -dontwarn cn.smssdk.**
 -keep class cn.smssdk.**{*;}
+
+# Retrofit2
+-dontwarn okio.**
+-dontwarn javax.annotation.**

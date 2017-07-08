@@ -1,23 +1,29 @@
 package com.mm.weclubs.app.login;
 
-import android.content.Context;
-
 import com.blankj.utilcode.utils.EmptyUtils;
 import com.blankj.utilcode.utils.RegexUtils;
 import com.mm.weclubs.app.base.BasePresenter;
-import com.mm.weclubs.data.bean.WCResponseParamBean;
-import com.mm.weclubs.data.pojo.WCUserInfoInfo;
-import com.mm.weclubs.datacenter.WCUserDataCenter;
-import com.mm.weclubs.retrofit.WCServiceFactory;
-import com.mm.weclubs.retrofit.service.WCUserService;
+import com.mm.weclubs.data.DataManager;
+import com.mm.weclubs.data.db.entity.User;
+import com.mm.weclubs.data.network.pojo.WCUserInfoInfo;
+import com.mm.weclubs.util.DataHelper;
 import com.mm.weclubs.util.MD5Util;
-import com.mm.weclubs.util.WCLog;
+import com.mm.weclubs.util.rx.SchedulerProvider;
+import com.socks.library.KLog;
 
 import java.util.HashMap;
+import java.util.Map;
 
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import javax.inject.Inject;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+
+import static com.mm.weclubs.data.prefs.AppPreferencesHelper.NULL_INDEX;
 
 /**
  * 创建人: fangzanpan
@@ -25,21 +31,44 @@ import rx.schedulers.Schedulers;
  * 描述: 用于登录相关的 presenter
  */
 
-public class WCLoginPresenter extends BasePresenter<WCLoginView> {
+public class WCLoginPresenter<V extends WCLoginContract.View> extends BasePresenter<V>
+    implements WCLoginContract.Presenter<V>{
 
-    private WCUserService mUserService = null;
-    private WCUserDataCenter mUserDataCenter;
-
-    public WCLoginPresenter(Context context) {
-        super(context);
-
-        mUserService = WCServiceFactory.getUserService();
-        mUserDataCenter = WCUserDataCenter.getInstance(mContext);
+    @Inject
+    public WCLoginPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     @Override
-    public void initLog() {
-        log = new WCLog(WCLoginPresenter.class);
+    public void attachView(V mvpView) {
+        super.attachView(mvpView);
+
+        final int lastLoginId = getDataManager().getLastTimeLoginId();
+
+        if (lastLoginId <= NULL_INDEX){
+            return;
+        }
+
+        getCompositeDisposable().add(
+                Observable.just(lastLoginId)
+                .flatMap(new Function<Integer, ObservableSource<String>>() {
+                    @Override
+                    public ObservableSource<String> apply(@NonNull Integer integer) throws Exception {
+                        User user = getDataManager().loadUser();
+                        if (user == null || user.getUserId() != integer){
+                            return Observable.empty();
+                        }
+                        return Observable.just(user.getMobile());
+                    }
+                })
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(@NonNull String mobile) throws Exception {
+                        getMvpView().setDefaultMobile(mobile);
+                    }
+                }));
     }
 
     /**
@@ -48,6 +77,7 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
      * @param mobile    手机号码
      * @param password  密码
      */
+    @Override
     public void login(String mobile, String password) {
 
         if (EmptyUtils.isEmpty(mobile)) {
@@ -67,176 +97,98 @@ public class WCLoginPresenter extends BasePresenter<WCLoginView> {
 
         getMvpView().showProgressDialog("登录中...", false);
 
-        log.d("mobile = " + mobile + "; password = " + password);
+        KLog.d("mobile = " + mobile + "; password = " + password);
         password = MD5Util.md5(password);
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("mobile", mobile);
         params.put("password", password);
 
-        mUserService.login(WCUserService.URL_LOGIN, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
+        getCompositeDisposable().add(getDataManager().login(params)
+                .doOnNext(new Consumer<WCUserInfoInfo>() {
                     @Override
-                    public void onCompleted() {
-                        log.d("login：onCompleted");
+                    public void accept(@NonNull WCUserInfoInfo wcUserInfoInfo) throws Exception {
+                        getDataManager().saveUser(DataHelper.wcUserInfoInfo2User(wcUserInfoInfo));
+                        getDataManager().saveLastTimeLoginId(wcUserInfoInfo.getUser_id());
                     }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        log.d("login：onError");
-
-                        getMvpView().loginFail(e.getMessage());
-                        getMvpView().hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
-                        log.d("login：onNext = " + userInfo.toString());
-                        if (userInfo.getResult_code() == 2000) {
-                            mUserDataCenter.saveUserInfo(userInfo.getData());
-                            getMvpView().loginSuccess(userInfo.getData());
-                        } else {
-                            getMvpView().loginFail(userInfo.getResult_msg());
-                            mUserDataCenter.deleteUserInfo();
-                        }
-
-                        getMvpView().hideProgressDialog();
-                    }
-                });
+                })
+            .subscribeOn(getSchedulerProvider().io())
+            .observeOn(getSchedulerProvider().ui())
+            .subscribe(new Consumer<WCUserInfoInfo>() {
+                @Override
+                public void accept(@NonNull WCUserInfoInfo wcUserInfoInfo) throws Exception {
+                    getMvpView().hideProgressDialog();
+                    getMvpView().loginSuccess(wcUserInfoInfo);
+                }
+            }, this));
     }
 
-    /**
-     * 新用户通过手机验证码注册登录
-     *
-     * @param mobile    手机号码
-     * @param code  手机验证码
-     * @param password  用户设置的密码
-     */
-    public void register(String mobile, String code, String password) {
-
-        if (!RegexUtils.isMobileSimple(mobile)) {
-            log.d("手机验证错误：" + mobile);
-            getMvpView().showToast("请输入正确的手机号码");
-            return;
-        }
-
-        if (EmptyUtils.isEmpty(code)) {
-            log.d("验证码不能为空");
-            getMvpView().showToast("验证码不能为空");
-            return;
-        }
-
-        if (code.length() != 4) {
-            log.d("输入验证码格式错误" + code);
-            getMvpView().showToast("请输入正确的验证码");
-            return;
-        }
-
-        try {
-            int codeNumber = Integer.parseInt(code);
-            log.d("手机验证码转为数字之后为：" + codeNumber);
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            getMvpView().showToast("请输入正确的验证码");
-            return;
-        }
-
-        if (EmptyUtils.isEmpty(password)) {
-            log.d("密码输入为空");
-            getMvpView().showToast("请输入密码");
-            return;
-        }
-
-        getMvpView().showProgressDialog("注册中...", false);
-
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("mobile", mobile);
-
-        password = MD5Util.md5(password);
-        params.put("password", password);
-        params.put("code", code);
-
-        mUserService.register(WCUserService.URL_REGISTER, mHttpParamsPresenter.initRequestParam(mContext.getApplicationContext(), params))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
-                    @Override
-                    public void onCompleted() {
-                        log.d("register：onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        log.d("register：onError");
-
-                        getMvpView().hideProgressDialog();
-                    }
-
-                    @Override
-                    public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
-                        log.d("register：onNext = " + userInfo.toString());
-                        if (userInfo.getResult_code() == 2000) {
-                            mUserDataCenter.saveUserInfo(userInfo.getData());
-                            getMvpView().registerSuccess(userInfo.getData());
-                        } else {
-                            getMvpView().showToast(userInfo.getResult_msg());
-
-                            checkResult(userInfo);
-                        }
-
-                        getMvpView().hideProgressDialog();
-                    }
-                });
-
-    }
-
+    @Override
     public void checkLogin() {
 
-        WCUserInfoInfo userInfoInfo = mUserDataCenter.getCurrentUserInfo();
+        getCompositeDisposable().add(Observable.just(getDataManager().getLastTimeLoginId())
+                .flatMap(new Function<Integer, ObservableSource<User>>() {
+                    @Override
+                    public ObservableSource<User> apply(@NonNull Integer integer) throws Exception {
+                        if (integer <= NULL_INDEX){
+                            //没有最后一个登录的ID
+                            KLog.d("没有最后一个登录的ID");
+                            return Observable.empty();
+                        }
+                        User user = getDataManager().loadUser();
 
-        if (userInfoInfo != null) {
-
-            getMvpView().showProgressDialog("登录中...", false);
-
-            HashMap<String, Object> params = new HashMap<>();
-            params.put("mobile", userInfoInfo.getMobile());
-            params.put("token", userInfoInfo.getToken());
-
-            mUserService.getUserInfo(WCUserService.URL_GET_USER_INFO, mHttpParamsPresenter.initRequestParam(mContext, params))
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<WCResponseParamBean<WCUserInfoInfo>>() {
-                        @Override
-                        public void onCompleted() {
-                            log.d("checkLogin：onCompleted");
+                        if (user == null || user.getUserId() != integer){
+                            //没有找到数据
+                            KLog.d("没有找到数据");
+                            return Observable.empty();
                         }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            log.d("checkLogin：onError - " + e.getMessage());
-                            getMvpView().hideProgressDialog();
-                        }
+                        return Observable.just(user);
+                    }
+                })
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .flatMap(new Function<User, ObservableSource<WCUserInfoInfo>>() {
+                    @Override
+                    public ObservableSource<WCUserInfoInfo> apply(@NonNull User user) throws Exception {
+                        getMvpView().showProgressDialog("登录中...", false);
+                        Map<String,Object> params = new HashMap<>();
 
-                        @Override
-                        public void onNext(WCResponseParamBean<WCUserInfoInfo> userInfo) {
-                            log.d("checkLogin：onNext = " + userInfo.toString());
-                            if (userInfo.getResult_code() == 2000) {
-                                userInfo.getData().setToken(mUserDataCenter.getCurrentUserInfo().getToken());
-                                mUserDataCenter.saveUserInfo(userInfo.getData());
-                                getMvpView().loginSuccess(userInfo.getData());
-                            } else {
-                                mUserDataCenter.deleteUserInfo();
-                                log.d("checkLogin：获取用户信息失败 - " + userInfo.getResult_msg());
-                            }
+                        params.put("mobile",user.getMobile());
+                        params.put("token",user.getToken());
+                        params.put("user_id",user.getUserId());
 
-                            getMvpView().hideProgressDialog();
-                        }
-                    });
-        }
+                        return getDataManager().getUserInfo(params)
+                                .subscribeOn(getSchedulerProvider().io());
+                    }
+                })
+                .observeOn(getSchedulerProvider().io())
+                .doOnNext(new Consumer<WCUserInfoInfo>() {
+                    @Override
+                    public void accept(@NonNull WCUserInfoInfo wcUserInfoInfo) throws Exception {
+                        User user = getDataManager().loadUser();
+                        wcUserInfoInfo.setToken(user.getToken());
+                        //保存数据
+                        KLog.d("保存数据");
+                        getDataManager().saveUser(DataHelper.wcUserInfoInfo2User(wcUserInfoInfo));
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        //清除用户数据?
+                        KLog.d("清除用户数据");
+                        getDataManager().clearUser();
+                    }
+                })
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<WCUserInfoInfo>() {
+                    @Override
+                    public void accept(@NonNull WCUserInfoInfo wcUserInfoInfo) throws Exception {
+                        KLog.d("登录成功");
+                        getMvpView().hideProgressDialog();
+                        getMvpView().loginSuccess(wcUserInfoInfo);
+                    }
+                }, this));
     }
 }

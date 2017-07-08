@@ -1,12 +1,14 @@
 package com.mm.weclubs.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.mm.weclubs.R;
-import com.mm.weclubs.data.pojo.WCMyClubListInfo;
+import com.mm.weclubs.app.base.BaseActivity;
+import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.adapter.WCTODOListFragmentAdapter;
 import com.mm.weclubs.ui.fragment.WCMeetingListFragment;
 import com.mm.weclubs.ui.fragment.WCMissionListFragment;
@@ -36,13 +38,7 @@ public class WCTODOListActivity extends BaseActivity {
     }
 
     @Override
-    protected void getBundleExtras(Bundle extras) {
-
-        if (extras == null) {
-            log.e("getBundleExtras.extras == null");
-            return;
-        }
-
+    protected void getBundleExtras(@NonNull Bundle extras) {
         mClubListInfo = (WCMyClubListInfo) extras.getSerializable("clubListInfo");
     }
 
