@@ -1,6 +1,7 @@
 package com.mm.weclubs.data;
 
 import com.mm.weclubs.data.db.DbHelper;
+import com.mm.weclubs.data.db.entity.User;
 import com.mm.weclubs.data.network.ApiHelper;
 import com.mm.weclubs.data.prefs.PreferencesHelper;
 
@@ -22,4 +23,11 @@ public interface DataManager extends DbHelper,ApiHelper,PreferencesHelper{
      * @return 如果已经登录，返回UserId, 返回 NULL_INDEX
      */
     Observable<Integer> getUserId();
+
+
+    /**
+     * 返回当前用户
+     * @return 如果已经登录，返回User, 返回 empty
+     */
+    Observable<User> getUser();
 }

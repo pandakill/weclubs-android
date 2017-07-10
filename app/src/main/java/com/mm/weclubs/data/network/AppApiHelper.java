@@ -10,6 +10,7 @@ import com.mm.weclubs.data.network.bean.WCClubMeetingBean;
 import com.mm.weclubs.data.network.bean.WCClubMissionBean;
 import com.mm.weclubs.data.network.bean.WCClubNotifyBean;
 import com.mm.weclubs.data.network.bean.WCCommentListBean;
+import com.mm.weclubs.data.network.bean.WCIndexClubBean;
 import com.mm.weclubs.data.network.bean.WCMeetingListBean;
 import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.network.bean.WCMissionListBean;
@@ -34,6 +35,7 @@ import com.mm.weclubs.retrofit.service.WCClubNotifyService;
 import com.mm.weclubs.retrofit.service.WCClubService;
 import com.mm.weclubs.retrofit.service.WCCommentService;
 import com.mm.weclubs.retrofit.service.WCDynamicService;
+import com.mm.weclubs.retrofit.service.WCIndexService;
 import com.mm.weclubs.retrofit.service.WCUserService;
 import com.mm.weclubs.util.JsonHelper;
 import com.mm.weclubs.util.MD5Util;
@@ -272,6 +274,14 @@ public class AppApiHelper implements ApiHelper {
 
         WCRequestParamBean bean = initRequestParam(params);
         return handle(service.getMyMission(bean));
+    }
+
+    @Override
+    public Observable<WCIndexClubBean> getIndexClub(@NonNull Map<String, Object> params) {
+        WCIndexService service = mRetrofit.create(WCIndexService.class);
+
+        WCRequestParamBean bean = initRequestParam(params);
+        return handle(service.getIndexClub(bean));
     }
 
     private <T> Observable<T> handle(Observable<WCResponseParamBean<T>> observable){

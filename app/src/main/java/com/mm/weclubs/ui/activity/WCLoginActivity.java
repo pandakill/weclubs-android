@@ -70,6 +70,9 @@ public class WCLoginActivity extends BaseActivity implements WCLoginContract.Vie
         if (mNeedGetUserInfo) {
             mLoginPresenter.checkLogin();
         }
+
+        mInputMobile.setText("13570578153");
+        mInputPassword.setText("123456");
     }
 
     @Override

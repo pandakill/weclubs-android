@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/item_dynamic"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="136dp"
+    style="@style/CommonLayout.WhiteBg"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:cardMaxElevation="2dp"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mm.weclubs.widget.RoundImageView
+            android:id="@+id/img_club_logo"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="16dp"
+            android:src="@mipmap/login_logo_weclubs"
+            android:background="@drawable/bg_my_dynamic_club_logo"/>
+
+        <TextView
+            android:id="@+id/tv_club_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:layout_toRightOf="@id/img_club_logo"
+            android:textColor="@color/colorCommonText"
+            android:textSize="16sp"
+            android:text="佐佐营销协会"/>
+
+        <TextView
+            android:id="@+id/tv_club_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="16dp"
+            android:layout_toRightOf="@id/img_club_logo"
+            android:layout_below="@+id/tv_club_name"
+            android:drawablePadding="4dp"
+            android:textSize="11sp"
+            android:maxLines="2"
+            android:textColor="#c3c3c3"
+            tools:text="与时俱进，勇敢向前。用我们的智慧和技术 解决你们的困难与时俱进，勇敢向前。用我们的智慧和技术 解决你们的困难"/>
+        
+        <LinearLayout
+            android:id="@+id/ll_btn_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/login_logo_weclubs"/>
+            <com.mm.weclubs.widget.RoundImageView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginRight="8dp"
+                android:src="@mipmap/ic_membermore"/>
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

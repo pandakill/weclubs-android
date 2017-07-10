@@ -6,6 +6,7 @@ import com.mm.weclubs.data.network.bean.WCClubMeetingBean;
 import com.mm.weclubs.data.network.bean.WCClubMissionBean;
 import com.mm.weclubs.data.network.bean.WCClubNotifyBean;
 import com.mm.weclubs.data.network.bean.WCCommentListBean;
+import com.mm.weclubs.data.network.bean.WCIndexClubBean;
 import com.mm.weclubs.data.network.bean.WCMeetingListBean;
 import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.network.bean.WCMissionListBean;
@@ -88,4 +89,7 @@ public interface ApiHelper {
 
     //=====================================WCClubMissionService=========================
     Observable<WCClubMissionBean> getMyMission(@NonNull Map<String,Object> params);
+
+    //===========================Index=========================
+    Observable<WCIndexClubBean> getIndexClub(@NonNull Map<String,Object> params);
 }
