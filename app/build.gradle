@@ -15,6 +15,13 @@ android {
         //    enabled true
         //}
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [moduleName           : project.getName(),
+                             "room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+
         manifestPlaceholders = [
                 JPUSH_PKGNAME : applicationId,
                 JPUSH_APPKEY : "3821df98e100598741efa38d", //JPush上注册的包名对应的appkey.
@@ -96,6 +103,11 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:1.0.0-alpha3"
     testCompile "android.arch.persistence.room:testing:1.0.0-alpha3"
     compile "android.arch.persistence.room:rxjava2:1.0.0-alpha3"
+
+    // 小红点
+    compile 'q.rorbin:badgeview:1.1.1'
+
+    compile project(":viewpagerindicator")
 
     // adapter 陈志鹏的库
     compile 'xyz.zpayh:sherlockadapter:1.0.8'

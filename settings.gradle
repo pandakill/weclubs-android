@@ -1,1 +1,1 @@
-include ':app', ':SMSSDK-2.1.4', ':JPushExample(614268)'
+include ':app', ':SMSSDK-2.1.4', ':JPushExample(614268)', ':viewpagerindicator'

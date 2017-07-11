@@ -30,7 +30,11 @@ import xyz.zpayh.adapter.OnLoadMoreListener;
  */
 
 public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListContract.View {
-
+    public static final String TAG = "WCDynamicFragment";
+    public static WCDynamicFragment newInstance(){
+        WCDynamicFragment fragment = new WCDynamicFragment();
+        return fragment;
+    }
     @Inject
     WCMyClubListContract.Presenter<WCMyClubListContract.View> mPresenter;
 

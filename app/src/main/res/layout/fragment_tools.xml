@@ -5,8 +5,15 @@
     style="@style/CommonLayout"
     android:background="@color/colorCommonBg">
 
+    <View
+        android:id="@+id/fake_status_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/statusbar_view_height"
+        android:background="@color/colorPrimary"/>
+
     <cn.bingoogolapple.titlebar.BGATitleBar
         style="@style/TitleBar"
+        android:fitsSystemWindows="true"
         app:bgatitlebar_titleText="@string/title_tools"
         app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
         app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"

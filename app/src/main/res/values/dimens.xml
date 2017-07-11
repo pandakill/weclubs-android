@@ -8,4 +8,6 @@
 
     <dimen name="widget_space">8dp</dimen>  <!-- 控件上下间的间距大小 -->
     <dimen name="setting_height">48dp</dimen>   <!---->
+
+    <dimen name="statusbar_view_height">25dp</dimen>
 </resources>

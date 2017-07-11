@@ -16,4 +16,8 @@
     <string name="title_activity_pdmain">PDMainActivity</string>
 
     <string name="hot_clubs">热门社团</string>
+    <string name="tab_index">首页</string>
+    <string name="tab_dynamic">动态</string>
+    <string name="tab_tools">工具</string>
+    <string name="tab_mine">我的</string>
 </resources>

@@ -30,6 +30,11 @@ import xyz.zpayh.adapter.OnItemClickListener;
  */
 
 public class WCToolsFragment extends BaseLazyFragment {
+    public static final String TAG = "WCToolsFragment";
+    public static WCToolsFragment newInstance(){
+        WCToolsFragment fragment = new WCToolsFragment();
+        return fragment;
+    }
 
     private ImageView mImgToolBanner;
     private RecyclerView mGvManageList;

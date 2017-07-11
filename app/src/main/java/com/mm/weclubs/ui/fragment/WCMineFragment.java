@@ -15,6 +15,12 @@ import com.mm.weclubs.util.WCLog;
  */
 
 public class WCMineFragment extends BaseLazyFragment {
+    public static final String TAG = "WCMineFragment";
+
+    public static WCMineFragment newInstance(){
+        WCMineFragment fragment = new WCMineFragment();
+        return fragment;
+    }
 
     private Button mBtnLogout;
 

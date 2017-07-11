@@ -2,7 +2,11 @@ package com.mm.weclubs.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -17,12 +21,20 @@ import com.mm.weclubs.ui.fragment.WCDynamicFragment;
 import com.mm.weclubs.ui.fragment.WCIndexFragment;
 import com.mm.weclubs.ui.fragment.WCMineFragment;
 import com.mm.weclubs.ui.fragment.WCToolsFragment;
+import com.mm.weclubs.util.StatusBarUtil;
+import com.mm.weclubs.widget.BottomNavigationViewEx;
 import com.mm.weclubs.widget.FragmentTabHost;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 
-public class WCMainActivity extends BaseActivity {
+public class WCMainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
+
+    public static final int TAB_NONE = 0;
+    public static final int TAB_INDEX = 1;
+    public static final int TAB_DYNAMIC = 2;
+    public static final int TAB_TOOLS = 3;
+    public static final int TAB_MINE = 4;
 
     private TabWidget mTabs;
     private FragmentTabHost mTabHost;
@@ -49,6 +61,13 @@ public class WCMainActivity extends BaseActivity {
             WCMineFragment.class
     };
 
+    private int mCurrentTab = TAB_NONE;
+
+    private FragmentManager mManager;
+    private FragmentTransaction mTransaction;
+
+    private BottomNavigationViewEx mNavigation;
+
     @Override
     protected int getContentLayout() {
         return R.layout.activity_main;
@@ -56,15 +75,27 @@ public class WCMainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
-        mTabs = (TabWidget) findViewById(android.R.id.tabs);
+        StatusBarUtil.setTranslucentForImageViewInFragment(this,0,null);
+        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        //    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        //}
+        //mTabHost = (FragmentTabHost) findViewById(android.R.id.tabhost);
+        //mTabs = (TabWidget) findViewById(android.R.id.tabs);
 
-        mFragmentManager = getSupportFragmentManager();
+        //mFragmentManager = getSupportFragmentManager();
+
+        mNavigation = (BottomNavigationViewEx)findViewById(R.id.navigation);
+        mNavigation.setOnNavigationItemSelectedListener(this);
+        mNavigation.enableShiftingMode(false);
+        mNavigation.enableItemShiftingMode(false);
+
+        mManager = getSupportFragmentManager();
     }
 
     @Override
     protected void afterView() {
-        initTabHost();
+        //initTabHost();
+        tabChanged(TAB_INDEX);
 
         mBus.addDisposable(this,mBus.toObservable(RxEvents.class)
                 .subscribe(new Consumer<RxEvents>() {
@@ -97,6 +128,102 @@ public class WCMainActivity extends BaseActivity {
     @Override
     protected void getBundleExtras(@android.support.annotation.NonNull Bundle extras) {
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@android.support.annotation.NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.navigation_index:
+                tabChanged(TAB_INDEX);
+                return true;
+            case R.id.navigation_dynamic:
+                tabChanged(TAB_DYNAMIC);
+                return true;
+            case R.id.navigation_tools:
+                tabChanged(TAB_TOOLS);
+                return true;
+            case R.id.navigation_mine:
+                tabChanged(TAB_MINE);
+                return true;
+        }
+        return false;
+    }
+
+    public void tabChanged(int tab){
+        if (tab == mCurrentTab){
+            return;
+        }
+        if (mTransaction == null){
+            mTransaction = mManager.beginTransaction();
+        }
+        //隐藏其他界面
+        hideFragment();
+        mCurrentTab = tab;
+        switch (mCurrentTab){
+            case TAB_INDEX:
+                mNavigation.setCurrentItem(0);
+                Fragment homeFragment = mManager.findFragmentByTag(WCIndexFragment.TAG);
+                if (homeFragment != null){
+                    mTransaction.show(homeFragment);
+                } else {
+                    homeFragment = WCIndexFragment.newInstance();
+                    mTransaction.add(R.id.content,homeFragment,WCIndexFragment.TAG);
+                }
+                break;
+            case TAB_DYNAMIC:
+                mNavigation.setCurrentItem(1);
+                Fragment newFragment = mManager.findFragmentByTag(WCDynamicFragment.TAG);
+                if (newFragment != null){
+                    mTransaction.show(newFragment);
+                } else {
+                    newFragment = WCDynamicFragment.newInstance();
+                    mTransaction.add(R.id.content,newFragment,WCDynamicFragment.TAG);
+                }
+                break;
+            case TAB_TOOLS:
+                mNavigation.setCurrentItem(2);
+                Fragment showFragment = mManager.findFragmentByTag(WCToolsFragment.TAG);
+                if (showFragment != null){
+                    mTransaction.show(showFragment);
+                } else {
+                    showFragment = WCToolsFragment.newInstance();
+                    mTransaction.add(R.id.content,showFragment,WCToolsFragment.TAG);
+                }
+                break;
+            case TAB_MINE:
+                mNavigation.setCurrentItem(3);
+                Fragment shoppingFragment = mManager.findFragmentByTag(WCMineFragment.TAG);
+                if (shoppingFragment != null){
+                    mTransaction.show(shoppingFragment);
+                } else {
+                    shoppingFragment = WCMineFragment.newInstance();
+                    mTransaction.add(R.id.content,shoppingFragment,WCMineFragment.TAG);
+                }
+                break;
+        }
+
+        mTransaction.commitNowAllowingStateLoss();
+        mTransaction = null;
+    }
+
+    // 隐藏所有片段
+    private void hideFragment() {
+        Fragment fragment = mManager.findFragmentByTag(WCIndexFragment.TAG);
+        if (fragment != null){
+            mTransaction.hide(fragment);
+        }
+        fragment = mManager.findFragmentByTag(WCDynamicFragment.TAG);
+        if (fragment != null){
+            mTransaction.hide(fragment);
+        }
+        fragment = mManager.findFragmentByTag(WCToolsFragment.TAG);
+        if (fragment != null){
+            mTransaction.hide(fragment);
+        }
+        fragment = mManager.findFragmentByTag(WCMineFragment.TAG);
+        if (fragment != null){
+            mTransaction.hide(fragment);
+        }
     }
 
     private void initTabHost() {
