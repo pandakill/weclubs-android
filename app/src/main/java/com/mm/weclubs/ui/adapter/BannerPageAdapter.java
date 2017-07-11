@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.mm.weclubs.R;
-import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,10 +55,10 @@ public class BannerPageAdapter extends PagerAdapter {
 
         final String pictureUri = mPictureUris.get(position);
 
-        ImageLoaderHelper.getInstance(container.getContext())
-                .loadImage(imageView,pictureUri);
+        //ImageLoaderHelper.getInstance(container.getContext())
+        //        .loadImage(imageView,pictureUri);
 
-        //Glide.with(container.getContext()).load(pictureUri).into(imageView);
+        Glide.with(container.getContext()).load(pictureUri).into(imageView);
         container.addView(view);
         return view;
     }

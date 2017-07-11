@@ -36,7 +36,9 @@ import com.mm.weclubs.di.AppUUid;
 import com.mm.weclubs.di.ApplicationContext;
 import com.mm.weclubs.di.BaseUrl;
 import com.mm.weclubs.di.DatabaseInfo;
+import com.mm.weclubs.di.DeviceHeight;
 import com.mm.weclubs.di.DeviceSize;
+import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.di.PreferenceInfo;
 import com.mm.weclubs.util.MD5Util;
 import com.socks.library.KLog;
@@ -56,6 +58,9 @@ public class ApplicationModule {
 
     private final String mUUid;
     private final String mDeviceSize;
+
+    private final int mWidth;
+    private final int mHeight;
 
     public ApplicationModule(Application application) {
         mApplication = application;
@@ -78,6 +83,8 @@ public class ApplicationModule {
         KLog.d("initUUID: 加密后的uuid = " + uuid);
 
         mUUid = uuid;
+        mWidth = sw;
+        mHeight = sh;
     }
 
     @Provides
@@ -89,6 +96,18 @@ public class ApplicationModule {
     @Provides
     Application provideApplication() {
         return mApplication;
+    }
+
+    @DeviceWidth
+    @Provides
+    int provideWidth(){
+        return mWidth;
+    }
+
+    @DeviceHeight
+    @Provides
+    int provideHeight(){
+        return mHeight;
     }
 
     @Provides

@@ -1,5 +1,7 @@
 package com.mm.weclubs.app.index;
 
+import android.support.annotation.NonNull;
+
 import com.mm.weclubs.app.base.MVPPresenter;
 import com.mm.weclubs.app.base.MVPView;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
@@ -21,6 +23,18 @@ public interface WCIndexContract {
     }
 
     interface View extends MVPView{
+
+        /**
+         * 设置首页标题
+         * @param schoolName 学校名字
+         */
+        void setSchoolName(@NonNull String schoolName);
+
+        /**
+         * 设置热门社团
+         * @param hotClubs 热门社团集合，只有前五个
+         */
+        void setHotClubs(@NonNull List<WCIndexClubListInfo> hotClubs);
 
         void setData(List<WCIndexClubListInfo> list);
 

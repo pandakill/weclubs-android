@@ -56,6 +56,9 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                                 params.put("page_no", 1);
                                 params.put("school_id", user.getSchoolId());
 
+                                // 设置学校名
+                                getMvpView().setSchoolName(user.getSchoolName());
+
                                 return getDataManager().getIndexClub(params)
                                         .subscribeOn(getSchedulerProvider().io());
                             }
@@ -78,8 +81,6 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                         .flatMap(new Function<User, ObservableSource<WCIndexClubBean>>() {
                             @Override
                             public ObservableSource<WCIndexClubBean> apply(@NonNull User user) throws Exception {
-                                getMvpView().showProgressDialog("加载中...", false);
-
                                 HashMap<String, Object> params = new HashMap<>();
 
                                 params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
@@ -102,7 +103,6 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                                 WCIndexPresenter.this.accept(throwable);
                                 if (isViewAttachView()){
                                     getMvpView().loadFail();
-                                    getMvpView().hideProgressDialog();
                                 }
                             }
                         }));

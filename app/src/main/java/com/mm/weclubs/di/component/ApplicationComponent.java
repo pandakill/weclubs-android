@@ -21,6 +21,8 @@ import android.content.Context;
 import com.mm.weclubs.WCWeClubsApplication;
 import com.mm.weclubs.data.DataManager;
 import com.mm.weclubs.di.ApplicationContext;
+import com.mm.weclubs.di.DeviceHeight;
+import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.di.module.ApplicationModule;
 
 import javax.inject.Singleton;
@@ -43,4 +45,10 @@ public interface ApplicationComponent {
     Application application();
 
     DataManager getDataManager();
+
+    @DeviceHeight
+    int getHeight();
+
+    @DeviceWidth
+    int getWidth();
 }

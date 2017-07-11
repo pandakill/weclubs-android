@@ -1,6 +1,5 @@
 package com.mm.weclubs.ui.fragment;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -10,13 +9,20 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.index.WCIndexContract;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
+import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
 import com.mm.weclubs.ui.adapter.WCClubsListAdapter;
 import com.mm.weclubs.util.WCLog;
+import com.mm.weclubs.widget.RoundImageView;
+import com.socks.library.KLog;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
@@ -27,6 +33,10 @@ import javax.inject.Inject;
 import xyz.zpayh.adapter.BaseViewHolder;
 import xyz.zpayh.adapter.OnItemClickListener;
 import xyz.zpayh.adapter.OnLoadMoreListener;
+import xyz.zpayh.adapter.ViewCallback;
+
+import static com.mm.weclubs.util.ColorUtils.changeAlpha;
+import static com.mm.weclubs.util.ColorUtils.old2new;
 
 /**
  * 创建人: fangzanpan
@@ -52,10 +62,18 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
     private BannerPageAdapter mPageAdapter;
     private CirclePageIndicator mIndicator;
 
+    private TextView mSchoolName;
+    private ImageView mScanView;
+    private ImageView mSearchView;
+
     private int pageNo = 1;
 
     @Inject
     WCIndexContract.Presenter<WCIndexContract.View> mPresenter;
+
+    @Inject
+    @DeviceWidth
+    int mWidth;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -81,6 +99,9 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
         mToolbar = findViewById(R.id.toolbar,Toolbar.class);
         mAppBar = findViewById(R.id.app_bar,AppBarLayout.class);
+        mSchoolName = findViewById(R.id.tv_school_name, TextView.class);
+        mScanView = findViewById(R.id.iv_scan,ImageView.class);
+        mSearchView = findViewById(R.id.iv_search,ImageView.class);
 
         mViewPager = findViewById(R.id.viewPager,ViewPager.class);
         mIndicator = findViewById(R.id.indicator,CirclePageIndicator.class);
@@ -92,8 +113,19 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         mAppBar.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                final float fraction = Math.abs(verticalOffset*1.0f)/appBarLayout.getTotalScrollRange();
+                KLog.d("滑动度:"+fraction);
                 mToolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.colorPrimary),
-                        Math.abs(verticalOffset*1.0f)/appBarLayout.getTotalScrollRange()));
+                        fraction));
+                mSchoolName.setTextColor(old2new(getResources().getColor(R.color.colorPrimary),
+                        getResources().getColor(R.color.themeColor), fraction));
+                if (fraction < 0.6){
+                    mScanView.setImageResource(R.mipmap.navitem_scan_white);
+                    mSearchView.setImageResource(R.mipmap.navitem_search_white);
+                }else{
+                    mScanView.setImageResource(R.mipmap.navitem_scan_blue);
+                    mSearchView.setImageResource(R.mipmap.navitem_search_blue);
+                }
             }
         });
 
@@ -114,7 +146,9 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         mAdapter = new WCClubsListAdapter() {
             @Override
             public void bind(BaseViewHolder holder, int layoutRes) {
-
+                if (layoutRes == R.layout.view_index_club_item) {
+                    resize(holder);
+                }
             }
         };
         mRecyclerView.setAdapter(mAdapter);
@@ -175,15 +209,55 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
     }
 
-    public int changeAlpha(int color, float fraction){
-        int red = Color.red(color);
-        int green = Color.green(color);
-        int blue = Color.blue(color);
-        int alpha = (int) (Color.alpha(color) * fraction);
-        return Color.argb(alpha,red,green,blue);
+    private void resize(@NonNull BaseViewHolder holder) {
+        final int lW = mWidth - SizeUtils.dp2px((16+16+2)*2);
+        KLog.d("总宽度:"+mWidth);
+        KLog.d("LinearLayout宽度:"+lW);
+
+        final int imageWidth = lW / 7;
+        final int margin = SizeUtils.dp2px(8);
+
+        ViewCallback<RoundImageView> callback = new ViewCallback<RoundImageView>() {
+            @Override
+            public void callback(@NonNull RoundImageView view) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+                params.width = imageWidth - margin;
+                params.height = imageWidth - margin;
+                view.setLayoutParams(params);
+                view.setRectAdius(imageWidth-margin);
+            }
+        };
+
+        holder.setView(R.id.iv_student_1,callback);
+        holder.setView(R.id.iv_student_2,callback);
+        holder.setView(R.id.iv_student_3,callback);
+        holder.setView(R.id.iv_student_4,callback);
+        holder.setView(R.id.iv_student_5,callback);
+        holder.setView(R.id.iv_student_6,callback);
+        holder.setView(R.id.iv_more_student,callback);
+
+        holder.setClickable(R.id.iv_student_1,true);
+        holder.setClickable(R.id.iv_student_2,true);
+        holder.setClickable(R.id.iv_student_3,true);
+        holder.setClickable(R.id.iv_student_4,true);
+        holder.setClickable(R.id.iv_student_5,true);
+        holder.setClickable(R.id.iv_student_6,true);
+        holder.setClickable(R.id.iv_more_student,true);
     }
 
     //======================= MVP View ===================
+
+
+    @Override
+    public void setSchoolName(@NonNull String schoolName) {
+        mSchoolName.setText(schoolName);
+    }
+
+    @Override
+    public void setHotClubs(@NonNull List<WCIndexClubListInfo> hotClubs) {
+
+    }
+
     @Override
     public void setData(List<WCIndexClubListInfo> list) {
         mAdapter.setData(list);

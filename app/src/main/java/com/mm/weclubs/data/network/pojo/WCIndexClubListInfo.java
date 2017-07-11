@@ -12,12 +12,33 @@ import java.util.List;
  */
 
 public class WCIndexClubListInfo {
+    /**
+     * 社团id
+     */
     private long club_id;
+    /**
+     * 社团名称
+     */
     private String club_name;
+    /**
+     * 社团头像地址
+     */
     private String avatar_url;
+    /**
+     * 社团等级，0：校级组织，1：院系组织，2：兴趣社团，3：班级组织，4：私下组织
+     */
     private int level;
+    /**
+     * 社团口号
+     */
     private String slogan;
+    /**
+     * 社团简介
+     */
     private String attribution;
+    /**
+     * 社团的学生
+     */
     private List<WCStudentInfo> student;
 
     public long getClub_id() {

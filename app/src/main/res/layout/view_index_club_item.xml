@@ -23,88 +23,112 @@
             android:id="@+id/img_club_logo"
             android:layout_width="44dp"
             android:layout_height="44dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="12dp"
             android:layout_marginBottom="16dp"
-            android:src="@mipmap/login_logo_weclubs"
-            android:background="@drawable/bg_my_dynamic_club_logo"/>
+            android:layout_marginEnd="12dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_my_dynamic_club_logo"
+            android:src="@mipmap/login_logo_weclubs"/>
 
         <TextView
             android:id="@+id/tv_club_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="19dp"
-            android:layout_toRightOf="@id/img_club_logo"
+            android:layout_toEndOf="@id/img_club_logo"
             android:textColor="@color/colorCommonText"
             android:textSize="16sp"
-            android:text="佐佐营销协会"/>
+            android:singleLine="true"
+            android:maxEms="10"
+            tools:text="佐佐营销协会佐佐营销协会佐佐营销协会佐佐营销协会佐佐营销协会"/>
 
         <TextView
-            android:id="@+id/tv_club_tips"
+            android:id="@+id/tv_club_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="16dp"
-            android:layout_toRightOf="@id/img_club_logo"
+            android:layout_marginTop="19dp"
+            android:layout_marginStart="8dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:layout_toEndOf="@+id/tv_club_name"
+            android:background="@drawable/club_level_tag_school2"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            tools:text="校级组织"/>
+
+        <TextView
+            android:id="@+id/tv_club_slogan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_club_name"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@id/img_club_logo"
             android:drawablePadding="4dp"
-            android:textSize="11sp"
+            android:ellipsize="end"
             android:maxLines="2"
-            android:textColor="#c3c3c3"
+            android:textSize="11sp"
             tools:text="与时俱进，勇敢向前。用我们的智慧和技术 解决你们的困难与时俱进，勇敢向前。用我们的智慧和技术 解决你们的困难"/>
-        
+
         <LinearLayout
             android:id="@+id/ll_btn_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="12dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="16dp"
-            android:gravity="center_horizontal"
             android:orientation="horizontal">
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_1"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_2"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_3"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_4"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_5"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_student_6"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/login_logo_weclubs"/>
+
             <com.mm.weclubs.widget.RoundImageView
+                android:id="@+id/iv_more_student"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="8dp"
+                android:layout_margin="4dp"
                 android:src="@mipmap/ic_membermore"/>
         </LinearLayout>
     </RelativeLayout>

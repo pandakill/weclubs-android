@@ -1,6 +1,7 @@
 package com.mm.weclubs.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,9 @@ public class WCMainActivity extends BaseActivity implements BottomNavigationView
 
     @Override
     protected void initView() {
-        StatusBarUtil.setTranslucentForImageViewInFragment(this,0,null);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
+        }
         //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         //    getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         //}
