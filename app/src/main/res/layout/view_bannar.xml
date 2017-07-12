@@ -13,6 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"
         tools:background="@color/cardview_dark_background" />
+    <View
+        android:layout_width="match_parent"
+        android:background="@drawable/fg_banner"
+        android:layout_height="120dp"/>
 
     <FrameLayout
         android:id="@+id/cl_hot_clubs"

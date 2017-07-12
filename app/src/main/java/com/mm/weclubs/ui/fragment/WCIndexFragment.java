@@ -22,6 +22,7 @@ import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
 import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
 import com.mm.weclubs.ui.adapter.WCClubsListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
 import com.mm.weclubs.widget.RoundImageView;
 import com.socks.library.KLog;
@@ -71,7 +72,8 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
     @Inject
     WCIndexContract.Presenter<WCIndexContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     @Inject
     @DeviceWidth
     int mWidth;
@@ -107,7 +109,7 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         mViewPager = findViewById(R.id.viewPager,ViewPager.class);
         mIndicator = findViewById(R.id.indicator,CirclePageIndicator.class);
 
-        mPageAdapter = new BannerPageAdapter();
+        mPageAdapter = new BannerPageAdapter(mImageLoaderHelper);
         mViewPager.setAdapter(mPageAdapter);
         mIndicator.setViewPager(mViewPager);
 
@@ -115,7 +117,6 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 final float fraction = Math.abs(verticalOffset*1.0f)/appBarLayout.getTotalScrollRange();
-                KLog.d("滑动度:"+fraction);
                 mToolbar.setBackgroundColor(changeAlpha(getResources().getColor(R.color.colorPrimary),
                         fraction));
                 mSchoolName.setTextColor(old2new(getResources().getColor(R.color.colorPrimary),
@@ -144,7 +145,7 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
         mRecyclerView = findViewById(R.id.recycler_view,RecyclerView.class);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new WCClubsListAdapter() {
+        mAdapter = new WCClubsListAdapter(mImageLoaderHelper) {
             @Override
             public void bind(BaseViewHolder holder, int layoutRes) {
                 if (layoutRes == R.layout.view_index_club_item) {

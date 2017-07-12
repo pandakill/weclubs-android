@@ -61,6 +61,9 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionDe
     @Inject
     WCMissionDetailContract.Presenter<WCMissionDetailContract.View> mPresenter;
 
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
+
     private WCMissionDetailInfo mMissionDetailInfo;
 
     private int mCommentPageNo = 1;
@@ -165,7 +168,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionDe
     }
 
     private void initBaseInfo() {
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mMissionListInfo.getSponsor().getSponsor_avatar());
         mTvSponsorName.setText(mMissionListInfo.getSponsor().getSponsor_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mMissionListInfo.getCreate_date(), "MMMdd日"));
@@ -212,7 +215,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionDe
             return;
         }
 
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mMissionDetailInfo.getSponsor().getSponsor_avatar());
         mTvSponsorName.setText(mMissionDetailInfo.getSponsor().getSponsor_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mMissionDetailInfo.getCreate_date(), "MMMdd日"));
@@ -282,7 +285,7 @@ public class WCMissionDetailActivity extends BaseActivity implements WCMissionDe
         TextView createDate = (TextView) itemView.findViewById(R.id.tv_create_date);
         TextView commentContent = (TextView) itemView.findViewById(R.id.tv_comment_content);
 
-        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
+        mImageLoaderHelper.loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
         sponsorName.setText(commentListInfo.getStudent_name());
         createDate.setText(TimeUtils.millis2String(commentListInfo.getCreate_date(), "MM-dd  HH:mm"));
         commentContent.setText(commentListInfo.getContent());

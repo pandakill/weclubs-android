@@ -26,6 +26,12 @@ import xyz.zpayh.adapter.ViewCallback;
 
 public class WCMyClubListAdapter extends BaseAdapter<WCMyClubListInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+
+    public WCMyClubListAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_dynamic_club_item;
@@ -50,8 +56,8 @@ public class WCMyClubListAdapter extends BaseAdapter<WCMyClubListInfo> {
             @Override
             public void callback(@NonNull RoundImageView view) {
                 view.setRectAdius(SizeUtils.dp2px(44));
-                ImageLoaderHelper.getInstance(view.getContext())
-                        .loadImage(view,data.getAvatar_url());
+                mImageLoaderHelper
+                        .loadImage(view,data.getAvatar_url(),SizeUtils.dp2px(44));
             }
         }).setText(R.id.tv_club_name,data.getClub_name())
                 .setText(R.id.tv_club_member_count, String.valueOf(data.getMember_count()))

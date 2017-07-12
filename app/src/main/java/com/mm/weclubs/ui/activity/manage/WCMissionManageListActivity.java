@@ -11,6 +11,7 @@ import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.manage.mission.WCManageMissionListContract;
 import com.mm.weclubs.data.network.pojo.WCManageMissionInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageMissionAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,8 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
 
     @Inject
     WCManageMissionListContract.Presenter<WCManageMissionListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private int mPageNo = 1;
 
     @Override
@@ -58,7 +60,7 @@ public class WCMissionManageListActivity extends BaseActivity implements WCManag
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMissionAdapter = new WCManageMissionAdapter();
+        mManageMissionAdapter = new WCManageMissionAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mManageMissionAdapter);
     }
 

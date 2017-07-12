@@ -54,8 +54,11 @@ public abstract class WCClubsListAdapter extends BaseAdapter<WCIndexClubListInfo
 
     private final List<WCHotClubListInfo> mHotClubs;
 
-    public WCClubsListAdapter() {
+    private final ImageLoaderHelper mImageLoaderHelper;
+
+    public WCClubsListAdapter(@NonNull ImageLoaderHelper imageLoaderHelper) {
         mHotClubs = new ArrayList<>();
+        mImageLoaderHelper = imageLoaderHelper;
     }
 
     @Override
@@ -71,8 +74,8 @@ public abstract class WCClubsListAdapter extends BaseAdapter<WCIndexClubListInfo
                     @Override
                     public void callback(@NonNull RoundImageView view) {
                         view.setRectAdius(SizeUtils.dp2px(44));
-                        ImageLoaderHelper.getInstance(view.getContext())
-                                .loadImage(view, data.getAvatar_url());
+                        mImageLoaderHelper
+                                .loadImage(view, data.getAvatar_url(),SizeUtils.dp2px(44));
                     }
                 })
                 .setText(R.id.tv_club_tag, new TextCallback() {
@@ -109,7 +112,7 @@ public abstract class WCClubsListAdapter extends BaseAdapter<WCIndexClubListInfo
                     @Override
                     public void callback(@NonNull RoundImageView view) {
                         view.setVisibility(View.VISIBLE);
-                        ImageLoaderHelper.getInstance(view.getContext())
+                        mImageLoaderHelper
                                 .loadImage(view,info.getAvatar_url());
                     }
                 });
@@ -135,7 +138,7 @@ public abstract class WCClubsListAdapter extends BaseAdapter<WCIndexClubListInfo
                     .setView(HOT_CLUBS_LOGO_IDS[i], new ViewCallback<RoundImageView>() {
                         @Override
                         public void callback(@NonNull RoundImageView view) {
-                            ImageLoaderHelper.getInstance(view.getContext())
+                            mImageLoaderHelper
                                     .loadImage(view,info.getAvatar_url());
                         }
                     })

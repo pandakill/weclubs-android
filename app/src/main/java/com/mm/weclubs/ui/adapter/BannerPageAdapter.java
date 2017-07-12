@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.mm.weclubs.R;
 import com.mm.weclubs.data.network.pojo.WCBannerInfo;
-import com.mm.weclubs.glide.okhttp3.GlideApp;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,9 +21,12 @@ public class BannerPageAdapter extends PagerAdapter {
 
     private final LinkedList<View> mCacheViews;
 
-    public BannerPageAdapter() {
+    private final ImageLoaderHelper mImageLoaderHelper;
+
+    public BannerPageAdapter(ImageLoaderHelper imageLoaderHelper) {
         mPictureUris = new ArrayList<>();
         mCacheViews = new LinkedList<>();
+        mImageLoaderHelper = imageLoaderHelper;
     }
 
     public void setBanners(List<WCBannerInfo> pictureUris){
@@ -56,11 +59,7 @@ public class BannerPageAdapter extends PagerAdapter {
 
         final String pictureUri = mPictureUris.get(position).getImg_url();
 
-        //ImageLoaderHelper.getInstance(container.getContext())
-        //        .loadImage(imageView,pictureUri);
-
-        //Glide.with(container.getContext()).load(pictureUri).into(imageView);
-        GlideApp.with(container.getContext()).load(pictureUri).into(imageView);
+        mImageLoaderHelper.loadImage(imageView,pictureUri);
         container.addView(view);
         return view;
     }

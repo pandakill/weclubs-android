@@ -14,10 +14,12 @@ import com.mm.weclubs.data.network.pojo.WCMeetingListInfo;
 import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMeetingDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMeetingListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
 import xyz.zpayh.adapter.OnItemClickListener;
 import xyz.zpayh.adapter.OnLoadMoreListener;
 
@@ -36,7 +38,8 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
 
     @Inject
     WCMeetingListContract.Presenter<WCMeetingListContract.View> mMeetingListPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private int mPageNo = 1;
 
     private WCMyClubListInfo mClubListInfo;
@@ -81,7 +84,7 @@ public class WCMeetingListFragment extends BaseLazyFragment implements WCMeeting
     }
 
     private void afterView() {
-        mMeetingListAdapter = new WCMeetingListAdapter();
+        mMeetingListAdapter = new WCMeetingListAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mMeetingListAdapter);
         mMeetingListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

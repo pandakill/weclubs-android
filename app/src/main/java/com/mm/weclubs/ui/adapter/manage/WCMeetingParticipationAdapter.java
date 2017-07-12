@@ -25,6 +25,11 @@ import xyz.zpayh.adapter.ViewCallback;
  */
 public class WCMeetingParticipationAdapter extends BaseAdapter<WCMeetingParticipationInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+    public WCMeetingParticipationAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_meeting_paticipation_item;
@@ -48,8 +53,8 @@ public class WCMeetingParticipationAdapter extends BaseAdapter<WCMeetingParticip
             @Override
             public void callback(@NonNull RoundImageView view) {
                 view.setRectAdius(SizeUtils.dp2px(40));
-                ImageLoaderHelper.getInstance(view.getContext())
-                        .loadImage(view,data.getAvatar_url());
+                mImageLoaderHelper
+                        .loadImage(view,data.getAvatar_url(),SizeUtils.dp2px(40));
             }
         }).setText(R.id.tv_student_name, data.getName())
                 .setText(R.id.tv_student_department,data.getDepartment_name() + "  " + data.getJob_name())

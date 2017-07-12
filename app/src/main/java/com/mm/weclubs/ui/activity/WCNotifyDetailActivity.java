@@ -56,6 +56,9 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyDeta
     @Inject
     WCNotifyDetailContract.Presenter<WCNotifyDetailContract.View> mPresenter;
 
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
+
     private int mCommentPageNo = 1;
 
     @Override
@@ -147,7 +150,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyDeta
     }
 
     private void initBaseInfo() {
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mNotifyListInfo.getSponsor().getSponsor_avatar());
         mTvSponsorName.setText(mNotifyListInfo.getSponsor().getSponsor_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mNotifyListInfo.getCreate_date(), "MMMdd日"));
@@ -177,7 +180,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyDeta
             return;
         }
 
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mNotifyListInfo.getSponsor().getSponsor_avatar());
         mTvSponsorName.setText(mNotifyListInfo.getSponsor().getSponsor_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mNotifyListInfo.getCreate_date(), "MMMdd日"));
@@ -226,7 +229,7 @@ public class WCNotifyDetailActivity extends BaseActivity implements WCNotifyDeta
         TextView createDate = (TextView) itemView.findViewById(R.id.tv_create_date);
         TextView commentContent = (TextView) itemView.findViewById(R.id.tv_comment_content);
 
-        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
+        mImageLoaderHelper.loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
         sponsorName.setText(commentListInfo.getStudent_name());
         createDate.setText(TimeUtils.millis2String(commentListInfo.getCreate_date(), "MM-dd  HH:mm"));
         commentContent.setText(commentListInfo.getContent());

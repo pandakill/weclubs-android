@@ -53,7 +53,10 @@ import com.mm.weclubs.app.notify_list.WCNotifyListPresenter;
 import com.mm.weclubs.app.register.WCRegisterContract;
 import com.mm.weclubs.app.register.WCRegisterPresenter;
 import com.mm.weclubs.di.ActivityContext;
+import com.mm.weclubs.di.ActivityGlide;
 import com.mm.weclubs.di.PerActivity;
+import com.mm.weclubs.glide.okhttp3.GlideApp;
+import com.mm.weclubs.glide.okhttp3.GlideRequests;
 import com.mm.weclubs.util.rx.AppSchedulerProvider;
 import com.mm.weclubs.util.rx.SchedulerProvider;
 
@@ -66,14 +69,23 @@ public class ActivityModule {
 
     private AppCompatActivity mActivity;
 
+    private final GlideRequests mGlideRequests;
+
     public ActivityModule(AppCompatActivity activity) {
         this.mActivity = activity;
+        mGlideRequests = GlideApp.with(activity);
     }
 
     @Provides
     @ActivityContext
     Context provideContext() {
         return mActivity;
+    }
+
+    @Provides
+    @ActivityGlide
+    GlideRequests provideGlideRequests(){
+        return mGlideRequests;
     }
 
     @Provides

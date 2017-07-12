@@ -14,12 +14,14 @@ import com.mm.weclubs.app.club.WCMyClubListContract;
 import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCTODOListActivity;
 import com.mm.weclubs.ui.adapter.WCMyClubListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
 import com.socks.library.KLog;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
 import xyz.zpayh.adapter.OnItemClickListener;
 import xyz.zpayh.adapter.OnLoadMoreListener;
 
@@ -37,7 +39,8 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListC
     }
     @Inject
     WCMyClubListContract.Presenter<WCMyClubListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private SwipeRefreshLayout mRefreshLayout = null;
     private RecyclerView mRecyclerView = null;
     private WCMyClubListAdapter mAdapter = null;
@@ -68,7 +71,7 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListC
         manager.canScrollVertically();
         mRecyclerView.setLayoutManager(manager);
 
-        mAdapter = new WCMyClubListAdapter();
+        mAdapter = new WCMyClubListAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.openAutoLoadMore(true);

@@ -21,6 +21,8 @@ import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
 
+import javax.inject.Inject;
+
 import xyz.zpayh.adapter.OnItemClickListener;
 
 /**
@@ -46,6 +48,9 @@ public class WCToolsFragment extends BaseLazyFragment {
     private WCManageItemAdapter mManageItemAdapter;
     private WCManageItemAdapter mInformationItemAdapter;
 
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
+
     @Override
     protected int getContentViewLayoutID() {
         log = new WCLog(WCToolsFragment.class);
@@ -65,6 +70,9 @@ public class WCToolsFragment extends BaseLazyFragment {
     }
 
     private void initView() {
+
+        getActivityComponent().inject(this);
+
         mImgToolBanner = findViewById(R.id.img_tool_banner, ImageView.class);
         mGvManageList = findViewById(R.id.gv_manage_list, RecyclerView.class);
         mGvInformationList = findViewById(R.id.gv_information_list, RecyclerView.class);
@@ -103,7 +111,7 @@ public class WCToolsFragment extends BaseLazyFragment {
     }
 
     private void afterView() {
-        ImageLoaderHelper.getInstance(mContext.getApplicationContext()).loadImage(mImgToolBanner,
+        mImageLoaderHelper.loadImage(mImgToolBanner,
                 "http://img0.pconline.com.cn/pconline/download/iosdl/1611/A4.jpg");
 
         LayoutParams layoutParams = (LayoutParams) mImgToolBanner.getLayoutParams();

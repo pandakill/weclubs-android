@@ -1,17 +1,6 @@
 package com.mm.weclubs.picasso;
 
-import android.net.Uri;
-
-import com.squareup.picasso.Downloader;
-import com.squareup.picasso.NetworkPolicy;
-
-import java.io.IOException;
-
-import okhttp3.Cache;
-import okhttp3.CacheControl;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
 
 /**
  * 创建人: fangzanpan
@@ -19,7 +8,7 @@ import okhttp3.ResponseBody;
  * 描述:
  */
 
-public class ImageDownLoader implements Downloader {
+public class ImageDownLoader /*implements Downloader*/ {
 
     private OkHttpClient client = null;
 
@@ -27,7 +16,7 @@ public class ImageDownLoader implements Downloader {
         this.client = client;
     }
 
-    @Override
+    /*@Override
     public Response load(Uri uri, int networkPolicy) throws IOException {
 
         CacheControl cacheControl = null;
@@ -76,5 +65,5 @@ public class ImageDownLoader implements Downloader {
             } catch (IOException ignored) {
             }
         }
-    }
+    }*/
 }

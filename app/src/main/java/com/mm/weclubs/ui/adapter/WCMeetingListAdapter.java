@@ -26,6 +26,12 @@ import xyz.zpayh.adapter.ViewCallback;
 
 public class WCMeetingListAdapter extends BaseAdapter<WCMeetingListInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+
+    public WCMeetingListAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_dynamic_meeting_item;
@@ -50,8 +56,8 @@ public class WCMeetingListAdapter extends BaseAdapter<WCMeetingListInfo> {
             @Override
             public void callback(@NonNull RoundImageView view) {
                 view.setRectAdius(SizeUtils.dp2px(32));
-                ImageLoaderHelper.getInstance(view.getContext())
-                        .loadImage(view,data.getSponsor().getSponsor_avatar());
+                mImageLoaderHelper
+                        .loadImage(view,data.getSponsor().getSponsor_avatar(),SizeUtils.dp2px(32));
             }
         }).setText(R.id.tv_sponsor_name,data.getSponsor().getSponsor_name())
                 .setText(R.id.tv_meeting_content,data.getContent())
