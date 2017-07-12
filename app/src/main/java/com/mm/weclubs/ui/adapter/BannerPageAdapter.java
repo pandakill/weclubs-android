@@ -6,8 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.mm.weclubs.R;
+import com.mm.weclubs.data.network.pojo.WCBannerInfo;
+import com.mm.weclubs.glide.okhttp3.GlideApp;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class BannerPageAdapter extends PagerAdapter {
 
-    private final ArrayList<String> mPictureUris;
+    private final ArrayList<WCBannerInfo> mPictureUris;
 
     private final LinkedList<View> mCacheViews;
 
@@ -25,7 +26,7 @@ public class BannerPageAdapter extends PagerAdapter {
         mCacheViews = new LinkedList<>();
     }
 
-    public void setPicture(List<String> pictureUris){
+    public void setBanners(List<WCBannerInfo> pictureUris){
         mPictureUris.clear();
         if (pictureUris != null){
             mPictureUris.addAll(pictureUris);
@@ -33,7 +34,7 @@ public class BannerPageAdapter extends PagerAdapter {
         notifyDataSetChanged();
     }
 
-    public ArrayList<String> getPictureUris() {
+    public ArrayList<WCBannerInfo> getBanners() {
         return mPictureUris;
     }
 
@@ -53,12 +54,13 @@ public class BannerPageAdapter extends PagerAdapter {
             imageView = holder.mImageView;
         }
 
-        final String pictureUri = mPictureUris.get(position);
+        final String pictureUri = mPictureUris.get(position).getImg_url();
 
         //ImageLoaderHelper.getInstance(container.getContext())
         //        .loadImage(imageView,pictureUri);
 
-        Glide.with(container.getContext()).load(pictureUri).into(imageView);
+        //Glide.with(container.getContext()).load(pictureUri).into(imageView);
+        GlideApp.with(container.getContext()).load(pictureUri).into(imageView);
         container.addView(view);
         return view;
     }

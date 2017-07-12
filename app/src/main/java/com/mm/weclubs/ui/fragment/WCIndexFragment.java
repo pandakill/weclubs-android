@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.SizeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.index.WCIndexContract;
+import com.mm.weclubs.data.network.pojo.WCBannerInfo;
+import com.mm.weclubs.data.network.pojo.WCHotClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
 import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
@@ -25,7 +27,6 @@ import com.mm.weclubs.widget.RoundImageView;
 import com.socks.library.KLog;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -148,12 +149,15 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
             public void bind(BaseViewHolder holder, int layoutRes) {
                 if (layoutRes == R.layout.view_index_club_item) {
                     resize(holder);
+                }else if (layoutRes == R.layout.item_index_head){
+                    resizeHotClubs(holder);
                 }
             }
         };
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.addHeadLayout(R.layout.item_index_head);
+        mAdapter.addHeadLayout(R.layout.view_index_all_clubs_title);
 
         pageNo = 1;
 
@@ -174,22 +178,22 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
 
         mPresenter.attachView(this);
-
-        // Test
-        List<String> picture = new ArrayList<>(5);
-        picture.add("https://ws1.sinaimg.cn/large/610dc034ly1fhfmsbxvllj20u00u0q80.jpg");
-        picture.add("https://ws1.sinaimg.cn/large/610dc034ly1fhegpeu0h5j20u011iae5.jpg");
-        picture.add("https://ws1.sinaimg.cn/large/610dc034ly1fhb0t7ob2mj20u011itd9.jpg");
-        picture.add("https://ws1.sinaimg.cn/large/610dc034ly1fh8ox6bmjlj20u00u0mz7.jpg");
-        picture.add("https://ws1.sinaimg.cn/large/610dc034ly1fgi3vd6irmj20u011i439.jpg");
-
-        mPageAdapter.setPicture(picture);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mPresenter.detachView();
+    }
+
+    @Override
+    public void onShow() {
+        mPresenter.startBanner();
+    }
+
+    @Override
+    public void onHide() {
+        mPresenter.stopBanner();
     }
 
     @Override
@@ -245,6 +249,54 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         holder.setClickable(R.id.iv_more_student,true);
     }
 
+    private void resizeHotClubs(BaseViewHolder holder) {
+        final int lW = mWidth - SizeUtils.dp2px(16*2);
+        KLog.d("总宽度:"+mWidth);
+        KLog.d("LinearLayout宽度:"+lW);
+
+        final int imageWidth = lW / 5;
+        final int margin = SizeUtils.dp2px(4);
+        final int ImageMargin = SizeUtils.dp2px(10);
+
+        ViewCallback<LinearLayout> layoutViewCallback = new ViewCallback<LinearLayout>() {
+            @Override
+            public void callback(@NonNull LinearLayout view) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+                params.width = imageWidth - margin;
+                view.setLayoutParams(params);
+            }
+        };
+
+        ViewCallback<RoundImageView> callback = new ViewCallback<RoundImageView>() {
+            @Override
+            public void callback(@NonNull RoundImageView view) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
+                params.width = imageWidth - ImageMargin;
+                params.height = imageWidth - ImageMargin;
+                view.setLayoutParams(params);
+                view.setRectAdius(imageWidth-ImageMargin);
+            }
+        };
+
+        holder.setView(R.id.ll_item_hot_clubs1,layoutViewCallback);
+        holder.setView(R.id.ll_item_hot_clubs2,layoutViewCallback);
+        holder.setView(R.id.ll_item_hot_clubs3,layoutViewCallback);
+        holder.setView(R.id.ll_item_hot_clubs4,layoutViewCallback);
+        holder.setView(R.id.ll_item_hot_clubs5,layoutViewCallback);
+
+        holder.setView(R.id.img_club_logo1,callback);
+        holder.setView(R.id.img_club_logo2,callback);
+        holder.setView(R.id.img_club_logo3,callback);
+        holder.setView(R.id.img_club_logo4,callback);
+        holder.setView(R.id.img_club_logo5,callback);
+
+        holder.setClickable(R.id.ll_item_hot_clubs1,true);
+        holder.setClickable(R.id.ll_item_hot_clubs2,true);
+        holder.setClickable(R.id.ll_item_hot_clubs3,true);
+        holder.setClickable(R.id.ll_item_hot_clubs4,true);
+        holder.setClickable(R.id.ll_item_hot_clubs5,true);
+    }
+
     //======================= MVP View ===================
 
 
@@ -254,8 +306,15 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
     }
 
     @Override
-    public void setHotClubs(@NonNull List<WCIndexClubListInfo> hotClubs) {
+    public void setHotClubs(@NonNull List<WCHotClubListInfo> hotClubs) {
+        KLog.d("热门社区的人数:"+hotClubs.size());
+        mAdapter.setHotClubs(hotClubs);
+    }
 
+    @Override
+    public void setBanner(@NonNull List<WCBannerInfo> banners) {
+        mPageAdapter.setBanners(banners);
+        mPresenter.startBanner();
     }
 
     @Override
@@ -280,5 +339,16 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
     @Override
     public void loadFail() {
         mAdapter.loadFailed();
+    }
+
+    @Override
+    public void autoBanner() {
+        final int currentItem = mViewPager.getCurrentItem();
+        final int count = mPageAdapter.getCount();
+        if (count == 0){
+            return;
+        }
+        final int nextItem = (currentItem+1)%count;
+        mViewPager.setCurrentItem(nextItem,true);
     }
 }

@@ -5,15 +5,20 @@ import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.DataManager;
 import com.mm.weclubs.data.db.entity.User;
 import com.mm.weclubs.data.network.bean.WCIndexClubBean;
+import com.mm.weclubs.data.network.bean.WCIndexDataBean;
 import com.mm.weclubs.util.rx.SchedulerProvider;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
@@ -25,6 +30,10 @@ import io.reactivex.functions.Function;
 
 public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresenter<V>
     implements WCIndexContract.Presenter<V>{
+
+    public static final Long TIME_INTERVAL = 3000L;
+
+    private Disposable mClockDisposable;
 
     @Inject
     public WCIndexPresenter(DataManager dataManager, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable) {
@@ -40,7 +49,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
     @Override
     public void refresh() {
-        getCompositeDisposable().add(
+        getCompositeDisposable().addAll(
                 getDataManager().getUser()
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
@@ -50,7 +59,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
                                 getMvpView().showProgressDialog("加载中...", false);
 
-                                HashMap<String, Object> params = new HashMap<>();
+                                Map<String, Object> params = new HashMap<>();
 
                                 params.put("size", WCConfigConstants.ONE_PAGE_SIZE);
                                 params.put("page_no", 1);
@@ -69,7 +78,30 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                                 getMvpView().setData(bean.getClub_list());
                                 getMvpView().hideProgressDialog();
                             }
-                        },this));
+                        },this),
+                getDataManager().getUser()
+                        .subscribeOn(getSchedulerProvider().io())
+                        .observeOn(getSchedulerProvider().ui())
+                        .flatMap(new Function<User, ObservableSource<WCIndexDataBean>>() {
+                            @Override
+                            public ObservableSource<WCIndexDataBean> apply(@NonNull User user) throws Exception {
+
+                                Map<String, Object> params = new HashMap<>();
+                                params.put("school_id", user.getSchoolId());
+
+                                return getDataManager().getIndexData(params)
+                                        .subscribeOn(getSchedulerProvider().io());
+                            }
+                        }).observeOn(getSchedulerProvider().ui())
+                        .subscribe(new Consumer<WCIndexDataBean>() {
+                            @Override
+                            public void accept(@NonNull WCIndexDataBean bean) throws Exception {
+                                getMvpView().setBanner(bean.getBanner());
+                                getMvpView().setHotClubs(bean.getHot_club());
+                                getMvpView().hideProgressDialog();
+                            }
+                        },this)
+        );
     }
 
     @Override
@@ -106,5 +138,30 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                                 }
                             }
                         }));
+    }
+
+    @Override
+    public void startBanner() {
+        if (mClockDisposable == null || mClockDisposable.isDisposed()){
+            mClockDisposable = Observable.interval(TIME_INTERVAL, TimeUnit.MILLISECONDS)
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<Long>() {
+                        @Override
+                        public void accept(@NonNull Long aLong) throws Exception {
+                            if (isViewAttachView()){
+                                getMvpView().autoBanner();
+                            }
+                        }
+                    },this);
+            getCompositeDisposable().add(mClockDisposable);
+        }
+    }
+
+    @Override
+    public void stopBanner() {
+        if (mClockDisposable != null){
+            getCompositeDisposable().remove(mClockDisposable);
+            mClockDisposable = null;
+        }
     }
 }

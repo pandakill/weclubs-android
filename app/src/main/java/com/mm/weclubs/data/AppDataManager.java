@@ -11,6 +11,7 @@ import com.mm.weclubs.data.network.bean.WCClubMissionBean;
 import com.mm.weclubs.data.network.bean.WCClubNotifyBean;
 import com.mm.weclubs.data.network.bean.WCCommentListBean;
 import com.mm.weclubs.data.network.bean.WCIndexClubBean;
+import com.mm.weclubs.data.network.bean.WCIndexDataBean;
 import com.mm.weclubs.data.network.bean.WCMeetingListBean;
 import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.network.bean.WCMissionListBean;
@@ -343,9 +344,20 @@ public class AppDataManager implements DataManager {
                 });
     }
 
+    @Override
+    public Observable<WCIndexDataBean> getIndexData(@NonNull Map<String, Object> params) {
+        return addUserInfo(params)
+                .flatMap(new Function<Map<String, Object>, ObservableSource<WCIndexDataBean>>() {
+                    @Override
+                    public ObservableSource<WCIndexDataBean> apply(@io.reactivex.annotations.NonNull Map<String, Object> addUserParams) throws Exception {
+                        return mApiHelper.getIndexData(addUserParams);
+                    }
+                });
+    }
+
     /*
-                     * 添加公共参数
-                     */
+                         * 添加公共参数
+                         */
     private Observable<Map<String,Object>> addUserInfo(@NonNull Map<String, Object> params){
         // 查询数据库，找到用户信息
         return Observable.just(params)

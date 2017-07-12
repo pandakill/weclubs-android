@@ -2,6 +2,7 @@ package com.mm.weclubs.retrofit.service;
 
 import com.mm.weclubs.config.WCConfigConstants;
 import com.mm.weclubs.data.network.bean.WCIndexClubBean;
+import com.mm.weclubs.data.network.bean.WCIndexDataBean;
 import com.mm.weclubs.data.network.bean.WCRequestParamBean;
 import com.mm.weclubs.data.network.bean.WCResponseParamBean;
 
@@ -21,9 +22,12 @@ import retrofit2.http.POST;
 
 public interface WCIndexService {
     String GET_INDEX_CLUB = "/service/get_index_club";
+    String GET_INDEX_DATA = "/service/get_index_data";
 
     @POST(GET_INDEX_CLUB)
     @Headers(WCConfigConstants.CONTENT_TYPE_JSON)
     Observable<WCResponseParamBean<WCIndexClubBean>> getIndexClub(@Body WCRequestParamBean requestBean);
 
+    @POST(GET_INDEX_DATA)
+    Observable<WCResponseParamBean<WCIndexDataBean>> getIndexData(@Body WCRequestParamBean requestBean);
 }

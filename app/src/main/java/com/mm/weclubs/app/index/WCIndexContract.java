@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 
 import com.mm.weclubs.app.base.MVPPresenter;
 import com.mm.weclubs.app.base.MVPView;
+import com.mm.weclubs.data.network.pojo.WCBannerInfo;
+import com.mm.weclubs.data.network.pojo.WCHotClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public interface WCIndexContract {
         void refresh();
 
         void getClubListFromServer(final int pageNo);
+
+        void startBanner();
+
+        void stopBanner();
     }
 
     interface View extends MVPView{
@@ -34,12 +40,16 @@ public interface WCIndexContract {
          * 设置热门社团
          * @param hotClubs 热门社团集合，只有前五个
          */
-        void setHotClubs(@NonNull List<WCIndexClubListInfo> hotClubs);
+        void setHotClubs(@NonNull List<WCHotClubListInfo> hotClubs);
+
+        void setBanner(@NonNull List<WCBannerInfo> banners);
 
         void setData(List<WCIndexClubListInfo> list);
 
         void addData(List<WCIndexClubListInfo> list, boolean hasMore);
 
         void loadFail();
+
+        void autoBanner();
     }
 }
