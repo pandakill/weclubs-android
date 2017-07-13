@@ -42,8 +42,12 @@ public class StatusBarUtil {
 
     }
 
-    public static int fixmarginTopSub(Context context,int top){
+    public static int fixMarginTopSub(Context context,int top){
         return top - getStatusBarHeight(context);
+    }
+
+    public static int fixMarginTopAdd(Context context,int top){
+        return top + getStatusBarHeight(context);
     }
 
     public static void fixStatusHeight(@NonNull View view){

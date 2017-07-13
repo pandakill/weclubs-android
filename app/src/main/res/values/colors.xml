@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#20ffffff</color>
     <color name="colorAccent">#888888</color>
 
-    <color name="colorLine">#F3F5F7</color>
+    <color name="colorLine">#f3f5f7</color>
 
     <color name="colorCommonBg">#F3F5F7</color>
 
@@ -20,4 +20,6 @@
     <color name="themeColor.Disable">#b5eafa</color>
     
     <color name="pink">#FE7681</color>
+
+    <color name="line">#F3F3F3</color>
 </resources>

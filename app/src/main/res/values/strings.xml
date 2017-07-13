@@ -27,4 +27,11 @@
     <string name="club_class">兴趣社团</string>
     <string name="club_interest">班级组织</string>
     <string name="club_freedom">私下组织</string>
+
+    <string name="mine_info">我的资料</string>
+    <string name="mine_auth">学生认证</string>
+    <string name="mine_msg">我的消息</string>
+    <string name="mine_setup">设置</string>
+    <string name="mine_feedback">意见反馈</string>
+    <string name="mine_about_us">关于我们</string>
 </resources>

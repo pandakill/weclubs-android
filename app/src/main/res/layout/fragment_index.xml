@@ -23,7 +23,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary">
 
-            <include layout="@layout/view_bannar"
+            <include layout="@layout/view_banner"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"/>
 

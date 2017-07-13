@@ -1,7 +1,8 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
+import android.support.constraint.ConstraintLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,7 +10,9 @@ import com.blankj.utilcode.utils.SizeUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.mine.WCMineContract;
 import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.util.StatusBarUtil;
 import com.mm.weclubs.util.WCLog;
+import com.socks.library.KLog;
 
 import javax.inject.Inject;
 
@@ -27,10 +30,13 @@ public class WCMineFragment extends BaseLazyFragment implements WCMineContract.V
         return fragment;
     }
 
-    private Button mBtnLogout;
-
     private ImageView mAvatarView;
     private TextView mNameView;
+    private TextView mUserInfo;
+
+    private TextView mAuthInfo;
+
+    private ImageView mQRCodeView;
 
     @Inject
     WCMineContract.Presenter<WCMineContract.View> mPresenter;
@@ -54,15 +60,7 @@ public class WCMineFragment extends BaseLazyFragment implements WCMineContract.V
 
         initViews();
         initEvents();
-        /*mBtnLogout = findViewById(R.id.btn_logout, Button.class);
-        mBtnLogout.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //退出登录
-                //WCUserDataCenter.getInstance(mContext.getApplicationContext()).deleteUserInfo();
-                backToLoginActivity();
-            }
-        });*/
+
         mPresenter.attachView(this);
     }
 
@@ -79,8 +77,21 @@ public class WCMineFragment extends BaseLazyFragment implements WCMineContract.V
     private void initViews() {
         getActivityComponent().inject(this);
 
+        mQRCodeView = findView(R.id.img_qrcode);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //修复状态栏高度
+
+            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) mQRCodeView.getLayoutParams();
+            KLog.d("修复前:"+params.topMargin);
+            params.topMargin = StatusBarUtil.fixMarginTopAdd(getContext(),params.topMargin);
+            KLog.d("修复后:"+params.topMargin);
+            mQRCodeView.setLayoutParams(params);
+        }
+
         mAvatarView = findView(R.id.img_avatar);
         mNameView = findView(R.id.tv_name);
+        mUserInfo = findView(R.id.tv_info);
+        mAuthInfo = findView(R.id.img_mine_certification_info);
     }
 
     @Override
@@ -110,5 +121,15 @@ public class WCMineFragment extends BaseLazyFragment implements WCMineContract.V
     @Override
     public void setName(String name) {
         mNameView.setText(name);
+    }
+
+    @Override
+    public void setInfo(String info, int gender) {
+        mUserInfo.setText(info);
+    }
+
+    @Override
+    public void setAuth(String auth) {
+        mAuthInfo.setText(auth);
     }
 }

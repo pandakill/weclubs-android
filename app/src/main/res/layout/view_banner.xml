@@ -18,19 +18,17 @@
         android:background="@drawable/fg_banner"
         android:layout_height="120dp"/>
 
-    <FrameLayout
-        android:id="@+id/cl_hot_clubs"
+    <ImageView
+        android:layout_gravity="bottom"
         android:layout_width="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:layout_height="20dp"
-        android:layout_marginTop="220dp"
-        android:background="@drawable/bg_index_head">
-    </FrameLayout>
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:srcCompat="@mipmap/image_arc"/>
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
         android:layout_gravity="bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="16dp"
         app:radius="4dp"/>
 </FrameLayout>

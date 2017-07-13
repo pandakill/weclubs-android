@@ -41,6 +41,22 @@ public class WCMinePresenter<V extends WCMineContract.View> extends BasePresente
                     public void accept(@NonNull User user) throws Exception {
                         getMvpView().setAvatar(user.getAvatarUrl());
                         getMvpView().setName(user.getNickName());
+                        getMvpView().setInfo(user.getGraduateYear()+user.getClassName(),user.getGender());
+                        switch (user.getIsAuth()){
+                            case User.AUTH_NO:
+                                getMvpView().setAuth("未认证");
+                                break;
+                            case User.AUTH_ING:
+                                getMvpView().setAuth("认证中");
+                                break;
+                            case User.AUTH_SUCCESS:
+                                getMvpView().setAuth("认证通过");
+                                break;
+                            case User.AUTH_FAILD:
+                                getMvpView().setAuth("认证失败");
+                                break;
+                            default:break;
+                        }
                     }
                 },this)
         );
