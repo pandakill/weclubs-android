@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -35,6 +36,20 @@ public class StatusBarUtil {
      */
     public static void setColor(Activity activity, @ColorInt int color) {
         setColor(activity, color, DEFAULT_STATUS_BAR_ALPHA);
+    }
+
+    public static void fixPaddingTop(){
+
+    }
+
+    public static int fixmarginTopSub(Context context,int top){
+        return top - getStatusBarHeight(context);
+    }
+
+    public static void fixStatusHeight(@NonNull View view){
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = getStatusBarHeight(view.getContext());
+        view.setLayoutParams(params);
     }
 
     /**

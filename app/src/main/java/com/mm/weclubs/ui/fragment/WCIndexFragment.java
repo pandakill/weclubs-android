@@ -14,11 +14,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.SizeUtils;
+import com.blankj.utilcode.utils.ToastUtils;
 import com.mm.weclubs.R;
 import com.mm.weclubs.app.index.WCIndexContract;
 import com.mm.weclubs.data.network.pojo.WCBannerInfo;
 import com.mm.weclubs.data.network.pojo.WCHotClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
+import com.mm.weclubs.data.network.pojo.WCStudentInfo;
 import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
 import com.mm.weclubs.ui.adapter.WCClubsListAdapter;
@@ -95,6 +97,120 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         log.d("首页 initViewsAndEvents");
 
         initView();
+        initEvent();
+    }
+
+    private void initEvent() {
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                pageNo=1;
+                mPresenter.refresh();
+            }
+        });
+        mAdapter.openAutoLoadMore(true);
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull View view, int adapterPosition) {
+                final int id = view.getId();
+                WCIndexClubListInfo club = mAdapter.getData(adapterPosition);
+                switch (id){
+                    case R.id.iv_student_1://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(0);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_student_2://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(1);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_student_3://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(2);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_student_4://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(3);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_student_5://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(4);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_student_6://跳转到个人详情
+                        if (club != null){
+                            WCStudentInfo student = club.getStudent().get(5);
+                            ToastUtils.showLongToast(student.getStudent_name());
+                        }
+                        break;
+                    case R.id.iv_more_student://跳转到社团成员
+                        if (club != null) {
+                            ToastUtils.showLongToast("跳转到" + club.getClub_name() + "的社团成员列表");
+                        }
+                        break;
+                    case R.id.ll_item_hot_clubs1://跳转到社团详情
+                        WCHotClubListInfo hotClub1 = mAdapter.getHotClub(0);
+                        if (hotClub1 != null){
+                            ToastUtils.showLongToast(hotClub1.getClub_name());
+                        }
+                        break;
+                    case R.id.ll_item_hot_clubs2://跳转到社团详情
+                        WCHotClubListInfo hotClub2 = mAdapter.getHotClub(1);
+                        if (hotClub2 != null){
+                            ToastUtils.showLongToast(hotClub2.getClub_name());
+                        }
+                        break;
+                    case R.id.ll_item_hot_clubs3://跳转到社团详情
+                        WCHotClubListInfo hotClub3 = mAdapter.getHotClub(2);
+                        if (hotClub3 != null){
+                            ToastUtils.showLongToast(hotClub3.getClub_name());
+                        }
+                        break;
+                    case R.id.ll_item_hot_clubs4://跳转到社团详情
+                        WCHotClubListInfo hotClub4 = mAdapter.getHotClub(3);
+                        if (hotClub4 != null){
+                            ToastUtils.showLongToast(hotClub4.getClub_name());
+                        }
+                        break;
+                    case R.id.ll_item_hot_clubs5://跳转到社团详情
+                        WCHotClubListInfo hotClub5 = mAdapter.getHotClub(4);
+                        if (hotClub5 != null){
+                            ToastUtils.showLongToast(hotClub5.getClub_name());
+                        }
+                        break;
+                    case R.id.item_club://跳转到社团详情
+                        if (club != null){
+                            ToastUtils.showLongToast(club.getClub_name());
+                        }
+                    default:break;
+                }
+            }
+        });
+
+        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                mPresenter.getClubListFromServer(pageNo);
+            }
+        });
+
+        mPageAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WCBannerInfo info = mPageAdapter.getBanner(mViewPager.getCurrentItem());
+                if (info == null) return;
+
+                ToastUtils.showLongToast(info.getTitle());
+            }
+        });
     }
 
     private void initView() {
@@ -132,17 +248,7 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         });
 
         mRefresh = findViewById(R.id.swipeRefreshLayout,SwipeRefreshLayout.class);
-
-        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                pageNo=1;
-                mPresenter.refresh();
-            }
-        });
-
         attachRefreshLayout(mRefresh,mRecyclerView);
-
         mRecyclerView = findViewById(R.id.recycler_view,RecyclerView.class);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new WCClubsListAdapter(mImageLoaderHelper) {
@@ -150,6 +256,7 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
             public void bind(BaseViewHolder holder, int layoutRes) {
                 if (layoutRes == R.layout.view_index_club_item) {
                     resize(holder);
+                    holder.setCheckable(R.id.item_club,true);
                 }else if (layoutRes == R.layout.item_index_head){
                     resizeHotClubs(holder);
                 }
@@ -161,23 +268,6 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         mAdapter.addHeadLayout(R.layout.view_index_all_clubs_title);
 
         pageNo = 1;
-
-        mAdapter.openAutoLoadMore(true);
-        mAdapter.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(@NonNull View view, int adapterPosition) {
-
-            }
-        });
-
-        mAdapter.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                mPresenter.getClubListFromServer(pageNo);
-            }
-        });
-
-
         mPresenter.attachView(this);
     }
 

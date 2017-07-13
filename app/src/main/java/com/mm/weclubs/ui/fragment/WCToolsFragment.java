@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import com.mm.weclubs.ui.activity.manage.WCMissionManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCNotifyManageListActivity;
 import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
 import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.util.StatusBarUtil;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
@@ -72,6 +74,11 @@ public class WCToolsFragment extends BaseLazyFragment {
     private void initView() {
 
         getActivityComponent().inject(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //修复状态栏高度
+            StatusBarUtil.fixStatusHeight(findView(R.id.fake_status_bar));
+        }
 
         mImgToolBanner = findViewById(R.id.img_tool_banner, ImageView.class);
         mGvManageList = findViewById(R.id.gv_manage_list, RecyclerView.class);

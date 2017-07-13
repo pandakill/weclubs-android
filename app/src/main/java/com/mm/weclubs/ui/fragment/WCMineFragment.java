@@ -1,12 +1,17 @@
 package com.mm.weclubs.ui.fragment;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.blankj.utilcode.utils.SizeUtils;
 import com.mm.weclubs.R;
+import com.mm.weclubs.app.mine.WCMineContract;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
+
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -14,7 +19,7 @@ import com.mm.weclubs.util.WCLog;
  * 描述:  首页动态的fragment
  */
 
-public class WCMineFragment extends BaseLazyFragment {
+public class WCMineFragment extends BaseLazyFragment implements WCMineContract.View{
     public static final String TAG = "WCMineFragment";
 
     public static WCMineFragment newInstance(){
@@ -23,6 +28,14 @@ public class WCMineFragment extends BaseLazyFragment {
     }
 
     private Button mBtnLogout;
+
+    private ImageView mAvatarView;
+    private TextView mNameView;
+
+    @Inject
+    WCMineContract.Presenter<WCMineContract.View> mPresenter;
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -39,7 +52,9 @@ public class WCMineFragment extends BaseLazyFragment {
     protected void initViewsAndEvents() {
         log.d("我的 initViewsAndEvents");
 
-        mBtnLogout = findViewById(R.id.btn_logout, Button.class);
+        initViews();
+        initEvents();
+        /*mBtnLogout = findViewById(R.id.btn_logout, Button.class);
         mBtnLogout.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,7 +62,25 @@ public class WCMineFragment extends BaseLazyFragment {
                 //WCUserDataCenter.getInstance(mContext.getApplicationContext()).deleteUserInfo();
                 backToLoginActivity();
             }
-        });
+        });*/
+        mPresenter.attachView(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mPresenter.detachView();
+    }
+
+    private void initEvents() {
+
+    }
+
+    private void initViews() {
+        getActivityComponent().inject(this);
+
+        mAvatarView = findView(R.id.img_avatar);
+        mNameView = findView(R.id.tv_name);
     }
 
     @Override
@@ -65,5 +98,17 @@ public class WCMineFragment extends BaseLazyFragment {
     @Override
     protected void onUserInvisible() {
 
+    }
+
+    // =================== MVPView ===================
+
+    @Override
+    public void setAvatar(String path) {
+        mImageLoaderHelper.loadCircleImage(mAvatarView,path, SizeUtils.dp2px(76));
+    }
+
+    @Override
+    public void setName(String name) {
+        mNameView.setText(name);
     }
 }

@@ -3,6 +3,7 @@ package com.mm.weclubs.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -86,6 +87,11 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     }
 
     protected <T> T findViewById(int viewId, Class<T> targetClass) {
+        return (T) mRootView.findViewById(viewId);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends View> T findView(@IdRes int viewId){
         return (T) mRootView.findViewById(viewId);
     }
 

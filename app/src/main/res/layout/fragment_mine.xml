@@ -45,47 +45,55 @@
                 android:adjustViewBounds="true"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="end"
-                app:srcCompat="@mipmap/navitem_scan_white"/>
+                app:srcCompat="@mipmap/nav_item_ic_qrcode"/>
         </android.support.v7.widget.Toolbar>
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/img_avatar"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             app:srcCompat="@mipmap/weclubs_logo"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/toolbar"
+            android:layout_marginTop="@dimen/avatar_top"
+            tools:layout_marginTop="96dp"/>
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:text="欧阳娜娜"
+            android:textColor="@color/colorCommonText"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_avatar" />
+
+        <TextView
+            android:id="@+id/tv_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:background="@drawable/bg_name"
+            android:text="12级软件工程"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="11sp"
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name" />
     </android.support.constraint.ConstraintLayout>
-
-
-    <cn.bingoogolapple.titlebar.BGATitleBar
-        style="@style/TitleBar"
-        android:fitsSystemWindows="true"
-        app:bgatitlebar_titleText="@string/title_mine"
-        app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
-        app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"
-        app:bgatitlebar_isTitleTextBold="@bool/title_bar_text_bold"
-        android:background="@color/title_bar_bg"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorLine"/>
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="退出登录"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

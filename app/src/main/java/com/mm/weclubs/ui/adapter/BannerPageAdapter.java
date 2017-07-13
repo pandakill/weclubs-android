@@ -1,5 +1,7 @@
 package com.mm.weclubs.ui.adapter;
 
+import android.support.annotation.CheckResult;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +41,15 @@ public class BannerPageAdapter extends PagerAdapter {
 
     public ArrayList<WCBannerInfo> getBanners() {
         return mPictureUris;
+    }
+
+    @CheckResult
+    @Nullable
+    public WCBannerInfo getBanner(int position){
+        if (position < 0 || position >= mPictureUris.size()){
+            return null;
+        }
+        return mPictureUris.get(position);
     }
 
     @Override

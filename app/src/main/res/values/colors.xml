@@ -18,4 +18,6 @@
     <color name="themeColor">#2FCAFB</color>
     <color name="themeColor.Dark">#09c2fc</color>
     <color name="themeColor.Disable">#b5eafa</color>
+    
+    <color name="pink">#FE7681</color>
 </resources>

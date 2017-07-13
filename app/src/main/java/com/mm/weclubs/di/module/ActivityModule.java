@@ -42,6 +42,8 @@ import com.mm.weclubs.app.meeting_detail.WCMeetingDetailContract;
 import com.mm.weclubs.app.meeting_detail.WCMeetingDetailPresenter;
 import com.mm.weclubs.app.meeting_list.WCMeetingListContract;
 import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
+import com.mm.weclubs.app.mine.WCMineContract;
+import com.mm.weclubs.app.mine.WCMinePresenter;
 import com.mm.weclubs.app.mission_detail.WCMissionDetailContract;
 import com.mm.weclubs.app.mission_detail.WCMissionDetailPresenter;
 import com.mm.weclubs.app.mission_list.WCMissionListContract;
@@ -202,6 +204,12 @@ public class ActivityModule {
     @Provides
     @PerActivity
     WCIndexContract.Presenter<WCIndexContract.View> provideWCIndexPresenter(WCIndexPresenter<WCIndexContract.View> presenter){
+        return presenter;
+    }
+
+    @Provides
+    @PerActivity
+    WCMineContract.Presenter<WCMineContract.View> provideWWCMinePresenter(WCMinePresenter<WCMineContract.View> presenter){
         return presenter;
     }
 }

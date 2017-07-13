@@ -10,4 +10,6 @@
     <dimen name="setting_height">48dp</dimen>   <!---->
 
     <dimen name="statusbar_view_height">0dp</dimen>
+    
+    <dimen name="avatar_top">116dp</dimen>
 </resources>

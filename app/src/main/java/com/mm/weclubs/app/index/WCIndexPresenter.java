@@ -31,7 +31,7 @@ import io.reactivex.functions.Function;
 public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresenter<V>
     implements WCIndexContract.Presenter<V>{
 
-    public static final Long TIME_INTERVAL = 3000L;
+    public static final Long TIME_INTERVAL = 4500L;
 
     private Disposable mClockDisposable;
 

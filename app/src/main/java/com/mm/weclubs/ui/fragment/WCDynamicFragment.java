@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCTODOListActivity;
 import com.mm.weclubs.ui.adapter.WCMyClubListAdapter;
 import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.util.StatusBarUtil;
 import com.mm.weclubs.util.WCLog;
 import com.socks.library.KLog;
 
@@ -62,6 +64,11 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListC
     protected void initViewsAndEvents() {
         getActivityComponent().inject(this);
         mPresenter.attachView(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //修复状态栏高度
+            StatusBarUtil.fixStatusHeight(findView(R.id.fake_status_bar));
+        }
 
         log.d("动态 initViewsAndEvents");
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
