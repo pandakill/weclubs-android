@@ -15,6 +15,22 @@
         <item name="android:statusBarColor">#000000</item>
     </style>
 
+    <style name="TitleBar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+
+    <!-- Status Bar 的样式 START-->
+    <style name="StatusBar">
+        <item name="android:id">@id/fake_status_bar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:layout_height">@dimen/statusbar_view_height</item>
+        <item name="android:elevation">4dp</item>
+    </style>
+    <!-- Status Bar 的样式 END-->
+
     <!-- 登录页相关 START -->
     <style name="LoginButton">
         <item name="android:layout_width">match_parent</item>

@@ -50,9 +50,18 @@
 
     <style name="TitleBar">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
     </style>
     <!-- 标题栏的样式 END-->
+
+    <!-- Status Bar 的样式 START-->
+    <style name="StatusBar">
+        <item name="android:id">@id/fake_status_bar</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:layout_height">@dimen/statusbar_view_height</item>
+    </style>
+    <!-- Status Bar 的样式 END-->
 
     <!-- 登录页相关 START -->
     <string name="hint_mobile">请输入手机号</string>
