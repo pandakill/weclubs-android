@@ -7,6 +7,7 @@ import com.mm.weclubs.data.db.entity.User;
 import com.mm.weclubs.data.network.bean.WCIndexClubBean;
 import com.mm.weclubs.data.network.bean.WCIndexDataBean;
 import com.mm.weclubs.util.rx.SchedulerProvider;
+import com.socks.library.KLog;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -163,5 +164,77 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
             getCompositeDisposable().remove(mClockDisposable);
             mClockDisposable = null;
         }
+    }
+
+    @Override
+    public void scan() {
+        getCompositeDisposable().add(getDataManager().getUser()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(@NonNull User user) throws Exception {
+                        if (user.getIsAuth() == User.AUTH_NO){
+                            KLog.d("还未认证");
+                            getMvpView().showAuthDialog();
+                        }else{
+                            getMvpView().openScanActivity();
+                        }
+                    }
+                },this));
+    }
+
+    @Override
+    public void search() {
+        getCompositeDisposable().add(getDataManager().getUser()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(@NonNull User user) throws Exception {
+                        if (user.getIsAuth() == User.AUTH_NO){
+                            KLog.d("还未认证");
+                            getMvpView().showAuthDialog();
+                        }else{
+                            getMvpView().openSearchActivity();
+                        }
+                    }
+                },this));
+    }
+
+    @Override
+    public void club(final long club_id) {
+        getCompositeDisposable().add(getDataManager().getUser()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(@NonNull User user) throws Exception {
+                        if (user.getIsAuth() == User.AUTH_NO){
+                            KLog.d("还未认证");
+                            getMvpView().showAuthDialog();
+                        }else{
+                            getMvpView().openClubDetailActivity(club_id);
+                        }
+                    }
+                },this));
+    }
+
+    @Override
+    public void moreStudent(final long club_id) {
+        getCompositeDisposable().add(getDataManager().getUser()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(@NonNull User user) throws Exception {
+                        if (user.getIsAuth() == User.AUTH_NO){
+                            KLog.d("还未认证");
+                            getMvpView().showAuthDialog();
+                        }else{
+                            getMvpView().openStudentListActivity(club_id);
+                        }
+                    }
+                },this));
     }
 }

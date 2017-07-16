@@ -126,4 +126,10 @@
     <string name="title_mine">我的</string>
     <!-- 分tab-我的 END -->
 
+    <style name="CustomDialog" parent="Theme.AppCompat.Dialog">
+        <!--设置背景没有半透明蒙版-->
+        <!--<item name="android:backgroundDimEnabled">false</item>-->
+        <!--设置内容背景透明-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 </resources>

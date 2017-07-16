@@ -20,12 +20,12 @@ import com.mm.weclubs.app.index.WCIndexContract;
 import com.mm.weclubs.data.network.pojo.WCBannerInfo;
 import com.mm.weclubs.data.network.pojo.WCHotClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
-import com.mm.weclubs.data.network.pojo.WCStudentInfo;
 import com.mm.weclubs.di.DeviceWidth;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
 import com.mm.weclubs.ui.adapter.WCClubsListAdapter;
 import com.mm.weclubs.util.ImageLoaderHelper;
 import com.mm.weclubs.util.WCLog;
+import com.mm.weclubs.widget.AuthDialog;
 import com.mm.weclubs.widget.RoundImageView;
 import com.socks.library.KLog;
 import com.viewpagerindicator.CirclePageIndicator;
@@ -69,6 +69,8 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
     private TextView mSchoolName;
     private ImageView mScanView;
     private ImageView mSearchView;
+
+    private AuthDialog mAuthDialog;
 
     private int pageNo = 1;
 
@@ -115,80 +117,57 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
                 final int id = view.getId();
                 WCIndexClubListInfo club = mAdapter.getData(adapterPosition);
                 switch (id){
-                    case R.id.iv_student_1://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(0);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
-                    case R.id.iv_student_2://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(1);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
-                    case R.id.iv_student_3://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(2);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
-                    case R.id.iv_student_4://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(3);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
-                    case R.id.iv_student_5://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(4);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
-                    case R.id.iv_student_6://跳转到个人详情
-                        if (club != null){
-                            WCStudentInfo student = club.getStudent().get(5);
-                            ToastUtils.showLongToast(student.getStudent_name());
-                        }
-                        break;
+                    case R.id.iv_student_1://跳转到社团成员
+                    case R.id.iv_student_2://跳转到社团成员
+                    case R.id.iv_student_3://跳转到社团成员
+                    case R.id.iv_student_4://跳转到社团成员
+                    case R.id.iv_student_5://跳转到社团成员
+                    case R.id.iv_student_6://跳转到社团成员
                     case R.id.iv_more_student://跳转到社团成员
                         if (club != null) {
-                            ToastUtils.showLongToast("跳转到" + club.getClub_name() + "的社团成员列表");
+                            KLog.d("跳转到" + club.getClub_name() + "的社团成员列表");
+                            mPresenter.moreStudent(club.getClub_id());
                         }
                         break;
                     case R.id.ll_item_hot_clubs1://跳转到社团详情
                         WCHotClubListInfo hotClub1 = mAdapter.getHotClub(0);
                         if (hotClub1 != null){
-                            ToastUtils.showLongToast(hotClub1.getClub_name());
+                            KLog.d("跳转到" + hotClub1.getClub_name() + "的社团成员列表");
+                            mPresenter.club(hotClub1.getClub_id());
                         }
                         break;
                     case R.id.ll_item_hot_clubs2://跳转到社团详情
                         WCHotClubListInfo hotClub2 = mAdapter.getHotClub(1);
                         if (hotClub2 != null){
-                            ToastUtils.showLongToast(hotClub2.getClub_name());
+                            KLog.d("跳转到" + hotClub2.getClub_name() + "的社团成员列表");
+                            mPresenter.club(hotClub2.getClub_id());
                         }
                         break;
                     case R.id.ll_item_hot_clubs3://跳转到社团详情
                         WCHotClubListInfo hotClub3 = mAdapter.getHotClub(2);
                         if (hotClub3 != null){
-                            ToastUtils.showLongToast(hotClub3.getClub_name());
+                            KLog.d("跳转到" + hotClub3.getClub_name() + "的社团成员列表");
+                            mPresenter.club(hotClub3.getClub_id());
                         }
                         break;
                     case R.id.ll_item_hot_clubs4://跳转到社团详情
                         WCHotClubListInfo hotClub4 = mAdapter.getHotClub(3);
                         if (hotClub4 != null){
-                            ToastUtils.showLongToast(hotClub4.getClub_name());
+                            KLog.d("跳转到" + hotClub4.getClub_name() + "的社团成员列表");
+                            mPresenter.club(hotClub4.getClub_id());
                         }
                         break;
                     case R.id.ll_item_hot_clubs5://跳转到社团详情
                         WCHotClubListInfo hotClub5 = mAdapter.getHotClub(4);
                         if (hotClub5 != null){
-                            ToastUtils.showLongToast(hotClub5.getClub_name());
+                            KLog.d("跳转到" + hotClub5.getClub_name() + "的社团成员列表");
+                            mPresenter.club(hotClub5.getClub_id());
                         }
                         break;
                     case R.id.item_club://跳转到社团详情
                         if (club != null){
-                            ToastUtils.showLongToast(club.getClub_name());
+                            KLog.d("跳转到" + club.getClub_name() + "的社团成员列表");
+                            mPresenter.club(club.getClub_id());
                         }
                     default:break;
                 }
@@ -209,6 +188,20 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
                 if (info == null) return;
 
                 ToastUtils.showLongToast(info.getTitle());
+            }
+        });
+
+        mScanView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.scan();
+            }
+        });
+
+        mSearchView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.search();
             }
         });
     }
@@ -441,5 +434,45 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
         }
         final int nextItem = (currentItem+1)%count;
         mViewPager.setCurrentItem(nextItem,true);
+    }
+
+    @Override
+    public void showAuthDialog() {
+        if (mAuthDialog == null) {
+            mAuthDialog = new AuthDialog();
+            mAuthDialog.setCancelable(false);
+            mAuthDialog.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openAuthActivity();
+                    mAuthDialog.dismissAllowingStateLoss();
+                }
+            });
+        }
+        mAuthDialog.show(getActivity().getSupportFragmentManager(),AuthDialog.TAG);
+    }
+
+    @Override
+    public void openScanActivity() {
+        ToastUtils.showLongToast("打开搜索页面");
+    }
+
+    @Override
+    public void openSearchActivity() {
+        ToastUtils.showLongToast("打开扫一扫页面");
+    }
+
+    @Override
+    public void openClubDetailActivity(long club_id) {
+        ToastUtils.showLongToast("打开社团详情页面");
+    }
+
+    @Override
+    public void openStudentListActivity(long club_id) {
+        ToastUtils.showLongToast("打开社团成员页面");
+    }
+
+    private void openAuthActivity(){
+        ToastUtils.showLongToast("跳转到认证界面");
     }
 }

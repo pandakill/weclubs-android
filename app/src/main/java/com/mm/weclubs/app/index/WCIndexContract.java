@@ -26,6 +26,26 @@ public interface WCIndexContract {
         void startBanner();
 
         void stopBanner();
+
+        /**
+         * 点击 "扫一扫" 后跳转到 <二维码扫描>
+         */
+        void scan();
+
+        /**
+         * 点击 "搜索" 后, 跳转到 <首页搜索>
+         */
+        void search();
+
+        /**
+         * 点击某一个社团后, 跳转到 <社团详情>
+         */
+        void club(long club_id);
+
+        /**
+         * 点击社团成员头像区域，跳转到<社团成员>
+         */
+        void moreStudent(long club_id);
     }
 
     interface View extends MVPView{
@@ -51,5 +71,15 @@ public interface WCIndexContract {
         void loadFail();
 
         void autoBanner();
+
+        void showAuthDialog();
+
+        void openScanActivity();
+
+        void openSearchActivity();
+
+        void openClubDetailActivity(long club_id);
+
+        void openStudentListActivity(long club_id);
     }
 }
