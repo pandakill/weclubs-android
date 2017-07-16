@@ -13,6 +13,10 @@ import android.arch.persistence.room.PrimaryKey;
  */
 @Entity
 public class User {
+    public static final int AUTH_NO = 0;
+    public static final int AUTH_ING = 2;
+    public static final int AUTH_SUCCESS = 1;
+    public static final int AUTH_FAILD = 3;
     /**
      * graduate_year : 0级
      * avatar_url : http://weclubs.net/avatar/qx2jkloew8.jpeg

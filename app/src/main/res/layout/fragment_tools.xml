@@ -5,8 +5,12 @@
     style="@style/CommonLayout"
     android:background="@color/colorCommonBg">
 
+    <View
+        style="@style/StatusBar"/>
+
     <cn.bingoogolapple.titlebar.BGATitleBar
         style="@style/TitleBar"
+        android:fitsSystemWindows="true"
         app:bgatitlebar_titleText="@string/title_tools"
         app:bgatitlebar_titleTextSize="@dimen/title_bar_title_text_size"
         app:bgatitlebar_titleTextColor="@color/title_bar_title_text_color"

@@ -1,16 +1,17 @@
 package com.mm.weclubs.util;
 
-import android.content.Context;
+import android.graphics.Color;
 import android.widget.ImageView;
 
+import com.blankj.utilcode.utils.SizeUtils;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.mm.weclubs.R;
-import com.mm.weclubs.config.WCConfigConstants;
-import com.mm.weclubs.picasso.CacheInterceptor;
-import com.mm.weclubs.picasso.ImageDownLoader;
-import com.squareup.picasso.LruCache;
-import com.squareup.picasso.Picasso;
+import com.mm.weclubs.di.ActivityGlide;
+import com.mm.weclubs.glide.okhttp3.GlideRequests;
+import com.mm.weclubs.glide.transform.CircleBorderTransform;
 
-import okhttp3.OkHttpClient;
+import javax.inject.Inject;
 
 /**
  * 创建人: fangzanpan
@@ -19,62 +20,55 @@ import okhttp3.OkHttpClient;
  */
 
 public class ImageLoaderHelper {
-    private static final int MAX_HEAP_SIZE = (int) Runtime.getRuntime().maxMemory();
 
-    private static final int MAX_DISK_CACHE_SIZE = 40 * 1024 * 1024;
-    private static final int MAX_MEMORY_CACHE_SIZE = MAX_HEAP_SIZE / 4;
+    /**
+     * 渐变动画
+     */
+    private final static DrawableTransitionOptions CROSS_FADE = new DrawableTransitionOptions().crossFade(500);
+    private final static CircleBorderTransform CIRCLE_BORDER = new CircleBorderTransform(Color.WHITE, SizeUtils.dp2px(1));
 
-    private static final Object monitor = new Object();
-    private static Picasso sPicasso;
+    private GlideRequests mGlideRequests;
 
-    private static ImageLoaderHelper mInstance;
-
-    private WCLog log = null;
-
-    private ImageLoaderHelper(Context context) {
-        if (sPicasso == null) {
-            sPicasso = new Picasso.Builder(context)
-                    .downloader(new ImageDownLoader(getProgressBarClient(context)))
-                    .memoryCache(new LruCache(MAX_MEMORY_CACHE_SIZE))
-                    .build();
-
-            sPicasso.setLoggingEnabled(WCConfigConstants.DEV);
-            log = new WCLog(ImageLoaderHelper.class);
-        }
-    }
-
-    private OkHttpClient getProgressBarClient(Context context) {
-        OkHttpClient client = new OkHttpClient();
-        return client.newBuilder()
-                .addInterceptor(new CacheInterceptor(context))
-                .addNetworkInterceptor(new CacheInterceptor(context))
-                .build();
-    }
-
-    public static ImageLoaderHelper getInstance(Context context) {
-        synchronized (monitor) {
-            if (mInstance == null) {
-                mInstance = new ImageLoaderHelper(context);
-            }
-
-            return mInstance;
-        }
+    @Inject
+    public ImageLoaderHelper(@ActivityGlide GlideRequests glideRequests) {
+        mGlideRequests = glideRequests;
     }
 
     public void loadImage(ImageView imageView, String url) {
-        try {
-            sPicasso
-                    .load(url)
-                    .placeholder(R.mipmap.login_logo_weclubs)
-                    .error(R.mipmap.login_logo_weclubs)
-                    .fit()
-                    .into(imageView);
-        } catch (IllegalArgumentException e) {
-            log.e("loadImage：" + e.getMessage());
-            sPicasso
-                    .load(R.mipmap.login_logo_weclubs)
-                    .fit()
-                    .into(imageView);
-        }
+        mGlideRequests.load(url)
+                .placeholder(R.mipmap.login_logo_weclubs)
+                .error(R.mipmap.login_logo_weclubs)
+                .transition(CROSS_FADE)
+                .into(imageView);
+    }
+
+    public void loadImage(ImageView imageView, String url, int size){
+        mGlideRequests.load(url)
+                .placeholder(R.mipmap.login_logo_weclubs)
+                .error(R.mipmap.login_logo_weclubs)
+                .transition(CROSS_FADE)
+                .apply(RequestOptions.overrideOf(size))
+                .into(imageView);
+    }
+
+    public void loadCircleImage(ImageView imageView, String url){
+        mGlideRequests.load(url)
+                .placeholder(R.mipmap.login_logo_weclubs)
+                .error(R.mipmap.login_logo_weclubs)
+                //.circleCrop()
+                .transition(CROSS_FADE)
+                .transform(CIRCLE_BORDER)
+                .into(imageView);
+    }
+
+    public void loadCircleImage(ImageView imageView, String url, int size){
+        mGlideRequests.load(url)
+                .placeholder(R.mipmap.login_logo_weclubs)
+                .error(R.mipmap.login_logo_weclubs)
+                //.circleCrop()
+                .transition(CROSS_FADE)
+                .transform(CIRCLE_BORDER)
+                .apply(RequestOptions.overrideOf(size))
+                .into(imageView);
     }
 }

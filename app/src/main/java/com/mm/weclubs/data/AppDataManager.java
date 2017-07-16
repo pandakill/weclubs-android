@@ -5,10 +5,13 @@ import android.support.annotation.NonNull;
 import com.mm.weclubs.data.db.DbHelper;
 import com.mm.weclubs.data.db.entity.User;
 import com.mm.weclubs.data.network.ApiHelper;
+import com.mm.weclubs.data.network.NetError;
 import com.mm.weclubs.data.network.bean.WCClubMeetingBean;
 import com.mm.weclubs.data.network.bean.WCClubMissionBean;
 import com.mm.weclubs.data.network.bean.WCClubNotifyBean;
 import com.mm.weclubs.data.network.bean.WCCommentListBean;
+import com.mm.weclubs.data.network.bean.WCIndexClubBean;
+import com.mm.weclubs.data.network.bean.WCIndexDataBean;
 import com.mm.weclubs.data.network.bean.WCMeetingListBean;
 import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.data.network.bean.WCMissionListBean;
@@ -22,6 +25,7 @@ import com.mm.weclubs.data.network.pojo.WCMissionDetailInfo;
 import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
 import com.mm.weclubs.data.network.pojo.WCUserInfoInfo;
 import com.mm.weclubs.data.prefs.PreferencesHelper;
+import com.mm.weclubs.util.StatusCode;
 import com.socks.library.KLog;
 
 import java.util.Map;
@@ -74,6 +78,20 @@ public class AppDataManager implements DataManager {
                 });
     }
 
+    @Override
+    public Observable<User> getUser() {
+        return Observable.just(getLastTimeLoginId())
+                .map(new Function<Integer, User>() {
+                    @Override
+                    public User apply(@NonNull Integer integer) throws Exception {
+                        User user = loadUser();
+                        if (user == null || user.getUserId() != integer){
+                            throw new NetError("用户未登录", StatusCode.TOKEN_TIMEOUT);
+                        }
+                        return user;
+                    }
+                });
+    }
 
     // ============ DB =======================
 
@@ -315,9 +333,31 @@ public class AppDataManager implements DataManager {
                 });
     }
 
+    @Override
+    public Observable<WCIndexClubBean> getIndexClub(@NonNull Map<String, Object> params) {
+        return addUserInfo(params)
+                .flatMap(new Function<Map<String, Object>, ObservableSource<WCIndexClubBean>>() {
+                    @Override
+                    public ObservableSource<WCIndexClubBean> apply(@io.reactivex.annotations.NonNull Map<String, Object> addUserParams) throws Exception {
+                        return mApiHelper.getIndexClub(addUserParams);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<WCIndexDataBean> getIndexData(@NonNull Map<String, Object> params) {
+        return addUserInfo(params)
+                .flatMap(new Function<Map<String, Object>, ObservableSource<WCIndexDataBean>>() {
+                    @Override
+                    public ObservableSource<WCIndexDataBean> apply(@io.reactivex.annotations.NonNull Map<String, Object> addUserParams) throws Exception {
+                        return mApiHelper.getIndexData(addUserParams);
+                    }
+                });
+    }
+
     /*
-                 * 添加公共参数
-                 */
+                         * 添加公共参数
+                         */
     private Observable<Map<String,Object>> addUserInfo(@NonNull Map<String, Object> params){
         // 查询数据库，找到用户信息
         return Observable.just(params)

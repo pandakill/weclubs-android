@@ -13,6 +13,7 @@ import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.manage.notify.WCNotifyReceiveStatusContract;
 import com.mm.weclubs.data.network.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.ui.adapter.manage.WCNotifyReceiveAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.socks.library.KLog;
 
 import javax.inject.Inject;
@@ -34,7 +35,8 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCNot
     private WCNotifyReceiveAdapter mAdapter;
     @Inject
     WCNotifyReceiveStatusContract.Presenter<WCNotifyReceiveStatusContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private long mNotifyId = 0;
 
     @Override
@@ -92,7 +94,7 @@ public class WCNotifyReceiveStatusActivity extends BaseActivity implements WCNot
         mTvNotifyListTitle.setText("通知成员");
         mTvConfirmCount.setVisibility(View.GONE);
 
-        mAdapter = new WCNotifyReceiveAdapter();
+        mAdapter = new WCNotifyReceiveAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mAdapter);
 
         mPresenter.getNotifyConfirmStatusFromServer(mNotifyId);

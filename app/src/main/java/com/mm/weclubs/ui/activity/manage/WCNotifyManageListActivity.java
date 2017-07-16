@@ -13,6 +13,7 @@ import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.manage.notify.WCManageNotifyListContract;
 import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageNotifyAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 
@@ -36,7 +37,8 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
 
     @Inject
     WCManageNotifyListContract.Presenter<WCManageNotifyListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private int mPageNo = 1;
 
     @Override
@@ -61,7 +63,7 @@ public class WCNotifyManageListActivity extends BaseActivity implements WCManage
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageNotifyAdapter = new WCManageNotifyAdapter();
+        mManageNotifyAdapter = new WCManageNotifyAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mManageNotifyAdapter);
 
         mManageNotifyAdapter.setOnItemClickListener(new OnItemClickListener() {

@@ -16,6 +16,9 @@
 
 package com.mm.weclubs.widget.progress;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -31,9 +34,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 import com.mm.weclubs.R;
-import com.nineoldandroids.animation.Animator;
-import com.nineoldandroids.animation.ArgbEvaluator;
-import com.nineoldandroids.animation.ValueAnimator;
 
 /**
  * 创建人: fangzanpan

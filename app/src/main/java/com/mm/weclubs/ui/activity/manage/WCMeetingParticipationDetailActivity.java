@@ -12,6 +12,7 @@ import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.manage.meeting.WCMeetingParticipationDetailContract;
 import com.mm.weclubs.data.network.bean.WCMeetingParticipationBean;
 import com.mm.weclubs.ui.adapter.manage.WCMeetingParticipationAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.socks.library.KLog;
 
 import javax.inject.Inject;
@@ -32,7 +33,8 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     private WCMeetingParticipationAdapter mMeetingParticipationAdapter;
     @Inject
     WCMeetingParticipationDetailContract.Presenter<WCMeetingParticipationDetailContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private long mMeetingId = 0;
 
     @Override
@@ -77,7 +79,7 @@ public class WCMeetingParticipationDetailActivity extends BaseActivity implement
     @Override
     protected void afterView() {
 
-        mMeetingParticipationAdapter = new WCMeetingParticipationAdapter();
+        mMeetingParticipationAdapter = new WCMeetingParticipationAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mMeetingParticipationAdapter);
 
         mPresenter.getMeetingParticipation(mMeetingId);

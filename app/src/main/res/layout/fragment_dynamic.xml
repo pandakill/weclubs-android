@@ -4,6 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/CommonLayout">
 
+    <View
+        style="@style/StatusBar"/>
+
     <cn.bingoogolapple.titlebar.BGATitleBar
         style="@style/TitleBar"
         app:bgatitlebar_titleText="@string/title_dynamic"

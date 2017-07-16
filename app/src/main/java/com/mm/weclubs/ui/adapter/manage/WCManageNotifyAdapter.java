@@ -26,6 +26,11 @@ import xyz.zpayh.adapter.ViewCallback;
 
 public class WCManageNotifyAdapter extends BaseAdapter<WCManageNotifyInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+    public WCManageNotifyAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_dynamic_notify_list_item;
@@ -50,8 +55,8 @@ public class WCManageNotifyAdapter extends BaseAdapter<WCManageNotifyInfo> {
             @Override
             public void callback(@NonNull RoundImageView view) {
                 view.setRectAdius(SizeUtils.dp2px(32));
-                ImageLoaderHelper.getInstance(view.getContext())
-                        .loadImage(view,data.getClub_avatar());
+                mImageLoaderHelper
+                        .loadImage(view,data.getClub_avatar(),SizeUtils.dp2px(32));
             }
         }).setText(R.id.tv_sponsor_name,data.getClub_name())
                 .setText(R.id.tv_notify_content,data.getContent())

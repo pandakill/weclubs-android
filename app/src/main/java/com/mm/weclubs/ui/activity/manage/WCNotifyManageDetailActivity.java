@@ -54,6 +54,9 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
     @Inject
     WCManageNotifyDetailContract.Presenter<WCManageNotifyDetailContract.View> mPresenter;
 
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
+
     private int mCommentPageNo = 1;
 
     @Override
@@ -116,7 +119,7 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
     }
 
     private void initBaseInfo() {
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mManageNotifyInfo.getClub_avatar());
         mTvSponsorName.setText(mManageNotifyInfo.getClub_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mManageNotifyInfo.getCreate_date(), "MMMdd日"));
@@ -195,7 +198,7 @@ public class WCNotifyManageDetailActivity extends BaseActivity implements WCMana
         TextView createDate = (TextView) itemView.findViewById(R.id.tv_create_date);
         TextView commentContent = (TextView) itemView.findViewById(R.id.tv_comment_content);
 
-        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
+        mImageLoaderHelper.loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
         sponsorName.setText(commentListInfo.getStudent_name());
         createDate.setText(TimeUtils.millis2String(commentListInfo.getCreate_date(), "MM-dd  HH:mm"));
         commentContent.setText(commentListInfo.getContent());

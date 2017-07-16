@@ -65,6 +65,9 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
     @Inject
     WCManageMeetingDetailContract.Presenter<WCManageMeetingDetailContract.View> mPresenter;
 
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
+
     private int mCommentPageNo = 1;
 
     @Override
@@ -179,7 +182,7 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
 
     private void initBaseInfo() {
 
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mManageMeetingInfo.getClub_avatar());
         mTvSponsorName.setText(mManageMeetingInfo.getClub_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mManageMeetingInfo.getCreate_date(), "MMMdd日"));
@@ -234,7 +237,7 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
             return;
         }
 
-        ImageLoaderHelper.getInstance(getApplicationContext())
+        mImageLoaderHelper
                 .loadImage(mIvSponsorLogo, mMeetingDetailInfo.getAvatar_url());
         mTvSponsorName.setText(mMeetingDetailInfo.getClub_name());
         mTvCreateDate.setText(TimeUtils.millis2String(mMeetingDetailInfo.getCreate_date(), "MMMdd日"));
@@ -302,7 +305,7 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
 
         leaderLogo.setRectAdius(SizeUtils.dp2px(36));
 
-        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(leaderLogo, leader.getAvatar_url());
+        mImageLoaderHelper.loadImage(leaderLogo, leader.getAvatar_url());
         leaderName.setText(leader.getStudent_name());
         leaderDepartment.setText(leader.getDepartment_name() + "  " + leader.getJob_name());
         leaderClass.setText("待接口返回");
@@ -334,7 +337,7 @@ public class WCMeetingManageDetailActivity extends BaseActivity implements WCMan
         TextView createDate = (TextView) itemView.findViewById(R.id.tv_create_date);
         TextView commentContent = (TextView) itemView.findViewById(R.id.tv_comment_content);
 
-        ImageLoaderHelper.getInstance(getApplicationContext()).loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
+        mImageLoaderHelper.loadImage(sponsorLogo, commentListInfo.getStudent_avatar());
         sponsorName.setText(commentListInfo.getStudent_name());
         createDate.setText(TimeUtils.millis2String(commentListInfo.getCreate_date(), "MM-dd  HH:mm"));
         commentContent.setText(commentListInfo.getContent());

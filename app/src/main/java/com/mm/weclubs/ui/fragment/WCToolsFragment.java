@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,9 +18,12 @@ import com.mm.weclubs.ui.activity.manage.WCMissionManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCNotifyManageListActivity;
 import com.mm.weclubs.ui.adapter.WCManageItemAdapter;
 import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.util.StatusBarUtil;
 import com.mm.weclubs.util.WCLog;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import xyz.zpayh.adapter.OnItemClickListener;
 
@@ -30,6 +34,11 @@ import xyz.zpayh.adapter.OnItemClickListener;
  */
 
 public class WCToolsFragment extends BaseLazyFragment {
+    public static final String TAG = "WCToolsFragment";
+    public static WCToolsFragment newInstance(){
+        WCToolsFragment fragment = new WCToolsFragment();
+        return fragment;
+    }
 
     private ImageView mImgToolBanner;
     private RecyclerView mGvManageList;
@@ -40,6 +49,9 @@ public class WCToolsFragment extends BaseLazyFragment {
 
     private WCManageItemAdapter mManageItemAdapter;
     private WCManageItemAdapter mInformationItemAdapter;
+
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -60,6 +72,14 @@ public class WCToolsFragment extends BaseLazyFragment {
     }
 
     private void initView() {
+
+        getActivityComponent().inject(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //修复状态栏高度
+            StatusBarUtil.fixStatusHeight(findView(R.id.fake_status_bar));
+        }
+
         mImgToolBanner = findViewById(R.id.img_tool_banner, ImageView.class);
         mGvManageList = findViewById(R.id.gv_manage_list, RecyclerView.class);
         mGvInformationList = findViewById(R.id.gv_information_list, RecyclerView.class);
@@ -98,7 +118,7 @@ public class WCToolsFragment extends BaseLazyFragment {
     }
 
     private void afterView() {
-        ImageLoaderHelper.getInstance(mContext.getApplicationContext()).loadImage(mImgToolBanner,
+        mImageLoaderHelper.loadImage(mImgToolBanner,
                 "http://img0.pconline.com.cn/pconline/download/iosdl/1611/A4.jpg");
 
         LayoutParams layoutParams = (LayoutParams) mImgToolBanner.getLayoutParams();

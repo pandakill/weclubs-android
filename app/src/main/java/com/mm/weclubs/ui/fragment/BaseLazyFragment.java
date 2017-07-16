@@ -3,6 +3,7 @@ package com.mm.weclubs.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.mm.weclubs.app.base.MVPView;
 import com.mm.weclubs.di.component.ActivityComponent;
 import com.mm.weclubs.ui.activity.WCLoginActivity;
 import com.mm.weclubs.util.WCLog;
+import com.socks.library.KLog;
 
 import java.lang.reflect.Field;
 
@@ -42,6 +44,7 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     private boolean isPrepared = true;
 
     private View mRootView;
+    private boolean mCreatedView = false;
     private SwipeRefreshLayout mSwipeRefreshLayout = null;
     private RecyclerView mRecyclerView = null;
 
@@ -66,6 +69,7 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (getContentViewLayoutID() != 0) {
             mRootView = inflater.inflate(getContentViewLayoutID(), null);
+            mCreatedView = true;
             return mRootView;
         } else {
             return super.onCreateView(inflater, container, savedInstanceState);
@@ -83,6 +87,11 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
     }
 
     protected <T> T findViewById(int viewId, Class<T> targetClass) {
+        return (T) mRootView.findViewById(viewId);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends View> T findView(@IdRes int viewId){
         return (T) mRootView.findViewById(viewId);
     }
 
@@ -136,6 +145,26 @@ public abstract class BaseLazyFragment extends Fragment implements MVPView {
         if (getUserVisibleHint()) {
             onUserInvisible();
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden && mCreatedView){
+            onShow();
+        }
+        if (hidden && mCreatedView){
+            onHide();
+        }
+    }
+
+    public void onShow(){
+        KLog.d("onShow");
+    }
+
+    public void onHide() {
+        KLog.d("onHide");
     }
 
     @Override

@@ -14,11 +14,13 @@ import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCNotifyListInfo;
 import com.mm.weclubs.ui.activity.WCNotifyDetailActivity;
 import com.mm.weclubs.ui.adapter.WCNotifyListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 import com.socks.library.KLog;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
 import xyz.zpayh.adapter.OnItemClickListener;
 import xyz.zpayh.adapter.OnLoadMoreListener;
 
@@ -36,7 +38,8 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
     private WCNotifyListAdapter mNotifyListAdapter;
     @Inject
     WCNotifyListContract.Presenter<WCNotifyListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private int mPageNo = 1;
 
     private WCMyClubListInfo mClubListInfo;
@@ -80,7 +83,7 @@ public class WCNotifyListFragment extends BaseLazyFragment implements WCNotifyLi
     }
 
     private void afterView() {
-        mNotifyListAdapter = new WCNotifyListAdapter();
+        mNotifyListAdapter = new WCNotifyListAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mNotifyListAdapter);
         mNotifyListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

@@ -14,6 +14,7 @@ import com.mm.weclubs.data.network.pojo.WCMissionListInfo;
 import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCMissionDetailActivity;
 import com.mm.weclubs.ui.adapter.WCMissionListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,8 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
     private WCMissionListAdapter mMissionListAdapter;
     @Inject
     WCMissionListContract.Presenter<WCMissionListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private int mPageNo = 1;
 
     private WCMyClubListInfo mClubListInfo;
@@ -87,7 +89,7 @@ public class WCMissionListFragment extends BaseLazyFragment implements WCMission
     }
 
     private void afterView() {
-        mMissionListAdapter = new WCMissionListAdapter();
+        mMissionListAdapter = new WCMissionListAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mMissionListAdapter);
         mMissionListAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override

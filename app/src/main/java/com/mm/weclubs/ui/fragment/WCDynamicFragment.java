@@ -1,5 +1,6 @@
 package com.mm.weclubs.ui.fragment;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,12 +15,15 @@ import com.mm.weclubs.app.club.WCMyClubListContract;
 import com.mm.weclubs.data.network.pojo.WCMyClubListInfo;
 import com.mm.weclubs.ui.activity.WCTODOListActivity;
 import com.mm.weclubs.ui.adapter.WCMyClubListAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
+import com.mm.weclubs.util.StatusBarUtil;
 import com.mm.weclubs.util.WCLog;
 import com.socks.library.KLog;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
 import xyz.zpayh.adapter.OnItemClickListener;
 import xyz.zpayh.adapter.OnLoadMoreListener;
 
@@ -30,10 +34,15 @@ import xyz.zpayh.adapter.OnLoadMoreListener;
  */
 
 public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListContract.View {
-
+    public static final String TAG = "WCDynamicFragment";
+    public static WCDynamicFragment newInstance(){
+        WCDynamicFragment fragment = new WCDynamicFragment();
+        return fragment;
+    }
     @Inject
     WCMyClubListContract.Presenter<WCMyClubListContract.View> mPresenter;
-
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
     private SwipeRefreshLayout mRefreshLayout = null;
     private RecyclerView mRecyclerView = null;
     private WCMyClubListAdapter mAdapter = null;
@@ -56,6 +65,11 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListC
         getActivityComponent().inject(this);
         mPresenter.attachView(this);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //修复状态栏高度
+            StatusBarUtil.fixStatusHeight(findView(R.id.fake_status_bar));
+        }
+
         log.d("动态 initViewsAndEvents");
         mRefreshLayout = findViewById(R.id.swipeRefreshLayout, SwipeRefreshLayout.class);
         mRecyclerView = findViewById(R.id.recycler_view, RecyclerView.class);
@@ -64,7 +78,7 @@ public class WCDynamicFragment extends BaseLazyFragment implements WCMyClubListC
         manager.canScrollVertically();
         mRecyclerView.setLayoutManager(manager);
 
-        mAdapter = new WCMyClubListAdapter();
+        mAdapter = new WCMyClubListAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.openAutoLoadMore(true);

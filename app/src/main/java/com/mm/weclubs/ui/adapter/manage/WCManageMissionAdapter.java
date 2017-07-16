@@ -26,6 +26,11 @@ import xyz.zpayh.adapter.ViewCallback;
 
 public class WCManageMissionAdapter extends BaseAdapter<WCManageMissionInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+    public WCManageMissionAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_dynamic_mission_item;
@@ -50,8 +55,8 @@ public class WCManageMissionAdapter extends BaseAdapter<WCManageMissionInfo> {
             @Override
             public void callback(@NonNull RoundImageView view) {
                 view.setRectAdius(SizeUtils.dp2px(32));
-                ImageLoaderHelper.getInstance(view.getContext())
-                        .loadImage(view,data.getClub_avatar());
+                mImageLoaderHelper
+                        .loadImage(view,data.getClub_avatar(),SizeUtils.dp2px(32));
             }
         }).setText(R.id.tv_sponsor_name, data.getClub_name())
         .setText(R.id.tv_create_date, TimeUtils.millis2String(data.getCreate_date(), "MMMdd日"))

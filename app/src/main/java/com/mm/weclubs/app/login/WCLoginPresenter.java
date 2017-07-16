@@ -189,6 +189,13 @@ public class WCLoginPresenter<V extends WCLoginContract.View> extends BasePresen
                         getMvpView().hideProgressDialog();
                         getMvpView().loginSuccess(wcUserInfoInfo);
                     }
-                }, this));
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        if (isViewAttachView()){
+                            getMvpView().hideProgressDialog();
+                        }
+                    }
+                }));
     }
 }

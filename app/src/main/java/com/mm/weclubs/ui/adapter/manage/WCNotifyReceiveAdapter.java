@@ -25,6 +25,11 @@ import xyz.zpayh.adapter.ViewCallback;
 
 public class WCNotifyReceiveAdapter extends BaseAdapter<WCNotifyReceiveStatusInfo> {
 
+    private final ImageLoaderHelper mImageLoaderHelper;
+    public WCNotifyReceiveAdapter(ImageLoaderHelper imageLoaderHelper) {
+        mImageLoaderHelper = imageLoaderHelper;
+    }
+
     @Override
     public int getLayoutRes(int index) {
         return R.layout.view_meeting_paticipation_item;
@@ -42,8 +47,8 @@ public class WCNotifyReceiveAdapter extends BaseAdapter<WCNotifyReceiveStatusInf
                     @Override
                     public void callback(@NonNull RoundImageView view) {
                         view.setRectAdius(SizeUtils.dp2px(40));
-                        ImageLoaderHelper.getInstance(view.getContext())
-                                .loadImage(view,data.getStudent_avatar());
+                        mImageLoaderHelper
+                                .loadImage(view,data.getStudent_avatar(),SizeUtils.dp2px(40));
                     }
                 }).setText(R.id.tv_student_name, data.getStudent_name())
                 .setText(R.id.tv_student_department, department)

@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mm.weclubs.app.club.WCMyClubListContract;
 import com.mm.weclubs.app.club.WCMyClubListPresenter;
+import com.mm.weclubs.app.index.WCIndexContract;
+import com.mm.weclubs.app.index.WCIndexPresenter;
 import com.mm.weclubs.app.login.WCLoginContract;
 import com.mm.weclubs.app.login.WCLoginPresenter;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingDetailContract;
@@ -40,6 +42,8 @@ import com.mm.weclubs.app.meeting_detail.WCMeetingDetailContract;
 import com.mm.weclubs.app.meeting_detail.WCMeetingDetailPresenter;
 import com.mm.weclubs.app.meeting_list.WCMeetingListContract;
 import com.mm.weclubs.app.meeting_list.WCMeetingListPresenter;
+import com.mm.weclubs.app.mine.WCMineContract;
+import com.mm.weclubs.app.mine.WCMinePresenter;
 import com.mm.weclubs.app.mission_detail.WCMissionDetailContract;
 import com.mm.weclubs.app.mission_detail.WCMissionDetailPresenter;
 import com.mm.weclubs.app.mission_list.WCMissionListContract;
@@ -51,7 +55,10 @@ import com.mm.weclubs.app.notify_list.WCNotifyListPresenter;
 import com.mm.weclubs.app.register.WCRegisterContract;
 import com.mm.weclubs.app.register.WCRegisterPresenter;
 import com.mm.weclubs.di.ActivityContext;
+import com.mm.weclubs.di.ActivityGlide;
 import com.mm.weclubs.di.PerActivity;
+import com.mm.weclubs.glide.okhttp3.GlideApp;
+import com.mm.weclubs.glide.okhttp3.GlideRequests;
 import com.mm.weclubs.util.rx.AppSchedulerProvider;
 import com.mm.weclubs.util.rx.SchedulerProvider;
 
@@ -64,14 +71,23 @@ public class ActivityModule {
 
     private AppCompatActivity mActivity;
 
+    private final GlideRequests mGlideRequests;
+
     public ActivityModule(AppCompatActivity activity) {
         this.mActivity = activity;
+        mGlideRequests = GlideApp.with(activity);
     }
 
     @Provides
     @ActivityContext
     Context provideContext() {
         return mActivity;
+    }
+
+    @Provides
+    @ActivityGlide
+    GlideRequests provideGlideRequests(){
+        return mGlideRequests;
     }
 
     @Provides
@@ -185,5 +201,15 @@ public class ActivityModule {
         return presenter;
     }
 
+    @Provides
+    @PerActivity
+    WCIndexContract.Presenter<WCIndexContract.View> provideWCIndexPresenter(WCIndexPresenter<WCIndexContract.View> presenter){
+        return presenter;
+    }
 
+    @Provides
+    @PerActivity
+    WCMineContract.Presenter<WCMineContract.View> provideWWCMinePresenter(WCMinePresenter<WCMineContract.View> presenter){
+        return presenter;
+    }
 }

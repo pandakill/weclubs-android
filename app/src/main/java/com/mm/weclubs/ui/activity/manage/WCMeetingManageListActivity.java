@@ -13,6 +13,7 @@ import com.mm.weclubs.app.base.BaseActivity;
 import com.mm.weclubs.app.manage.meeting.WCManageMeetingListContract;
 import com.mm.weclubs.data.network.pojo.WCManageMeetingInfo;
 import com.mm.weclubs.ui.adapter.manage.WCManageMeetingAdapter;
+import com.mm.weclubs.util.ImageLoaderHelper;
 
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
 
     @Inject
     WCManageMeetingListContract.Presenter<WCManageMeetingListContract.View> mPresenter;
+    @Inject
+    ImageLoaderHelper mImageLoaderHelper;
 
     private int mPageNo = 1;
 
@@ -60,7 +63,7 @@ public class WCMeetingManageListActivity extends BaseActivity implements WCManag
         layoutManager.canScrollVertically();
         mRecyclerView.setLayoutManager(layoutManager);
 
-        mManageMeetingAdapter = new WCManageMeetingAdapter();
+        mManageMeetingAdapter = new WCManageMeetingAdapter(mImageLoaderHelper);
         mRecyclerView.setAdapter(mManageMeetingAdapter);
 
         mManageMeetingAdapter.setOnItemClickListener(new OnItemClickListener() {
