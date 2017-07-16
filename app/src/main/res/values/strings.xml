@@ -34,8 +34,13 @@
     <string name="mine_setup">设置</string>
     <string name="mine_feedback">意见反馈</string>
     <string name="mine_about_us">关于我们</string>
-    
+
     <string name="dialog_auth_title">您还没有进行学生认证哦</string>
     <string name="dialog_auth_tips">完成认证即可创建、加入社团，开启精彩的社团生活！</string>
     <string name="dialog_auth_button">立即认证</string>
+    <string name="title_activity_club_detail">ClubDetailActivity</string>
+    
+    <string name="apply_join">申请加入</string>
+    <string name="club_attr">社团简介</string>
+    <string name="club_honor">社团荣誉</string>
 </resources>

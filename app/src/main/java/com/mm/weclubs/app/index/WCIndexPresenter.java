@@ -212,7 +212,8 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                     public void accept(@NonNull User user) throws Exception {
                         if (user.getIsAuth() == User.AUTH_NO){
                             KLog.d("还未认证");
-                            getMvpView().showAuthDialog();
+                            //getMvpView().showAuthDialog();
+                            getMvpView().openClubDetailActivity(club_id);
                         }else{
                             getMvpView().openClubDetailActivity(club_id);
                         }

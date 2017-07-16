@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.mm.weclubs">
 
@@ -6,116 +7,103 @@
     <uses-permission android:name="android.permission.READ_PROFILE"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+    <uses-permission android:name="android.permission.READ_SMS"/>
+    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
+        android:name=".WCWeClubsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/weclubs_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".WCWeClubsApplication">
-
+        android:theme="@style/AppTheme">
         <activity
-            android:name="com.mm.weclubs.ui.activity.WCLoginActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask">
+            android:name=".ui.activity.WCLoginActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.activity.WCMainActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleInstance">
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar">
         </activity>
-
         <activity
             android:name=".ui.activity.WCRegisterActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.WCTODOListActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.WCMissionDetailActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:launchMode="singleTask"/>
-
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.activity.WCMeetingDetailActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:launchMode="singleTask"/>
-
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.activity.WCNotifyDetailActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:launchMode="singleTask"/>
-
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
         <activity
             android:name=".ui.activity.manage.WCMeetingManageListActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.manage.WCNotifyManageListActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.manage.WCMissionManageListActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.manage.WCMeetingManageDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-
         <activity
             android:name=".ui.activity.manage.WCMeetingParticipationDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
-
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
         <activity
             android:name=".ui.activity.manage.WCNotifyManageDetailActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
-
         <activity
             android:name=".ui.activity.manage.WCNotifyReceiveStatusActivity"
-            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
+        <activity
+            android:name=".ui.activity.club.WCClubDetailActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar.HasStatusBar"/>
 
         <!-- SMS SDK_MOB要求的 activity START -->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
         <!-- SMS SDK_MOB要求的 activity END -->
-
     </application>
 
 </manifest>

@@ -90,7 +90,7 @@ public class WCMineFragment extends BaseLazyFragment implements WCMineContract.V
 
         mAvatarView = findView(R.id.img_avatar);
         mNameView = findView(R.id.tv_name);
-        mUserInfo = findView(R.id.tv_info);
+        mUserInfo = findView(R.id.tv_slogan);
         mAuthInfo = findView(R.id.img_mine_certification_info);
     }
 

@@ -55,7 +55,7 @@
             tools:layout_constraintLeft_creator="1"/>
 
         <TextView
-            android:id="@+id/tv_info"
+            android:id="@+id/tv_slogan"
             android:layout_width="wrap_content"
             android:layout_height="16dp"
             android:layout_marginTop="8dp"

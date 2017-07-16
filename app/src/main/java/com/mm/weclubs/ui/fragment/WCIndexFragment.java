@@ -21,6 +21,7 @@ import com.mm.weclubs.data.network.pojo.WCBannerInfo;
 import com.mm.weclubs.data.network.pojo.WCHotClubListInfo;
 import com.mm.weclubs.data.network.pojo.WCIndexClubListInfo;
 import com.mm.weclubs.di.DeviceWidth;
+import com.mm.weclubs.ui.activity.club.WCClubDetailActivity;
 import com.mm.weclubs.ui.adapter.BannerPageAdapter;
 import com.mm.weclubs.ui.adapter.WCClubsListAdapter;
 import com.mm.weclubs.util.ImageLoaderHelper;
@@ -464,7 +465,9 @@ public class WCIndexFragment extends BaseLazyFragment implements WCIndexContract
 
     @Override
     public void openClubDetailActivity(long club_id) {
-        ToastUtils.showLongToast("打开社团详情页面");
+        Bundle bundle = new Bundle();
+        bundle.putLong(WCClubDetailActivity.CLUB_ID,club_id);
+        showIntent(WCClubDetailActivity.class,bundle);
     }
 
     @Override
