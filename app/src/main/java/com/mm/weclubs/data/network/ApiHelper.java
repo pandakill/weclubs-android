@@ -14,6 +14,7 @@ import com.mm.weclubs.data.network.bean.WCMissionListBean;
 import com.mm.weclubs.data.network.bean.WCMyClubsBean;
 import com.mm.weclubs.data.network.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.network.bean.WCNotifyListBean;
+import com.mm.weclubs.data.network.pojo.WCClubDetail;
 import com.mm.weclubs.data.network.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo;
@@ -55,6 +56,11 @@ public interface ApiHelper {
      * 获取我的动态信息
      */
     Observable<WCMyClubsBean> getMyClubs(@NonNull Map<String,Object> params);
+
+    /**
+     * 获取组织详情
+     */
+    Observable<WCClubDetail> getClubDetail(@NonNull Map<String,Object> params);
 
     Observable<WCMeetingListBean> getMeetingList(@NonNull Map<String,Object> params);
 

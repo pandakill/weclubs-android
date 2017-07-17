@@ -18,6 +18,7 @@ import com.mm.weclubs.data.network.bean.WCMissionListBean;
 import com.mm.weclubs.data.network.bean.WCMyClubsBean;
 import com.mm.weclubs.data.network.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.network.bean.WCNotifyListBean;
+import com.mm.weclubs.data.network.pojo.WCClubDetail;
 import com.mm.weclubs.data.network.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo;
@@ -33,8 +34,10 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 
 import static com.mm.weclubs.data.prefs.AppPreferencesHelper.NULL_INDEX;
@@ -53,12 +56,31 @@ public class AppDataManager implements DataManager {
     private final DbHelper mDbHelper;
     private final ApiHelper mApiHelper;
     private final PreferencesHelper mPreferencesHelper;
+    private final User mUser;
 
     @Inject
     public AppDataManager(DbHelper dbHelper, ApiHelper apiHelper, PreferencesHelper preferencesHelper) {
         mDbHelper = dbHelper;
         mApiHelper = apiHelper;
         mPreferencesHelper = preferencesHelper;
+        mUser = new User();
+    }
+
+    @Inject
+    public void setup(){
+        mDbHelper.loadUserAsync()
+                .subscribe(new Consumer<User>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull User user) throws Exception {
+                        KLog.d("实时刷新内存数据");
+                        mUser.setUser(user);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@io.reactivex.annotations.NonNull Throwable throwable) throws Exception {
+                        throwable.printStackTrace();
+                    }
+                });
     }
 
     // =============  DataManager =============
@@ -79,7 +101,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Observable<User> getUser() {
+    public Observable<User> getUserAsync() {
         return Observable.just(getLastTimeLoginId())
                 .map(new Function<Integer, User>() {
                     @Override
@@ -91,6 +113,11 @@ public class AppDataManager implements DataManager {
                         return user;
                     }
                 });
+    }
+
+    @Override
+    public User getUser() {
+        return mUser;
     }
 
     // ============ DB =======================
@@ -112,6 +139,11 @@ public class AppDataManager implements DataManager {
     public User loadUser() {
         KLog.d("加载用户");
         return mDbHelper.loadUser();
+    }
+
+    @Override
+    public Flowable<User> loadUserAsync() {
+        return mDbHelper.loadUserAsync();
     }
 
     // =============== Prefs =====================
@@ -164,6 +196,17 @@ public class AppDataManager implements DataManager {
                     @Override
                     public ObservableSource<WCMyClubsBean> apply(@io.reactivex.annotations.NonNull Map<String, Object> addUserParams) throws Exception {
                         return mApiHelper.getMyClubs(addUserParams);
+                    }
+                });
+    }
+
+    @Override
+    public Observable<WCClubDetail> getClubDetail(@NonNull Map<String, Object> params) {
+        return addUserInfo(params)
+                .flatMap(new Function<Map<String, Object>, ObservableSource<WCClubDetail>>() {
+                    @Override
+                    public ObservableSource<WCClubDetail> apply(@io.reactivex.annotations.NonNull Map<String, Object> addUserParams) throws Exception {
+                        return mApiHelper.getClubDetail(addUserParams);
                     }
                 });
     }

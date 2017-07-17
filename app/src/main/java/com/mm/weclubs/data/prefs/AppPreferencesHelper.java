@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 @Singleton
 public class AppPreferencesHelper implements PreferencesHelper {
     public static final int NULL_INDEX = -1;
+    public static final int NULL_ID = -1;
     private static final String USER_CENTER_LAST_TIME_LOGIN = "PREFERENCE_KEY_LAST_LOGIN_ID";
     private static final String APP_UUID = "PREFERENCE_KEY_APP_UUID";
 

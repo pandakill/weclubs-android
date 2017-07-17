@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.mm.weclubs.app.club.WCMyClubListContract;
 import com.mm.weclubs.app.club.WCMyClubListPresenter;
+import com.mm.weclubs.app.club_detail.WCClubDetailContract;
+import com.mm.weclubs.app.club_detail.WCClubDetailPresenter;
 import com.mm.weclubs.app.index.WCIndexContract;
 import com.mm.weclubs.app.index.WCIndexPresenter;
 import com.mm.weclubs.app.login.WCLoginContract;
@@ -204,6 +206,12 @@ public class ActivityModule {
     @Provides
     @PerActivity
     WCIndexContract.Presenter<WCIndexContract.View> provideWCIndexPresenter(WCIndexPresenter<WCIndexContract.View> presenter){
+        return presenter;
+    }
+
+    @Provides
+    @PerActivity
+    WCClubDetailContract.Presenter<WCClubDetailContract.View> provideWCClubDetailPresenter(WCClubDetailPresenter<WCClubDetailContract.View> presenter){
         return presenter;
     }
 

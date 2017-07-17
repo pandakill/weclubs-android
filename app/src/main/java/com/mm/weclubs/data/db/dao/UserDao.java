@@ -9,6 +9,8 @@ import android.arch.persistence.room.Update;
 
 import com.mm.weclubs.data.db.entity.User;
 
+import io.reactivex.Flowable;
+
 /**
  * 文 件 名: UserDao
  * 创 建 人: 陈志鹏
@@ -34,4 +36,7 @@ public interface UserDao {
 
     @Query("SELECT * FROM User LIMIT 1")
     User loadUser();
+
+    @Query("SELECT * FROM User LIMIT 1")
+    Flowable<User> loadUserAsync();
 }

@@ -3,6 +3,8 @@ package com.mm.weclubs.data.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import static com.mm.weclubs.data.prefs.AppPreferencesHelper.NULL_ID;
+
 /**
  * 文 件 名: User
  * 创 建 人: 陈志鹏
@@ -16,7 +18,7 @@ public class User {
     public static final int AUTH_NO = 0;
     public static final int AUTH_ING = 2;
     public static final int AUTH_SUCCESS = 1;
-    public static final int AUTH_FAILD = 3;
+    public static final int AUTH_FAIL = 3;
     /**
      * graduate_year : 0级
      * avatar_url : http://weclubs.net/avatar/qx2jkloew8.jpeg
@@ -45,6 +47,10 @@ public class User {
     private String realName;
     private String className;
     private String token;
+
+    public User(){
+        userId = NULL_ID;
+    }
 
     public String getGraduateYear() {
         return graduateYear;
@@ -140,5 +146,20 @@ public class User {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public void setUser(User user) {
+        this.avatarUrl = user.avatarUrl;
+        this.className = user.className;
+        this.gender = user.gender;
+        this.graduateYear = user.graduateYear;
+        this.isAuth = user.isAuth;
+        this.mobile = user.mobile;
+        this.nickName = user.nickName;
+        this.realName = user.realName;
+        this.schoolId = user.schoolId;
+        this.schoolName = user.schoolName;
+        this.token = user.token;
+        this.userId = user.userId;
     }
 }

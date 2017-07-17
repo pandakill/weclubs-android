@@ -3,6 +3,7 @@ package com.mm.weclubs.app.base;
 import android.support.annotation.NonNull;
 
 import com.mm.weclubs.data.DataManager;
+import com.mm.weclubs.data.db.entity.User;
 import com.mm.weclubs.data.network.NetError;
 import com.mm.weclubs.data.network.bean.WCResponseParamBean;
 import com.mm.weclubs.util.StatusCode;
@@ -12,6 +13,8 @@ import com.socks.library.KLog;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+
+import static com.mm.weclubs.data.prefs.AppPreferencesHelper.NULL_ID;
 
 /**
  * 创建人: fangzanpan
@@ -125,6 +128,21 @@ public class BasePresenter<V extends MVPView> implements MVPPresenter<V> {
         if (responseParamBean.getResult_code() == 3010) {
             getMvpView().backToLoginActivity();
         }
+    }
+
+    protected boolean checkUserDirty(){
+        User user = getDataManager().getUser();
+        return checkUserDirty(user);
+    }
+
+    protected boolean checkUserDirty(User user){
+        if (user == null){
+            return true;
+        }
+        if (user.getUserId() == NULL_ID || user.getUserId() != getDataManager().getLastTimeLoginId()){
+            return true;
+        }
+        return false;
     }
 
     public static class MvpViewNotAttachedException extends RuntimeException {

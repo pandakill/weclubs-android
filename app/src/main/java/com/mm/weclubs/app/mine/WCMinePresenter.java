@@ -33,7 +33,7 @@ public class WCMinePresenter<V extends WCMineContract.View> extends BasePresente
     }
 
     private void init() {
-        getCompositeDisposable().add(getDataManager().getUser()
+        getCompositeDisposable().add(getDataManager().getUserAsync()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {
@@ -52,7 +52,7 @@ public class WCMinePresenter<V extends WCMineContract.View> extends BasePresente
                             case User.AUTH_SUCCESS:
                                 getMvpView().setAuth("认证通过");
                                 break;
-                            case User.AUTH_FAILD:
+                            case User.AUTH_FAIL:
                                 getMvpView().setAuth("认证失败");
                                 break;
                             default:break;

@@ -23,6 +23,7 @@ import com.mm.weclubs.ui.activity.WCMeetingDetailActivity;
 import com.mm.weclubs.ui.activity.WCMissionDetailActivity;
 import com.mm.weclubs.ui.activity.WCNotifyDetailActivity;
 import com.mm.weclubs.ui.activity.WCRegisterActivity;
+import com.mm.weclubs.ui.activity.club.WCClubDetailActivity;
 import com.mm.weclubs.ui.activity.manage.WCMeetingManageDetailActivity;
 import com.mm.weclubs.ui.activity.manage.WCMeetingManageListActivity;
 import com.mm.weclubs.ui.activity.manage.WCMeetingParticipationDetailActivity;
@@ -65,4 +66,6 @@ public interface ActivityComponent {
     void inject(WCIndexFragment fragment);
     void inject(WCMineFragment fragment);
     void inject(WCToolsFragment fragment);
+
+    void inject(WCClubDetailActivity activity);
 }

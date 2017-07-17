@@ -51,7 +51,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
     @Override
     public void refresh() {
         getCompositeDisposable().addAll(
-                getDataManager().getUser()
+                getDataManager().getUserAsync()
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .flatMap(new Function<User, ObservableSource<WCIndexClubBean>>() {
@@ -80,7 +80,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
                                 getMvpView().hideProgressDialog();
                             }
                         },this),
-                getDataManager().getUser()
+                getDataManager().getUserAsync()
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .flatMap(new Function<User, ObservableSource<WCIndexDataBean>>() {
@@ -108,7 +108,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
     @Override
     public void getClubListFromServer(final int pageNo) {
         getCompositeDisposable().add(
-                getDataManager().getUser()
+                getDataManager().getUserAsync()
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .flatMap(new Function<User, ObservableSource<WCIndexClubBean>>() {
@@ -168,7 +168,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
     @Override
     public void scan() {
-        getCompositeDisposable().add(getDataManager().getUser()
+        getCompositeDisposable().add(getDataManager().getUserAsync()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {
@@ -186,7 +186,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
     @Override
     public void search() {
-        getCompositeDisposable().add(getDataManager().getUser()
+        getCompositeDisposable().add(getDataManager().getUserAsync()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {
@@ -204,7 +204,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
     @Override
     public void club(final long club_id) {
-        getCompositeDisposable().add(getDataManager().getUser()
+        getCompositeDisposable().add(getDataManager().getUserAsync()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {
@@ -223,7 +223,7 @@ public class WCIndexPresenter<V extends WCIndexContract.View> extends BasePresen
 
     @Override
     public void moreStudent(final long club_id) {
-        getCompositeDisposable().add(getDataManager().getUser()
+        getCompositeDisposable().add(getDataManager().getUserAsync()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(new Consumer<User>() {

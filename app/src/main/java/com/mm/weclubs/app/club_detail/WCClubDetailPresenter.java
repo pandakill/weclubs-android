@@ -2,8 +2,11 @@ package com.mm.weclubs.app.club_detail;
 
 import com.mm.weclubs.app.base.BasePresenter;
 import com.mm.weclubs.data.DataManager;
-import com.mm.weclubs.data.db.entity.User;
+import com.mm.weclubs.data.network.pojo.WCClubDetail;
 import com.mm.weclubs.util.rx.SchedulerProvider;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -20,39 +23,47 @@ public class WCClubDetailPresenter<V extends WCClubDetailContract.View> extends 
     }
 
     @Override
-    public void attachView(V mvpView) {
-        super.attachView(mvpView);
+    public void loadDetail(long club_id) {
+        if (checkUserDirty()){
+            getMvpView().backToLoginActivity();
+            return;
+        }
 
-        init();
+        getMvpView().showProgressDialog("加载数据中",true);
+
+        Map<String,Object> params = new HashMap<>();
+        params.put("club_id",club_id);
+        getCompositeDisposable().add(getDataManager().getClubDetail(params)
+            .subscribeOn(getSchedulerProvider().io())
+            .observeOn(getSchedulerProvider().ui())
+            .subscribe(new Consumer<WCClubDetail>() {
+                @Override
+                public void accept(@NonNull WCClubDetail wcClubDetail) throws Exception {
+                    getMvpView().hideProgressDialog();
+                    getMvpView().setSlogan(wcClubDetail.getSlogan());
+                    getMvpView().setAvatar(wcClubDetail.getAvatar_url());
+                    getMvpView().setAttr(wcClubDetail.getAttribution());
+                    getMvpView().setClubName(wcClubDetail.getClub_name());
+                    getMvpView().setHonorList(wcClubDetail.getClub_honor());
+                    getMvpView().setLevel(wcClubDetail.getClub_level());
+                    getMvpView().setMemberList(wcClubDetail.getMember());
+                }
+            },this));
+
     }
 
-    private void init() {
-        getCompositeDisposable().add(getDataManager().getUser()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(new Consumer<User>() {
-                    @Override
-                    public void accept(@NonNull User user) throws Exception {
-                        getMvpView().setAvatar(user.getAvatarUrl());
-                        getMvpView().setName(user.getNickName());
-                        getMvpView().setInfo(user.getGraduateYear()+user.getClassName(),user.getGender());
-                        switch (user.getIsAuth()){
-                            case User.AUTH_NO:
-                                getMvpView().setAuth("未认证");
-                                break;
-                            case User.AUTH_ING:
-                                getMvpView().setAuth("认证中");
-                                break;
-                            case User.AUTH_SUCCESS:
-                                getMvpView().setAuth("认证通过");
-                                break;
-                            case User.AUTH_FAILD:
-                                getMvpView().setAuth("认证失败");
-                                break;
-                            default:break;
-                        }
-                    }
-                },this)
-        );
+    @Override
+    public void apply() {
+
+    }
+
+    @Override
+    public void showQRCode() {
+        getMvpView().showQRView("");
+    }
+
+    @Override
+    public void clickMember(int viewId) {
+
     }
 }

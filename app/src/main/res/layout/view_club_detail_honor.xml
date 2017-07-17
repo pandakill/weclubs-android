@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:text="我有好多荣誉啊"
+    android:textColor="@color/colorCommonText"
+    android:textSize="12sp"
+    android:drawableStart="@mipmap/ic_honor"
+    android:drawablePadding="8dp"
+    android:layout_margin="2dp"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" />

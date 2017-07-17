@@ -29,5 +29,10 @@ public interface DataManager extends DbHelper,ApiHelper,PreferencesHelper{
      * 返回当前用户
      * @return 如果已经登录，返回User, 返回 empty
      */
-    Observable<User> getUser();
+    Observable<User> getUserAsync();
+
+    /**
+     * 返回实时缓存在内存的User对象
+     */
+    User getUser();
 }

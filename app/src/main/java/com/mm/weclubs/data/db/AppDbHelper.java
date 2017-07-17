@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
+import io.reactivex.Flowable;
 
 /**
  * 文 件 名: AppDbHelper
@@ -83,5 +84,10 @@ public class AppDbHelper implements DbHelper {
     @Override
     public User loadUser() {
         return mAppDatabase.userDao().loadUser();
+    }
+
+    @Override
+    public Flowable<User> loadUserAsync() {
+        return mAppDatabase.userDao().loadUserAsync();
     }
 }

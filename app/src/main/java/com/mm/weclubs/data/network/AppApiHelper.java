@@ -20,6 +20,7 @@ import com.mm.weclubs.data.network.bean.WCNotifyCheckStatusBean;
 import com.mm.weclubs.data.network.bean.WCNotifyListBean;
 import com.mm.weclubs.data.network.bean.WCRequestParamBean;
 import com.mm.weclubs.data.network.bean.WCResponseParamBean;
+import com.mm.weclubs.data.network.pojo.WCClubDetail;
 import com.mm.weclubs.data.network.pojo.WCManageMeetingDetailInfo;
 import com.mm.weclubs.data.network.pojo.WCManageNotifyInfo;
 import com.mm.weclubs.data.network.pojo.WCMeetingDetailInfo;
@@ -154,6 +155,15 @@ public class AppApiHelper implements ApiHelper {
         WCRequestParamBean bean = initRequestParam(params);
 
         return handle(service.getMyClubs(bean));
+    }
+
+    @Override
+    public Observable<WCClubDetail> getClubDetail(@NonNull Map<String, Object> params) {
+        WCClubService service = mRetrofit.create(WCClubService.class);
+
+        WCRequestParamBean bean = initRequestParam(params);
+
+        return handle(service.getClubDetail(bean));
     }
 
     @Override

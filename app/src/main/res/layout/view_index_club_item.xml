@@ -129,7 +129,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_margin="4dp"
-                android:src="@mipmap/ic_membermore"/>
+                android:src="@mipmap/ic_membermore" />
         </LinearLayout>
     </RelativeLayout>
 

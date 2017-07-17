@@ -2,6 +2,8 @@ package com.mm.weclubs.data.db;
 
 import com.mm.weclubs.data.db.entity.User;
 
+import io.reactivex.Flowable;
+
 /**
  * 文 件 名: DbHelper
  * 创 建 人: 陈志鹏
@@ -18,4 +20,6 @@ public interface DbHelper {
     void clearUser();
 
     User loadUser();
+
+    Flowable<User> loadUserAsync();
 }
