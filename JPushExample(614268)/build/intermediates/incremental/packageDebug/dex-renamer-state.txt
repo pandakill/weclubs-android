@@ -1,4 +1,0 @@
-#Tue May 23 17:31:02 CST 2017
-base.0=/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/transforms/dex/debug/folders/1000/1f/main
-renamed.0=classes.dex
-file.0=/Users/fangzanpan/Documents/weclubs/gitlab_responsities/weclubs-android/JPushExample(614268)/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
