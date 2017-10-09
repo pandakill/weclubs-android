@@ -37,7 +37,7 @@ public interface WCConfigConstants {
 
     enum SERVER_URLS {
         DEV("192.168.31.168:1203", "weclubs_android", MD5Util.md5("pukongjie")),
-        DEBUG("weclubs.net:1203", "chrome_test", MD5Util.md5("pukongjie")),
+        DEBUG("116.196.97.31", "weclubs_android", MD5Util.md5("pukongjie")),
         RELEASE("release.com", "chrome_test", MD5Util.md5("pukongjie"));
 
         String url = null;
